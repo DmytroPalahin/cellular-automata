@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The worked example of section 2.3 of the subject, copied verbatim:
+    - a live cell with 4 live cells or more in its 8-neighborhood dies, otherwise it stays alive;
+    - a dead cell with exactly 2 live cells in its 8-neighborhood comes alive.
+  Note that the formula of the subject uses G8, which includes the cell itself.
+-->
+<automaton name="Subject example">
+  <description>The rule decomposed step by step in section 2.3 of the subject. It grows a maze-like texture that never settles.</description>
+  <dimension>2</dimension>
+  <size>64, 96</size>
+  <rule>
+    SI(EQ(COMPTER(G0), 1),
+       SI(SUPEQ(COMPTER(G8), 4), 0, 1),
+       SI(EQ(COMPTER(G8), 2), 1, 0))
+  </rule>
+  <initial seed="2024">RANDOM(4)</initial>
+</automaton>

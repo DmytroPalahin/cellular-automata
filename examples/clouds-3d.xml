@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A three-dimensional automaton on the full 26-neighborhood, started from a random soup.
+    - a live cell survives with 13 live neighbors or more;
+    - a dead cell comes alive with 13, 14, 17, 18 or 19 live neighbors.
+  The soup quickly condenses into smooth blobs that keep reshaping slowly.
+-->
+<automaton name="Clouds 3D">
+  <description>A 3D rule on the 26-neighborhood that condenses a random soup into cloud-like blobs. The displayed plane is the one where the second coordinate equals 20.</description>
+  <dimension>3</dimension>
+  <size>40, 40, 40</size>
+  <slice>(:, 20, :)</slice>
+  <rule>
+    SI(EQ(COMPTER(G0), 1),
+       SUPEQ(COMPTER(G26*), 13),
+       OU(OU(EQ(COMPTER(G26*), 13), EQ(COMPTER(G26*), 14)),
+          ET(SUPEQ(COMPTER(G26*), 17), SUPEQ(19, COMPTER(G26*)))))
+  </rule>
+  <initial>RANDOM(53)</initial>
+</automaton>

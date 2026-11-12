@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Nothing in the engine is specific to 1, 2 or 3 dimensions. Here the grid has four.
+  Predefined neighborhoods are resolved against the dimension of the grid: in 4D, G8 is the cell
+  and its 2 x 4 = 8 face neighbors (and the full neighborhood would be G80).
+  The slice pins the last two coordinates and displays the first two.
+-->
+<automaton name="Hypercube 4D">
+  <description>Crystal growth in four dimensions. In 4D, G8* designates the eight face neighbors of a cell. The window shows a two-dimensional cut of the four-dimensional crystal.</description>
+  <dimension>4</dimension>
+  <size>25, 25, 25, 25</size>
+  <slice>(:, :, 12, 12)</slice>
+  <rule>
+    OU(COMPTER(G0), EQ(COMPTER(G8*), 1))
+  </rule>
+  <initial>(12, 12, 12, 12)</initial>
+</automaton>

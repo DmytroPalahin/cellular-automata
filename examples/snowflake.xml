@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A user-defined neighborhood in 2D. The six offsets below are the neighbors of a cell on a
+  hexagonal lattice written in axial coordinates. On a 2D grid the name G6 is free (the predefined
+  G6 only exists in 3D), so it can be reused here.
+  Rule: a cell freezes when exactly one of its six neighbors is frozen, and stays frozen.
+-->
+<automaton name="Snowflake">
+  <description>Crystal growth on a hexagonal lattice, obtained with a user-defined six-cell neighborhood. The square grid shears the hexagons, hence the slanted snowflake.</description>
+  <dimension>2</dimension>
+  <size>97, 97</size>
+  <neighborhoods>
+    <neighborhood name="G6*">{(-1, 0), (1, 0), (0, -1), (0, 1), (-1, 1), (1, -1)}</neighborhood>
+  </neighborhoods>
+  <rule>
+    OU(COMPTER(G0), EQ(COMPTER(G6*), 1))
+  </rule>
+  <initial>(48, 48)</initial>
+</automaton>

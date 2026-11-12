@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The Sierpinski triangle of section 1.1 (figures 3 and 4 of the subject), i.e. Wolfram's rule 18.
+  The rule is a direct transcription of the formula of the subject,
+
+      c(t+1, i) = (max(c(t, i-1), c(t, i+1)) - min(c(t, i-1), c(t, i+1))) * (1 - c(t, i))
+
+  max - min of two bits is 1 exactly when one of them is set, that is when the two outer
+  neighbors (G2*) hold exactly one live cell.
+-->
+<automaton name="Sierpiński triangle">
+  <description>One-dimensional rule 18 started from a single live cell: the juxtaposition of its generations draws the Sierpiński triangle.</description>
+  <dimension>1</dimension>
+  <size>257</size>
+  <rule>
+    MUL(EQ(COMPTER(G2*), 1), SUB(1, COMPTER(G0)))
+  </rule>
+  <initial>(128)</initial>
+</automaton>

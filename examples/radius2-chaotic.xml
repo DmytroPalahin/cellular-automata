@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<automaton name="Radius-2 chaotic rule 1771542398">
+  <description>One-dimensional rule of radius 2 (Wolfram code 1771542398, totalistic code 22) found by 'cellula explore'. From a single live cell it draws a chaotic picture: box-counting dimension 1.945, compression ratio 0.430. It cannot be obtained with the left/center/right neighborhood alone.</description>
+  <dimension>1</dimension>
+  <size>1021</size>
+  <boundary>fixed</boundary>
+  <neighborhoods>
+    <neighborhood name="G4">{(-2), (-1), (0), (1), (2)}</neighborhood>
+  </neighborhoods>
+  <rule>
+    OU(EQ(COMPTER(G4), 1), OU(EQ(COMPTER(G4), 2), EQ(COMPTER(G4), 4)))
+  </rule>
+  <initial>(510)</initial>
+</automaton>

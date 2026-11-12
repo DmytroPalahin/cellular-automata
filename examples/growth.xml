@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The first, predictable automaton of section 1.1 (figures 1 and 2 of the subject):
+
+      c(t+1, i) = max(c(t, i-1), c(t, i), c(t, i+1))
+
+  A cell switches on as soon as itself or one of its two neighbors is on.
+-->
+<automaton name="Growth">
+  <description>A cell lights up when it or one of its two neighbors is lit: the lit area grows by one cell on each side per generation, then the automaton converges.</description>
+  <dimension>1</dimension>
+  <size>41</size>
+  <rule>SUPEQ(COMPTER(G2), 1)</rule>
+  <initial>(20)</initial>
+</automaton>

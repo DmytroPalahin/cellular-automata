@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Wolfram's rule 30: next = left XOR (center OR right).
+  The rule treats the left and the right neighbor differently, which no predefined neighborhood
+  allows. Two user-defined one-cell neighborhoods solve this: G11 is the left neighbor, G12 the
+  right one. With them COMPTER reads the state of a single cell.
+-->
+<automaton name="Rule 30">
+  <description>A chaotic elementary automaton: from a single cell it produces a picture irregular enough to have been used as a random number generator.</description>
+  <dimension>1</dimension>
+  <size>257</size>
+  <neighborhoods>
+    <neighborhood name="G11">{(-1)}</neighborhood>
+    <neighborhood name="G12">{(1)}</neighborhood>
+  </neighborhoods>
+  <rule>
+    EQ(ADD(COMPTER(G11), OU(COMPTER(G0), COMPTER(G12))), 1)
+  </rule>
+  <initial>(128)</initial>
+</automaton>

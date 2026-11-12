@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Explicit initial cells and a periodic boundary: a single glider of the Game of Life travels
+  diagonally on a torus and is back where it started after 4 x 20 = 80 generations, which the
+  status bar reports as "cycle of period 80".
+-->
+<automaton name="Glider on a torus">
+  <description>One glider of the Game of Life on a 20 × 20 torus. It comes back to its starting point every 80 generations.</description>
+  <dimension>2</dimension>
+  <size>20, 20</size>
+  <boundary>periodic</boundary>
+  <rule>
+    SI(EQ(COMPTER(G0), 1),
+       OU(EQ(COMPTER(G8*), 2), EQ(COMPTER(G8*), 3)),
+       EQ(COMPTER(G8*), 3))
+  </rule>
+  <initial>(0, 1), (1, 2), (2, 0), (2, 1), (2, 2)</initial>
+</automaton>
