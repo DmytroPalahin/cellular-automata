@@ -1,12 +1,5 @@
 package fr.uspn.cellula.simulation;
 
-import fr.uspn.cellula.automaton.CellularAutomaton;
-import fr.uspn.cellula.automaton.Regime;
-import fr.uspn.cellula.config.AutomatonDefinition;
-import fr.uspn.cellula.config.AutomatonFactory;
-import fr.uspn.cellula.grid.Coordinates;
-import fr.uspn.cellula.grid.Grid;
-import fr.uspn.cellula.grid.Slice;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.util.List;
@@ -20,18 +13,35 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import fr.uspn.cellula.automaton.CellularAutomaton;
+import fr.uspn.cellula.automaton.Regime;
+import fr.uspn.cellula.config.AutomatonDefinition;
+import fr.uspn.cellula.config.AutomatonFactory;
+import fr.uspn.cellula.grid.Coordinates;
+import fr.uspn.cellula.grid.Grid;
+import fr.uspn.cellula.grid.Slice;
+
 /**
- * A running automaton that can be driven from another thread: played, paused, stepped, reset,
+ * A running automaton that can be driven from another thread: played, paused,
+ * stepped, reset,
  * edited.
  *
- * <p><strong>Threading model.</strong> The automaton and its grid are confined to a single
- * background thread owned by this class. Every public method merely posts a command to that
- * thread and returns at once, so commands are executed one after the other, in the order they
- * were issued, without any lock. Nothing mutable ever leaves the simulation thread: observers
- * receive immutable {@link Snapshot}s. A user interface therefore stays responsive however long a
+ * <p>
+ * <strong>Threading model.</strong> The automaton and its grid are confined to
+ * a single
+ * background thread owned by this class. Every public method merely posts a
+ * command to that
+ * thread and returns at once, so commands are executed one after the other, in
+ * the order they
+ * were issued, without any lock. Nothing mutable ever leaves the simulation
+ * thread: observers
+ * receive immutable {@link Snapshot}s. A user interface therefore stays
+ * responsive however long a
  * generation takes to compute, and never sees a half-updated grid.
  *
- * <p>A simulation holds a thread and must be {@linkplain #close() closed} when no longer needed.
+ * <p>
+ * A simulation holds a thread and must be {@linkplain #close() closed} when no
+ * longer needed.
  */
 public final class Simulation implements AutoCloseable {
 
@@ -41,7 +51,8 @@ public final class Simulation implements AutoCloseable {
     private final ScheduledExecutorService worker;
     private final List<SimulationListener> listeners = new CopyOnWriteArrayList<>();
 
-    // Everything below is only touched by the worker thread once the constructor has returned.
+    // Everything below is only touched by the worker thread once the constructor
+    // has returned.
     private final CellularAutomaton automaton;
     private final Projection projection;
     private int[] initialStates;
@@ -75,7 +86,8 @@ public final class Simulation implements AutoCloseable {
     }
 
     /**
-     * Registers an observer. It is immediately sent the current state, then every change.
+     * Registers an observer. It is immediately sent the current state, then every
+     * change.
      *
      * @param listener the observer; called on the simulation thread
      */
@@ -120,7 +132,9 @@ public final class Simulation implements AutoCloseable {
         });
     }
 
-    /** Pauses and goes back to the initial state, exactly as it was at generation 0. */
+    /**
+     * Pauses and goes back to the initial state, exactly as it was at generation 0.
+     */
     public void reset() {
         post(() -> {
             halt();
@@ -131,7 +145,8 @@ public final class Simulation implements AutoCloseable {
     }
 
     /**
-     * Pauses and draws a new initial state from the definition. For a {@code RANDOM(k)} definition
+     * Pauses and draws a new initial state from the definition. For a
+     * {@code RANDOM(k)} definition
      * without a fixed seed this yields a different grid each time.
      */
     public void reseed() {
@@ -166,7 +181,8 @@ public final class Simulation implements AutoCloseable {
     }
 
     /**
-     * Moves the displayed plane. Has no effect on one-dimensional automata, and a slice that does
+     * Moves the displayed plane. Has no effect on one-dimensional automata, and a
+     * slice that does
      * not fit the grid is ignored.
      *
      * @param slice the new plane
@@ -189,9 +205,9 @@ public final class Simulation implements AutoCloseable {
     /**
      * Sets the state of the grid cell displayed at a given place of the picture.
      *
-     * @param row row in the displayed frame
+     * @param row    row in the displayed frame
      * @param column column in the displayed frame
-     * @param state the new state of the cell
+     * @param state  the new state of the cell
      */
     public void setCell(int row, int column, int state) {
         post(() -> {
@@ -215,7 +231,8 @@ public final class Simulation implements AutoCloseable {
     }
 
     /**
-     * Returns the state of the simulation once all the commands issued so far have been executed.
+     * Returns the state of the simulation once all the commands issued so far have
+     * been executed.
      *
      * @return a future completed on the simulation thread
      */

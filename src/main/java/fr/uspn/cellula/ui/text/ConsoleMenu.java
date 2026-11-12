@@ -1,8 +1,5 @@
 package fr.uspn.cellula.ui.text;
 
-import fr.uspn.cellula.config.AutomatonDefinition;
-import fr.uspn.cellula.config.DefinitionLibrary;
-import fr.uspn.cellula.config.DefinitionLibrary.Entry;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -11,18 +8,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import fr.uspn.cellula.config.AutomatonDefinition;
+import fr.uspn.cellula.config.DefinitionLibrary;
+import fr.uspn.cellula.config.DefinitionLibrary.Entry;
+
 /**
- * The start-up menu in a terminal: lists the automaton definition files of a directory and
- * launches the simulation of the one the user picks, again and again until the user quits.
+ * The start-up menu in a terminal: lists the automaton definition files of a
+ * directory and
+ * launches the simulation of the one the user picks, again and again until the
+ * user quits.
  */
 public final class ConsoleMenu {
 
-    /** What "launching a simulation" means; decided by the caller (a window, or text output). */
+    /**
+     * What "launching a simulation" means; decided by the caller (a window, or text
+     * output).
+     */
     @FunctionalInterface
     public interface Launcher {
 
         /**
-         * Runs the simulation of an automaton and returns once the user is done with it.
+         * Runs the simulation of an automaton and returns once the user is done with
+         * it.
          *
          * @param definition the automaton chosen by the user
          */
@@ -38,9 +45,9 @@ public final class ConsoleMenu {
      * Creates the menu.
      *
      * @param directory the directory whose definition files are listed
-     * @param in where the choices of the user are read from
-     * @param out where the menu is printed
-     * @param launcher what to do with the chosen automaton
+     * @param in        where the choices of the user are read from
+     * @param out       where the menu is printed
+     * @param launcher  what to do with the chosen automaton
      */
     public ConsoleMenu(Path directory, BufferedReader in, PrintStream out, Launcher launcher) {
         this.directory = directory.toAbsolutePath().normalize();
@@ -52,7 +59,8 @@ public final class ConsoleMenu {
     /**
      * Shows the menu until the user quits or the input ends.
      *
-     * @throws IOException if the directory cannot be listed or the input cannot be read
+     * @throws IOException if the directory cannot be listed or the input cannot be
+     *                     read
      */
     public void run() throws IOException {
         while (true) {
@@ -86,7 +94,9 @@ public final class ConsoleMenu {
         }
     }
 
-    /** Prints the list and returns the entries that can be chosen, in menu order. */
+    /**
+     * Prints the list and returns the entries that can be chosen, in menu order.
+     */
     private List<Entry.Loaded> show(List<Entry> entries) {
         out.println();
         out.println("Automaton definitions in " + directory);

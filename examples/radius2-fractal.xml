@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <automaton name="Radius-2 fractal rule 65814">
-  <description>One-dimensional rule of radius 2 (Wolfram code 65814, totalistic code 2) found by 'cellula explore'. From a single live cell it draws a fractal picture: box-counting dimension 1.502, compression ratio 0.032. It cannot be obtained with the left/center/right neighborhood alone.</description>
-  <dimension>1</dimension>
-  <size>1021</size>
-  <boundary>fixed</boundary>
-  <neighborhoods>
-    <neighborhood name="G4">{(-2), (-1), (0), (1), (2)}</neighborhood>
-  </neighborhoods>
-  <rule>
-    EQ(COMPTER(G4), 1)
-  </rule>
-  <initial>(510)</initial>
+    <description>One-dimensional rule of radius 2 (Wolfram code 65814, totalistic code 2) found by
+        'cellula explore'. From a single live cell it draws a fractal picture: box-counting
+        dimension 1.502, compression ratio 0.032. It cannot be obtained with the left/center/right
+        neighborhood alone.</description>
+    <dimension>1</dimension>
+    <size>1021</size>
+    <boundary>fixed</boundary>
+    <neighborhoods>
+        <neighborhood name="G4">{(-2), (-1), (0), (1), (2)}</neighborhood>
+    </neighborhoods>
+    <rule>
+        EQ(COMPTER(G4), 1)
+    </rule>
+    <initial>(510)</initial>
 </automaton>

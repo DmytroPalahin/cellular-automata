@@ -1,6 +1,8 @@
 package fr.uspn.cellula.rule.expression;
 
-/** {@code EQ(a, b)}: yields 1 if {@code a} equals {@code b}, and 0 otherwise. */
+/**
+ * {@code EQ(a, b)}: yields 1 if {@code a} equals {@code b}, and 0 otherwise.
+ */
 public final class Equal extends BinaryOperator {
 
     /** The keyword of this operator in the rule language. */
@@ -9,7 +11,7 @@ public final class Equal extends BinaryOperator {
     /**
      * Creates the operator.
      *
-     * @param left first operand
+     * @param left  first operand
      * @param right second operand
      */
     public Equal(Expression left, Expression right) {

@@ -5,14 +5,15 @@
   automata can simulate Turing machines. G12 is a user-defined neighborhood: the right neighbor.
 -->
 <automaton name="Rule 110">
-  <description>The Turing-complete elementary automaton. Its pattern grows to the left, so the initial cell sits at the right edge.</description>
-  <dimension>1</dimension>
-  <size>257</size>
-  <neighborhoods>
-    <neighborhood name="G12">{(1)}</neighborhood>
-  </neighborhoods>
-  <rule>
-    ET(OU(COMPTER(G0), COMPTER(G12)), NON(EQ(COMPTER(G2), 3)))
-  </rule>
-  <initial>(256)</initial>
+    <description>The Turing-complete elementary automaton. Its pattern grows to the left, so the
+        initial cell sits at the right edge.</description>
+    <dimension>1</dimension>
+    <size>257</size>
+    <neighborhoods>
+        <neighborhood name="G12">{(1)}</neighborhood>
+    </neighborhoods>
+    <rule>
+        ET(OU(COMPTER(G0), COMPTER(G12)), NON(EQ(COMPTER(G2), 3)))
+    </rule>
+    <initial>(256)</initial>
 </automaton>

@@ -44,15 +44,15 @@ exception in the middle of a simulation. \code{XmlDefinitionReader} therefore ac
 after three successive checks, each catching a different class of errors.
 
 \begin{enumerate}
-  \item \textbf{Structure.} The document is validated against an XML Schema bundled with the
-    application (\code{automaton.xsd}): unknown or duplicated elements, missing mandatory ones,
-    malformed colors or neighborhood names. These errors come with a line number.
-  \item \textbf{Consistency.} The values are parsed and cross-checked: as many sizes as
-    dimensions, a slice that fits the grid and leaves exactly two free axes, offsets and initial
-    cells that have the right number of coordinates and lie inside the grid.
-  \item \textbf{The rule.} The rule is compiled against the neighborhoods of the file. This proves
-    that it is syntactically correct and only refers to neighborhoods that exist in the grid's
-    dimension.
+    \item \textbf{Structure.} The document is validated against an XML Schema bundled with the
+          application (\code{automaton.xsd}): unknown or duplicated elements, missing mandatory ones,
+          malformed colors or neighborhood names. These errors come with a line number.
+    \item \textbf{Consistency.} The values are parsed and cross-checked: as many sizes as
+          dimensions, a slice that fits the grid and leaves exactly two free axes, offsets and initial
+          cells that have the right number of coordinates and lie inside the grid.
+    \item \textbf{The rule.} The rule is compiled against the neighborhoods of the file. This proves
+          that it is syntactically correct and only refers to neighborhoods that exist in the grid's
+          dimension.
 \end{enumerate}
 
 A file that passes is guaranteed to be instantiable. A file that fails yields a

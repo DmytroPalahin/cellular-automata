@@ -1,7 +1,5 @@
 package fr.uspn.cellula.config;
 
-import fr.uspn.cellula.config.InitialState.RandomFill;
-import fr.uspn.cellula.grid.Coordinates;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -11,21 +9,28 @@ import java.util.Locale;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
+import fr.uspn.cellula.config.InitialState.RandomFill;
+import fr.uspn.cellula.grid.Coordinates;
+
 /**
- * Writes automaton definitions as XML files, in the format read by {@link XmlDefinitionReader}.
+ * Writes automaton definitions as XML files, in the format read by
+ * {@link XmlDefinitionReader}.
  *
- * <p>Reading back a written definition yields an equal definition. The writer is what lets the
+ * <p>
+ * Reading back a written definition yields an equal definition. The writer is
+ * what lets the
  * rule explorer hand its discoveries over as ordinary input files.
  */
 public final class XmlDefinitionWriter {
 
-    private XmlDefinitionWriter() {}
+    private XmlDefinitionWriter() {
+    }
 
     /**
      * Writes a definition to a file, creating the parent directories if needed.
      *
      * @param definition the definition to save
-     * @param file the destination; overwritten if it exists
+     * @param file       the destination; overwritten if it exists
      * @throws IOException if the file cannot be written
      */
     public static void write(AutomatonDefinition definition, Path file) throws IOException {

@@ -9,11 +9,12 @@
   neighbors (G2*) hold exactly one live cell.
 -->
 <automaton name="Sierpiński triangle">
-  <description>One-dimensional rule 18 started from a single live cell: the juxtaposition of its generations draws the Sierpiński triangle.</description>
-  <dimension>1</dimension>
-  <size>257</size>
-  <rule>
-    MUL(EQ(COMPTER(G2*), 1), SUB(1, COMPTER(G0)))
-  </rule>
-  <initial>(128)</initial>
+    <description>One-dimensional rule 18 started from a single live cell: the juxtaposition of its
+        generations draws the Sierpiński triangle.</description>
+    <dimension>1</dimension>
+    <size>257</size>
+    <rule>
+        MUL(EQ(COMPTER(G2*), 1), SUB(1, COMPTER(G0)))
+    </rule>
+    <initial>(128)</initial>
 </automaton>

@@ -6,12 +6,13 @@
   Rule: a cell freezes when exactly one of its six face neighbors (G6*) is frozen.
 -->
 <automaton name="Crystal 3D">
-  <description>Crystal growth in three dimensions from a single seed, with the 6-neighborhood. The window shows the plane cutting the crystal through its center; move the slice to explore it.</description>
-  <dimension>3</dimension>
-  <size>65, 65, 65</size>
-  <slice>(32, :, :)</slice>
-  <rule>
-    OU(COMPTER(G0), EQ(COMPTER(G6*), 1))
-  </rule>
-  <initial>(32, 32, 32)</initial>
+    <description>Crystal growth in three dimensions from a single seed, with the 6-neighborhood. The
+        window shows the plane cutting the crystal through its center; move the slice to explore it.</description>
+    <dimension>3</dimension>
+    <size>65, 65, 65</size>
+    <slice>(32, :, :)</slice>
+    <rule>
+        OU(COMPTER(G0), EQ(COMPTER(G6*), 1))
+    </rule>
+    <initial>(32, 32, 32)</initial>
 </automaton>

@@ -1,5 +1,15 @@
 package fr.uspn.cellula.rule.parser;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 import fr.uspn.cellula.neighborhood.Neighborhood;
 import fr.uspn.cellula.rule.expression.Add;
 import fr.uspn.cellula.rule.expression.And;
@@ -14,25 +24,22 @@ import fr.uspn.cellula.rule.expression.Multiply;
 import fr.uspn.cellula.rule.expression.Not;
 import fr.uspn.cellula.rule.expression.Or;
 import fr.uspn.cellula.rule.expression.Subtract;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
- * The operators of the rule language: for each keyword, how many arguments it takes, of which
+ * The operators of the rule language: for each keyword, how many arguments it
+ * takes, of which
  * kind, and how to build the corresponding syntax-tree node.
  *
- * <p>The catalog is the single place where keywords are bound to classes. The parser contains no
- * knowledge of any particular operator, so adding one to the language takes a class and a line in
+ * <p>
+ * The catalog is the single place where keywords are bound to classes. The
+ * parser contains no
+ * knowledge of any particular operator, so adding one to the language takes a
+ * class and a line in
  * {@link #standard()}.
  *
- * <p>Keywords are case-insensitive. Each operator has the French keyword of the subject as its
+ * <p>
+ * Keywords are case-insensitive. Each operator has the French keyword of the
+ * subject as its
  * canonical name and, where it differs, an English alias.
  */
 public final class OperatorCatalog {
@@ -47,30 +54,36 @@ public final class OperatorCatalog {
     /**
      * An operator applied to a fixed number of values.
      *
-     * @param symbol canonical keyword
-     * @param arity number of arguments
+     * @param symbol  canonical keyword
+     * @param arity   number of arguments
      * @param factory builds the node from exactly {@code arity} sub-expressions
      */
     public record ValueOperator(
             String symbol, int arity, Function<List<Expression>, Expression> factory)
-            implements Signature {}
+            implements Signature {
+    }
 
     /**
      * An operator applied to one neighborhood.
      *
-     * @param symbol canonical keyword
+     * @param symbol  canonical keyword
      * @param factory builds the node from the neighborhood
      */
     public record NeighborhoodOperator(String symbol, Function<Neighborhood, Expression> factory)
-            implements Signature {}
+            implements Signature {
+    }
 
     private final Map<String, Signature> byKeyword = new LinkedHashMap<>();
     private final List<String> symbols = new ArrayList<>();
 
     /** Creates an empty catalog. */
-    public OperatorCatalog() {}
+    public OperatorCatalog() {
+    }
 
-    /** Returns a new catalog holding the operators of the subject and the documented extensions. */
+    /**
+     * Returns a new catalog holding the operators of the subject and the documented
+     * extensions.
+     */
     public static OperatorCatalog standard() {
         OperatorCatalog catalog = new OperatorCatalog();
         catalog.register(binary(And.SYMBOL, And::new), "AND");
@@ -103,7 +116,7 @@ public final class OperatorCatalog {
      * Adds an operator to the catalog.
      *
      * @param signature how to parse and build the operator
-     * @param aliases additional keywords accepted for the same operator
+     * @param aliases   additional keywords accepted for the same operator
      * @return this catalog, for chaining
      * @throws IllegalArgumentException if one of the keywords is already taken
      */

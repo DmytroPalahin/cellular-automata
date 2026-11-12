@@ -1,28 +1,34 @@
 package fr.uspn.cellula.ui.text;
 
+import java.io.PrintStream;
+
 import fr.uspn.cellula.automaton.CellularAutomaton;
 import fr.uspn.cellula.config.AutomatonDefinition;
 import fr.uspn.cellula.config.AutomatonFactory;
 import fr.uspn.cellula.grid.Frame;
 import fr.uspn.cellula.render.TextRenderer;
 import fr.uspn.cellula.simulation.Projection;
-import java.io.PrintStream;
 
 /**
- * Runs an automaton without any window and produces its picture: the display of last resort on a
- * machine without a screen, and the workhorse of the {@code print} and {@code render} commands.
+ * Runs an automaton without any window and produces its picture: the display of
+ * last resort on a
+ * machine without a screen, and the workhorse of the {@code print} and
+ * {@code render} commands.
  */
 public final class TextPlayer {
 
-    private TextPlayer() {}
+    private TextPlayer() {
+    }
 
     /**
-     * Runs an automaton for a number of generations and returns what a window would show at the
-     * end: the selected plane for a grid of two dimensions or more, the whole space-time diagram
+     * Runs an automaton for a number of generations and returns what a window would
+     * show at the
+     * end: the selected plane for a grid of two dimensions or more, the whole
+     * space-time diagram
      * for a one-dimensional grid.
      *
      * @param definition the automaton to run
-     * @param steps number of generations to compute
+     * @param steps      number of generations to compute
      * @return the final picture
      */
     public static Frame play(AutomatonDefinition definition, int steps) {
@@ -40,9 +46,9 @@ public final class TextPlayer {
      * Runs an automaton and prints the result as text.
      *
      * @param definition the automaton to run
-     * @param steps number of generations to compute
-     * @param renderer how to draw cells
-     * @param out where to print
+     * @param steps      number of generations to compute
+     * @param renderer   how to draw cells
+     * @param out        where to print
      */
     public static void print(
             AutomatonDefinition definition, int steps, TextRenderer renderer, PrintStream out) {

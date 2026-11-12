@@ -1,5 +1,9 @@
 package fr.uspn.cellula.rule.parser;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import fr.uspn.cellula.neighborhood.Neighborhood;
 import fr.uspn.cellula.neighborhood.NeighborhoodCatalog;
 import fr.uspn.cellula.neighborhood.UnknownNeighborhoodException;
@@ -8,14 +12,12 @@ import fr.uspn.cellula.rule.expression.Expression;
 import fr.uspn.cellula.rule.parser.OperatorCatalog.NeighborhoodOperator;
 import fr.uspn.cellula.rule.parser.OperatorCatalog.Signature;
 import fr.uspn.cellula.rule.parser.OperatorCatalog.ValueOperator;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Turns the text of a rule into a syntax tree.
  *
- * <p>The language is the prefix notation of the subject:
+ * <p>
+ * The language is the prefix notation of the subject:
  *
  * <pre>
  * rule         := expression END
@@ -26,17 +28,25 @@ import java.util.Objects;
  * neighborhood := NAME                              -- G0, G8*, ...
  * </pre>
  *
- * <p>It is parsed by recursive descent, one method per production. Which alternative of
- * {@code arguments} applies, and how many expressions are expected, is not hard-wired: the parser
+ * <p>
+ * It is parsed by recursive descent, one method per production. Which
+ * alternative of
+ * {@code arguments} applies, and how many expressions are expected, is not
+ * hard-wired: the parser
  * asks its {@link OperatorCatalog}. Neighborhood names are resolved against a
- * {@link NeighborhoodCatalog} while parsing, so a tree that parses is guaranteed to be evaluable
+ * {@link NeighborhoodCatalog} while parsing, so a tree that parses is
+ * guaranteed to be evaluable
  * on any grid of the catalog's dimension.
  *
- * <p>A parser holds no per-parse state and can be reused.
+ * <p>
+ * A parser holds no per-parse state and can be reused.
  */
 public final class RuleParser {
 
-    /** Nesting depth beyond which a rule is rejected rather than risking a stack overflow. */
+    /**
+     * Nesting depth beyond which a rule is rejected rather than risking a stack
+     * overflow.
+     */
     private static final int MAX_DEPTH = 512;
 
     private final NeighborhoodCatalog neighborhoods;
@@ -55,7 +65,7 @@ public final class RuleParser {
      * Creates a parser.
      *
      * @param neighborhoods the neighborhoods that rules may refer to
-     * @param operators the operators of the language
+     * @param operators     the operators of the language
      */
     public RuleParser(NeighborhoodCatalog neighborhoods, OperatorCatalog operators) {
         this.neighborhoods = Objects.requireNonNull(neighborhoods, "neighborhoods");

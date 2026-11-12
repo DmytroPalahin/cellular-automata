@@ -1,9 +1,12 @@
 package fr.uspn.cellula.rule.parser;
 
 /**
- * Thrown when the text of a rule is not a valid expression of the rule language.
+ * Thrown when the text of a rule is not a valid expression of the rule
+ * language.
  *
- * <p>The exception remembers where the problem was found, and its message quotes the offending
+ * <p>
+ * The exception remembers where the problem was found, and its message quotes
+ * the offending
  * line with a caret under the culprit:
  *
  * <pre>
@@ -23,8 +26,8 @@ public final class RuleSyntaxException extends IllegalArgumentException {
     /**
      * Creates the exception.
      *
-     * @param reason what is wrong, without location
-     * @param source the full text of the rule
+     * @param reason   what is wrong, without location
+     * @param source   the full text of the rule
      * @param position offset in {@code source} of the first offending character
      */
     public RuleSyntaxException(String reason, String source, int position) {

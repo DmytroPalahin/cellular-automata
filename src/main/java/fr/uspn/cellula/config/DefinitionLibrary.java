@@ -11,14 +11,20 @@ import java.util.List;
 /**
  * The automaton definition files available in a directory.
  *
- * <p>This is the model behind the start-up menu required by the subject, which lists every input
- * file of the current directory. Files that claim to be definitions but are invalid are not
- * silently dropped: they are listed as {@link Entry.Broken broken}, with the reason, so that the
- * author of a file with a typo is told about it instead of wondering where the file went.
+ * <p>
+ * This is the model behind the start-up menu required by the subject, which
+ * lists every input
+ * file of the current directory. Files that claim to be definitions but are
+ * invalid are not
+ * silently dropped: they are listed as {@link Entry.Broken broken}, with the
+ * reason, so that the
+ * author of a file with a typo is told about it instead of wondering where the
+ * file went.
  */
 public final class DefinitionLibrary {
 
-    private DefinitionLibrary() {}
+    private DefinitionLibrary() {
+    }
 
     /** A definition file found in a directory. */
     public sealed interface Entry {
@@ -34,24 +40,27 @@ public final class DefinitionLibrary {
         /**
          * A file that was read successfully.
          *
-         * @param file path of the file
+         * @param file       path of the file
          * @param definition the definition it holds
          */
-        record Loaded(Path file, AutomatonDefinition definition) implements Entry {}
+        record Loaded(Path file, AutomatonDefinition definition) implements Entry {
+        }
 
         /**
          * A file that looks like a definition but could not be used.
          *
-         * @param file path of the file
+         * @param file    path of the file
          * @param problem why it was rejected
          */
-        record Broken(Path file, String problem) implements Entry {}
+        record Broken(Path file, String problem) implements Entry {
+        }
     }
 
     /**
      * Lists the definition files of a directory, sorted by file name.
      *
-     * <p>Only the {@code *.xml} files directly in the directory whose root element is
+     * <p>
+     * Only the {@code *.xml} files directly in the directory whose root element is
      * {@code <automaton>} are considered.
      *
      * @param directory the directory to scan

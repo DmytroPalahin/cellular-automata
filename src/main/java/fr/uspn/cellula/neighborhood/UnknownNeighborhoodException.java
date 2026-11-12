@@ -1,6 +1,9 @@
 package fr.uspn.cellula.neighborhood;
 
-/** Thrown when a rule refers to a neighborhood that does not exist for the grid's dimension. */
+/**
+ * Thrown when a rule refers to a neighborhood that does not exist for the
+ * grid's dimension.
+ */
 public final class UnknownNeighborhoodException extends IllegalArgumentException {
 
     private static final long serialVersionUID = 1L;

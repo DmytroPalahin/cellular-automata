@@ -5,7 +5,9 @@ import fr.uspn.cellula.grid.Frame;
 /**
  * Draws frames with characters, for terminals and for tests.
  *
- * <p>A cell that is off is shown as a dot, a cell that is on as a block, and any other state as
+ * <p>
+ * A cell that is off is shown as a dot, a cell that is on as a block, and any
+ * other state as
  * its last decimal digit.
  */
 public final class TextRenderer {
@@ -18,7 +20,9 @@ public final class TextRenderer {
         this.on = on;
     }
 
-    /** Returns a renderer using Unicode block characters: {@code ·} and {@code █}. */
+    /**
+     * Returns a renderer using Unicode block characters: {@code ·} and {@code █}.
+     */
     public static TextRenderer unicode() {
         return new TextRenderer('·', '█');
     }

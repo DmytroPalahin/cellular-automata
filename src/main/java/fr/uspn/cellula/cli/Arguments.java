@@ -9,27 +9,29 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * The parsed command line of one command: positional arguments, options with a value
+ * The parsed command line of one command: positional arguments, options with a
+ * value
  * ({@code --steps 100} or {@code --steps=100}) and flags ({@code --ascii}).
  */
 final class Arguments {
 
     /** Short spellings of the most common options. */
-    private static final Map<String, String> ALIASES =
-            Map.of("-d", "--dir", "-n", "--steps", "-o", "--output", "-h", "--help");
+    private static final Map<String, String> ALIASES = Map.of("-d", "--dir", "-n", "--steps", "-o", "--output", "-h",
+            "--help");
 
     private final List<String> positionals = new ArrayList<>();
     private final Map<String, String> values = new HashMap<>();
     private final Set<String> flags = new HashSet<>();
 
-    private Arguments() {}
+    private Arguments() {
+    }
 
     /**
      * Parses the arguments of a command.
      *
-     * @param arguments the words following the command name
+     * @param arguments    the words following the command name
      * @param valueOptions the options that take a value, e.g. {@code --steps}
-     * @param flagOptions the options that do not, e.g. {@code --ascii}
+     * @param flagOptions  the options that do not, e.g. {@code --ascii}
      * @throws UsageException if an option is unknown, repeated or lacks its value
      */
     static Arguments parse(List<String> arguments, Set<String> valueOptions, Set<String> flagOptions)
@@ -100,10 +102,10 @@ final class Arguments {
     /**
      * Returns the integer value of an option.
      *
-     * @param name the option
+     * @param name     the option
      * @param fallback the value when the option is absent
-     * @param min smallest accepted value
-     * @param max largest accepted value
+     * @param min      smallest accepted value
+     * @param max      largest accepted value
      * @throws UsageException if the value is not an integer within the bounds
      */
     int intValue(String name, int fallback, int min, int max) throws UsageException {

@@ -8,17 +8,24 @@ import java.util.function.ToIntFunction;
 /**
  * A finite, regular, {@code d}-dimensional grid of cells.
  *
- * <p>The cells live in a {@link DynamicArrayND}, so the dimension is a run-time value. On top of
+ * <p>
+ * The cells live in a {@link DynamicArrayND}, so the dimension is a run-time
+ * value. On top of
  * storage, the grid is responsible for two things:
  *
  * <ul>
- *   <li>answering "which cell is at these coordinates?" for <em>any</em> coordinates, delegating
- *       positions beyond the edge to its {@link BoundaryCondition};
- *   <li>applying a transition to all cells <em>simultaneously</em> ({@link #evolve}).
+ * <li>answering "which cell is at these coordinates?" for <em>any</em>
+ * coordinates, delegating
+ * positions beyond the edge to its {@link BoundaryCondition};
+ * <li>applying a transition to all cells <em>simultaneously</em>
+ * ({@link #evolve}).
  * </ul>
  *
- * <p>A grid is not thread-safe: it must be confined to one thread, or handed over between threads
- * with a proper happens-before edge. {@link #evolve} internally fans out to several threads but
+ * <p>
+ * A grid is not thread-safe: it must be confined to one thread, or handed over
+ * between threads
+ * with a proper happens-before edge. {@link #evolve} internally fans out to
+ * several threads but
  * returns only once they are all done.
  */
 public final class Grid {
@@ -34,7 +41,7 @@ public final class Grid {
     /**
      * Creates a grid whose cells are all {@link Cell#OFF off}.
      *
-     * @param shape extent of the grid along each axis
+     * @param shape    extent of the grid along each axis
      * @param boundary what lies beyond the edges
      */
     public Grid(Shape shape, BoundaryCondition boundary) {
@@ -64,7 +71,9 @@ public final class Grid {
         return boundary;
     }
 
-    /** Returns every cell of the grid in row-major order, as an unmodifiable list. */
+    /**
+     * Returns every cell of the grid in row-major order, as an unmodifiable list.
+     */
     public List<GridCell> cells() {
         return cells;
     }
@@ -72,12 +81,16 @@ public final class Grid {
     /**
      * Returns the cell a rule sees at the given coordinates.
      *
-     * <p>Unlike {@link #cell(int...)}, this method accepts coordinates beyond the edges: they are
-     * resolved by the boundary condition. The argument array is never modified nor retained, so
+     * <p>
+     * Unlike {@link #cell(int...)}, this method accepts coordinates beyond the
+     * edges: they are
+     * resolved by the boundary condition. The argument array is never modified nor
+     * retained, so
      * callers may reuse it as a scratch buffer.
      *
      * @param coordinates one value per axis, possibly out of range
-     * @throws IllegalArgumentException if the number of coordinates is not {@link #dimension()}
+     * @throws IllegalArgumentException if the number of coordinates is not
+     *                                  {@link #dimension()}
      */
     public Cell cellAt(int... coordinates) {
         if (shape.contains(coordinates)) {
@@ -133,10 +146,15 @@ public final class Grid {
     /**
      * Advances the grid by one time step.
      *
-     * <p>The update is synchronous, as the definition of a cellular automaton demands: the
-     * transition is first evaluated for every cell against the current generation, and only then
-     * do all cells take their new state. Because the first phase only reads current states and
-     * writes each cell's private buffer, it is safely run in parallel on large grids.
+     * <p>
+     * The update is synchronous, as the definition of a cellular automaton demands:
+     * the
+     * transition is first evaluated for every cell against the current generation,
+     * and only then
+     * do all cells take their new state. Because the first phase only reads current
+     * states and
+     * writes each cell's private buffer, it is safely run in parallel on large
+     * grids.
      *
      * @param transition computes the next state of a cell; must not modify the grid
      * @return the number of cells whose state changed
@@ -182,7 +200,8 @@ public final class Grid {
     /**
      * Restores states previously captured by {@link #snapshot()}.
      *
-     * @throws IllegalArgumentException if the snapshot was taken from a grid of another size
+     * @throws IllegalArgumentException if the snapshot was taken from a grid of
+     *                                  another size
      */
     public void restore(int[] states) {
         if (states.length != cells.size()) {
@@ -198,8 +217,11 @@ public final class Grid {
     /**
      * Returns a 64-bit digest of the states (FNV-1a over the row-major sequence).
      *
-     * <p>Two grids of the same shape in the same configuration always have the same fingerprint;
-     * different configurations collide with negligible probability. This is what cycle detection
+     * <p>
+     * Two grids of the same shape in the same configuration always have the same
+     * fingerprint;
+     * different configurations collide with negligible probability. This is what
+     * cycle detection
      * relies on to remember past generations cheaply.
      */
     public long fingerprint() {

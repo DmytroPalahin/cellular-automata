@@ -9,7 +9,7 @@ public final class Subtract extends BinaryOperator {
     /**
      * Creates the operator.
      *
-     * @param left first operand
+     * @param left  first operand
      * @param right second operand
      */
     public Subtract(Expression left, Expression right) {

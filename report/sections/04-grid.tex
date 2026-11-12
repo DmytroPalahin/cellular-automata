@@ -13,8 +13,8 @@ base one, and the class models them with two private subclasses instead of a fla
 half-used fields:
 
 \begin{itemize}
-  \item a \code{Branch} holds a list of arrays that have one dimension less;
-  \item a \code{Leaf} is a one-dimensional array and holds the elements.
+    \item a \code{Branch} holds a list of arrays that have one dimension less;
+    \item a \code{Leaf} is a one-dimensional array and holds the elements.
 \end{itemize}
 
 This is the Composite pattern. Client code only sees the abstract type and obtains an instance
@@ -59,55 +59,55 @@ child designated by \code{indices[depth]} and delegates to it with \code{depth +
 generic and implements \code{Iterable<T>}, visiting elements in row-major order.
 
 \begin{figure}[tbp]
-  \centering
-  \begin{tikzpicture}
-    \node[class] (array) at (0, 0) {\atitle{DynamicArrayND<T>}
-      \nodepart{second}+ \static{create}(initializer, sizes...)\\
-        + get(indices...): T\\+ set(value, indices...)\\+ dimension(): int\\+ shape(): Shape\\
-        + iterator(): Iterator<T>\\\# \textit{get(indices, depth): T}};
-    \node[class] (leaf) at (-2.2, -3.5) {\ctitle{Leaf<T>}\nodepart{second}- elements: Object[]};
-    \node[class] (branch) at (1.75, -3.5) {\ctitle{Branch<T>}
-      \nodepart{second}- children: List<DynamicArrayND<T>>};
+    \centering
+    \begin{tikzpicture}
+        \node[class] (array) at (0, 0) {\atitle{DynamicArrayND<T>}
+            \nodepart{second}+ \static{create}(initializer, sizes...)\\
+            + get(indices...): T\\+ set(value, indices...)\\+ dimension(): int\\+ shape(): Shape\\
+            + iterator(): Iterator<T>\\\# \textit{get(indices, depth): T}};
+        \node[class] (leaf) at (-2.2, -3.5) {\ctitle{Leaf<T>}\nodepart{second}- elements: Object[]};
+        \node[class] (branch) at (1.75, -3.5) {\ctitle{Branch<T>}
+            \nodepart{second}- children: List<DynamicArrayND<T>>};
 
-    \node[class=3] (grid) at (6.8, 0.25) {\ctitle{Grid}
-      \nodepart{second}- shape: Shape\\- boundary: BoundaryCondition\\- cells: List<GridCell>
-      \nodepart{third}+ cellAt(coordinates...): Cell\\+ cell(coordinates...): GridCell\\
-        + setState(position, state)\\+ evolve(transition): int\\+ population(): int\\
-        + snapshot(): int[]\\+ fingerprint(): long};
-    \node[enum=3] (boundary) at (10.9, 0.95) {\ctitle[enumeration]{BoundaryCondition}
-      \nodepart{second}FIXED\\PERIODIC
-      \nodepart{third}\textasciitilde{} \textit{outside(...): Cell}};
+        \node[class=3] (grid) at (6.8, 0.25) {\ctitle{Grid}
+            \nodepart{second}- shape: Shape\\- boundary: BoundaryCondition\\- cells: List<GridCell>
+            \nodepart{third}+ cellAt(coordinates...): Cell\\+ cell(coordinates...): GridCell\\
+            + setState(position, state)\\+ evolve(transition): int\\+ population(): int\\
+            + snapshot(): int[]\\+ fingerprint(): long};
+        \node[enum=3] (boundary) at (10.9, 0.95) {\ctitle[enumeration]{BoundaryCondition}
+            \nodepart{second}FIXED\\PERIODIC
+            \nodepart{third}\textasciitilde{} \textit{outside(...): Cell}};
 
-    \node[iface] (cell) at (10.9, -2.5) {\ctitle[interface]{Cell}
-      \nodepart{second}+ state(): int\\+ isOn(): boolean};
-    \node[class=3] (gridcell) at (6.8, -4.6) {\ctitle{GridCell}
-      \nodepart{second}- position: Coordinates\\- state: int\\- staged: int
-      \nodepart{third}+ position(): Coordinates\\\textasciitilde{} stage(nextState)\\
-        \textasciitilde{} commit(): boolean};
-    \node[enum] (void) at (10.9, -5.0) {\ctitle[enumeration]{VoidCell}\nodepart{second}INSTANCE};
+        \node[iface] (cell) at (10.9, -2.5) {\ctitle[interface]{Cell}
+            \nodepart{second}+ state(): int\\+ isOn(): boolean};
+        \node[class=3] (gridcell) at (6.8, -4.6) {\ctitle{GridCell}
+            \nodepart{second}- position: Coordinates\\- state: int\\- staged: int
+            \nodepart{third}+ position(): Coordinates\\\textasciitilde{} stage(nextState)\\
+            \textasciitilde{} commit(): boolean};
+        \node[enum] (void) at (10.9, -5.0) {\ctitle[enumeration]{VoidCell}\nodepart{second}INSTANCE};
 
-    \node[class] (slice) at (-1.2, -6.4) {\ctitle{Slice}
-      \nodepart{second}+ \static{parse}(text): Slice\\+ extract(grid): Frame\\
-        + locate(row, column): Coordinates\\+ moved(axis, coordinate): Slice};
-    \node[class] (frame) at (3.6, -6.9) {\ctitle{Frame}
-      \nodepart{second}+ rows, columns: int\\+ stateAt(row, column): int};
+        \node[class] (slice) at (-1.2, -6.4) {\ctitle{Slice}
+            \nodepart{second}+ \static{parse}(text): Slice\\+ extract(grid): Frame\\
+            + locate(row, column): Coordinates\\+ moved(axis, coordinate): Slice};
+        \node[class] (frame) at (3.6, -6.9) {\ctitle{Frame}
+            \nodepart{second}+ rows, columns: int\\+ stateAt(row, column): int};
 
-    \draw[extends] (leaf.north) -- ++(0, 0.45) -| ($(array.south)+(-0.4,0)$);
-    \draw[extends] (branch.north) -- ++(0, 0.45) -| ($(array.south)+(0.4,0)$);
-    \draw[composition] (branch.east) -- ++(0.3, 0) |- node[elabel, pos=0.25] {$k_1$ children}
-      ($(array.east)+(0,-0.9)$);
-    \draw[composition] ($(grid.west)+(0,0.4)$) -- node[elabel] {stores cells in}
-      ($(array.east)+(0,0.65)$);
-    \draw[association] ($(grid.east)+(0,0.7)$) -- (boundary.west);
-    \draw[composition] (grid.south) -- node[elabel] {$k_1 \cdots k_d$} (gridcell.north);
-    \draw[implements] (gridcell.east) -- ++(0.9, 0) |- (cell.west);
-    \draw[implements] (void) -- (cell);
-    \draw[uses] (boundary.south) -- node[elabel] {resolves to} (cell.north);
-    \draw[uses] (slice.east |- frame.west) -- node[elabel, above] {produces} (frame.west);
-  \end{tikzpicture}
-  \caption{The \code{grid} package. \code{Shape} and \code{Coordinates}, two small immutable value
-    types used throughout, are not drawn.}
-  \label{fig:grid}
+        \draw[extends] (leaf.north) -- ++(0, 0.45) -| ($(array.south)+(-0.4,0)$);
+        \draw[extends] (branch.north) -- ++(0, 0.45) -| ($(array.south)+(0.4,0)$);
+        \draw[composition] (branch.east) -- ++(0.3, 0) |- node[elabel, pos=0.25] {$k_1$ children}
+        ($(array.east)+(0,-0.9)$);
+        \draw[composition] ($(grid.west)+(0,0.4)$) -- node[elabel] {stores cells in}
+        ($(array.east)+(0,0.65)$);
+        \draw[association] ($(grid.east)+(0,0.7)$) -- (boundary.west);
+        \draw[composition] (grid.south) -- node[elabel] {$k_1 \cdots k_d$} (gridcell.north);
+        \draw[implements] (gridcell.east) -- ++(0.9, 0) |- (cell.west);
+        \draw[implements] (void) -- (cell);
+        \draw[uses] (boundary.south) -- node[elabel] {resolves to} (cell.north);
+        \draw[uses] (slice.east |- frame.west) -- node[elabel, above] {produces} (frame.west);
+    \end{tikzpicture}
+    \caption{The \code{grid} package. \code{Shape} and \code{Coordinates}, two small immutable value
+        types used throughout, are not drawn.}
+    \label{fig:grid}
 \end{figure}
 
 \paragraph{Why not a flat array?} A single \code{int[]} indexed by

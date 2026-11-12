@@ -1,5 +1,11 @@
 package fr.uspn.cellula.cli;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+
 import fr.uspn.cellula.config.AutomatonDefinition;
 import fr.uspn.cellula.config.InitialState;
 import fr.uspn.cellula.config.XmlDefinitionWriter;
@@ -10,14 +16,10 @@ import fr.uspn.cellula.explore.RuleExplorer.Verdict;
 import fr.uspn.cellula.explore.SpaceTimeDiagram;
 import fr.uspn.cellula.explore.TableRule;
 import fr.uspn.cellula.grid.Coordinates;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 /**
- * {@code cellula explore}: searches the one-dimensional rules of radius 2 for fractal or chaotic
+ * {@code cellula explore}: searches the one-dimensional rules of radius 2 for
+ * fractal or chaotic
  * ones, which is the bonus question of the subject.
  */
 final class ExploreCommand implements Command {
@@ -76,7 +78,8 @@ final class ExploreCommand implements Command {
         console.out().printf(Locale.ROOT,
                 "Explored %s radius-2 rules for %d generations each, from a single live cell.%n"
                         + "Genuinely radius-2 rules found: %d fractal, %d chaotic.%n",
-                family == Family.TOTALISTIC ? "the 64 totalistic" : samples + " " + family.name().toLowerCase(Locale.ROOT),
+                family == Family.TOTALISTIC ? "the 64 totalistic"
+                        : samples + " " + family.name().toLowerCase(Locale.ROOT),
                 steps, fractal.size(), chaotic.size());
         table(console, "Fractal pictures, by increasing box-counting dimension", fractal, top);
         table(console, "Chaotic pictures, by decreasing compression ratio", chaotic, top);

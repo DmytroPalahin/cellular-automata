@@ -1,11 +1,15 @@
 package fr.uspn.cellula.rule.expression;
 
 /**
- * {@code SI(condition, then, otherwise)}: yields {@code then} if the condition is different from
+ * {@code SI(condition, then, otherwise)}: yields {@code then} if the condition
+ * is different from
  * 0, and {@code otherwise} if it equals 0.
  *
- * <p>Only the selected branch is evaluated. This cannot change the result, because expressions
- * have no side effects, but it does spare whole sub-trees and their neighborhood walks.
+ * <p>
+ * Only the selected branch is evaluated. This cannot change the result, because
+ * expressions
+ * have no side effects, but it does spare whole sub-trees and their
+ * neighborhood walks.
  */
 public final class Conditional extends Operator {
 
@@ -20,7 +24,7 @@ public final class Conditional extends Operator {
      * Creates the operator.
      *
      * @param condition the value to test
-     * @param whenTrue the result when the condition is different from 0
+     * @param whenTrue  the result when the condition is different from 0
      * @param whenFalse the result when the condition equals 0
      */
     public Conditional(Expression condition, Expression whenTrue, Expression whenFalse) {

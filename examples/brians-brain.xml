@@ -9,19 +9,20 @@
   The file also shows custom colors and the periodic boundary.
 -->
 <automaton name="Brian's Brain">
-  <description>A three-state automaton in which every pattern moves. Uses the ETAT() extension, custom colors and a periodic boundary.</description>
-  <dimension>2</dimension>
-  <size>64, 96</size>
-  <boundary>periodic</boundary>
-  <rule>
-    SI(EQ(ETAT(), 1), 2,
-       SI(EQ(ETAT(), 2), 0,
-          EQ(COMPTER(G8*), 2)))
-  </rule>
-  <initial>RANDOM(12)</initial>
-  <colors>
-    <state value="0" color="#0F172A"/>
-    <state value="1" color="#F8FAFC"/>
-    <state value="2" color="#38BDF8"/>
-  </colors>
+    <description>A three-state automaton in which every pattern moves. Uses the ETAT() extension,
+        custom colors and a periodic boundary.</description>
+    <dimension>2</dimension>
+    <size>64, 96</size>
+    <boundary>periodic</boundary>
+    <rule>
+        SI(EQ(ETAT(), 1), 2,
+        SI(EQ(ETAT(), 2), 0,
+        EQ(COMPTER(G8*), 2)))
+    </rule>
+    <initial>RANDOM(12)</initial>
+    <colors>
+        <state value="0" color="#0F172A" />
+        <state value="1" color="#F8FAFC" />
+        <state value="2" color="#38BDF8" />
+    </colors>
 </automaton>

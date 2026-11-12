@@ -7,12 +7,17 @@ import java.util.StringJoiner;
 /**
  * The extent of a grid along each of its axes.
  *
- * <p>A shape {@code k1 × k2 × ... × kd} describes a {@code d}-dimensional box holding
+ * <p>
+ * A shape {@code k1 × k2 × ... × kd} describes a {@code d}-dimensional box
+ * holding
  * {@code k1 * k2 * ... * kd} cells. Shapes are immutable.
  */
 public final class Shape {
 
-    /** Upper bound on the number of cells, to fail fast instead of exhausting the heap. */
+    /**
+     * Upper bound on the number of cells, to fail fast instead of exhausting the
+     * heap.
+     */
     public static final int MAX_CELLS = 64_000_000;
 
     private final int[] sizes;
@@ -28,8 +33,9 @@ public final class Shape {
      *
      * @param sizes extent along each axis; every extent must be positive
      * @return the shape
-     * @throws IllegalArgumentException if no size is given, a size is not positive, or the total
-     *     number of cells exceeds {@link #MAX_CELLS}
+     * @throws IllegalArgumentException if no size is given, a size is not positive,
+     *                                  or the total
+     *                                  number of cells exceeds {@link #MAX_CELLS}
      */
     public static Shape of(int... sizes) {
         Objects.requireNonNull(sizes, "sizes");
@@ -76,7 +82,8 @@ public final class Shape {
      *
      * @param coordinates one value per axis
      * @return {@code true} if every coordinate lies in {@code [0, size(axis))}
-     * @throws IllegalArgumentException if the number of coordinates is not {@link #dimension()}
+     * @throws IllegalArgumentException if the number of coordinates is not
+     *                                  {@link #dimension()}
      */
     public boolean contains(int... coordinates) {
         requireArity(coordinates.length);
@@ -92,7 +99,8 @@ public final class Shape {
      * Maps arbitrary coordinates onto the box as if it were a torus.
      *
      * @param coordinates one value per axis, possibly out of range
-     * @return a new array where each coordinate was reduced modulo the extent of its axis
+     * @return a new array where each coordinate was reduced modulo the extent of
+     *         its axis
      */
     public int[] wrap(int... coordinates) {
         requireArity(coordinates.length);

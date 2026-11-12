@@ -5,10 +5,14 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * An inner node of the syntax tree: a named operator applied to sub-expressions.
+ * An inner node of the syntax tree: a named operator applied to
+ * sub-expressions.
  *
- * <p>This class factors out what all value operators share, namely holding their operands and
- * printing themselves, and leaves evaluation to its subclasses. Those are organized by arity:
+ * <p>
+ * This class factors out what all value operators share, namely holding their
+ * operands and
+ * printing themselves, and leaves evaluation to its subclasses. Those are
+ * organized by arity:
  *
  * <pre>
  * Operator
@@ -17,7 +21,9 @@ import java.util.stream.Collectors;
  * └── Conditional      SI
  * </pre>
  *
- * <p>Two operators are equal when they are of the same class and have equal operands.
+ * <p>
+ * Two operators are equal when they are of the same class and have equal
+ * operands.
  */
 public abstract class Operator implements Expression {
 
@@ -27,7 +33,7 @@ public abstract class Operator implements Expression {
     /**
      * Initializes the common part of an operator.
      *
-     * @param symbol keyword of the operator in the rule language
+     * @param symbol   keyword of the operator in the rule language
      * @param operands the sub-expressions, in source order
      */
     protected Operator(String symbol, Expression... operands) {

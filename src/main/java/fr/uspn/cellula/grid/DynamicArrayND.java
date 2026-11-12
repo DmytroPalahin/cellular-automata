@@ -12,34 +12,49 @@ import java.util.function.Function;
 /**
  * A recursively defined array whose number of dimensions is chosen at run time.
  *
- * <p>Java fixes the dimension of an array in its type ({@code int[][]} is two-dimensional forever).
- * This class lifts that restriction with the recursive definition required by the subject (where
- * it is called {@code TableauDynamiqueND}): an {@code n}-dimensional array of size
- * {@code k1 × k2 × ... × kn} allocates {@code k1} arrays of dimension {@code n - 1} and size
- * {@code k2 × ... × kn}; the recursion stops at one-dimensional arrays, which hold the elements.
+ * <p>
+ * Java fixes the dimension of an array in its type ({@code int[][]} is
+ * two-dimensional forever).
+ * This class lifts that restriction with the recursive definition required by
+ * the subject (where
+ * it is called {@code TableauDynamiqueND}): an {@code n}-dimensional array of
+ * size
+ * {@code k1 × k2 × ... × kn} allocates {@code k1} arrays of dimension
+ * {@code n - 1} and size
+ * {@code k2 × ... × kn}; the recursion stops at one-dimensional arrays, which
+ * hold the elements.
  *
- * <p>The two cases of the definition are modelled by two private subclasses, following the
- * Composite pattern: a {@code Branch} holds sub-arrays, a {@code Leaf} holds elements. Client code
+ * <p>
+ * The two cases of the definition are modelled by two private subclasses,
+ * following the
+ * Composite pattern: a {@code Branch} holds sub-arrays, a {@code Leaf} holds
+ * elements. Client code
  * only ever sees this abstract type and obtains instances from {@link #create}.
  *
- * <p>Elements are visited in row-major (lexicographic) order: the last index varies fastest.
+ * <p>
+ * Elements are visited in row-major (lexicographic) order: the last index
+ * varies fastest.
  *
  * @param <T> type of the elements
  */
 public abstract class DynamicArrayND<T> implements Iterable<T> {
 
     /** Only the nested subclasses may extend this class. */
-    private DynamicArrayND() {}
+    private DynamicArrayND() {
+    }
 
     /**
      * Allocates an array and fills it.
      *
-     * @param initializer computes the element stored at given coordinates; called exactly once per
-     *     element, in row-major order
-     * @param sizes extent along each axis (variable arity: one argument per dimension)
-     * @param <T> type of the elements
+     * @param initializer computes the element stored at given coordinates; called
+     *                    exactly once per
+     *                    element, in row-major order
+     * @param sizes       extent along each axis (variable arity: one argument per
+     *                    dimension)
+     * @param <T>         type of the elements
      * @return the new array
-     * @throws IllegalArgumentException if {@code sizes} is empty or holds a non-positive extent
+     * @throws IllegalArgumentException if {@code sizes} is empty or holds a
+     *                                  non-positive extent
      */
     public static <T> DynamicArrayND<T> create(
             Function<? super Coordinates, ? extends T> initializer, int... sizes) {
@@ -49,9 +64,11 @@ public abstract class DynamicArrayND<T> implements Iterable<T> {
     }
 
     /**
-     * Recursive step of the construction: builds the sub-array that starts at axis {@code depth}.
+     * Recursive step of the construction: builds the sub-array that starts at axis
+     * {@code depth}.
      *
-     * @param prefix scratch buffer holding the indices chosen along the axes above {@code depth}
+     * @param prefix scratch buffer holding the indices chosen along the axes above
+     *               {@code depth}
      */
     private static <T> DynamicArrayND<T> allocate(
             Shape shape,
@@ -92,7 +109,8 @@ public abstract class DynamicArrayND<T> implements Iterable<T> {
      * Returns the element stored at the given indices.
      *
      * @param indices one index per dimension
-     * @throws IllegalArgumentException if the number of indices is not {@link #dimension()}
+     * @throws IllegalArgumentException  if the number of indices is not
+     *                                   {@link #dimension()}
      * @throws IndexOutOfBoundsException if an index is out of range
      */
     public final T get(int... indices) {
@@ -103,9 +121,10 @@ public abstract class DynamicArrayND<T> implements Iterable<T> {
     /**
      * Replaces the element stored at the given indices.
      *
-     * @param value the new element
+     * @param value   the new element
      * @param indices one index per dimension
-     * @throws IllegalArgumentException if the number of indices is not {@link #dimension()}
+     * @throws IllegalArgumentException  if the number of indices is not
+     *                                   {@link #dimension()}
      * @throws IndexOutOfBoundsException if an index is out of range
      */
     public final void set(T value, int... indices) {
@@ -126,7 +145,10 @@ public abstract class DynamicArrayND<T> implements Iterable<T> {
     /** Recursive update: {@code indices[depth]} selects within this (sub-)array. */
     abstract void set(int[] indices, int depth, T value);
 
-    /** Writes the extent of this (sub-)array and of its descendants from {@code depth} on. */
+    /**
+     * Writes the extent of this (sub-)array and of its descendants from
+     * {@code depth} on.
+     */
     abstract void collectSizes(int[] sizes, int depth);
 
     private void requireArity(int[] indices) {

@@ -1,18 +1,25 @@
 package fr.uspn.cellula.automaton;
 
-import fr.uspn.cellula.grid.Grid;
-import fr.uspn.cellula.rule.Rule;
 import java.util.Objects;
 import java.util.function.Consumer;
+
+import fr.uspn.cellula.grid.Grid;
+import fr.uspn.cellula.rule.Rule;
 
 /**
  * A cellular automaton: a grid of cells, a rule, and a discrete clock.
  *
- * <p>Each call to {@link #step()} makes the clock tick once: the rule is applied to every cell of
- * the grid simultaneously and the generation counter is incremented. The automaton also watches
- * its own trajectory and reports when it converges or starts cycling (see {@link Regime}).
+ * <p>
+ * Each call to {@link #step()} makes the clock tick once: the rule is applied
+ * to every cell of
+ * the grid simultaneously and the generation counter is incremented. The
+ * automaton also watches
+ * its own trajectory and reports when it converges or starts cycling (see
+ * {@link Regime}).
  *
- * <p>This class knows nothing about files, threads or display. Like the grid it owns, an
+ * <p>
+ * This class knows nothing about files, threads or display. Like the grid it
+ * owns, an
  * automaton must be confined to one thread at a time.
  */
 public final class CellularAutomaton {
@@ -66,7 +73,8 @@ public final class CellularAutomaton {
         if (changed == 0) {
             regime = Regime.FIXED_POINT;
         } else {
-            // A genuine repetition after a step that changed cells is at least two steps apart.
+            // A genuine repetition after a step that changed cells is at least two steps
+            // apart.
             int period = cycles.observe(grid.fingerprint(), generation);
             regime = period >= 2 ? Regime.cycle(period) : Regime.TRANSIENT;
         }
@@ -99,7 +107,8 @@ public final class CellularAutomaton {
     }
 
     /**
-     * Tells the automaton that its grid was modified from the outside, for instance by a user
+     * Tells the automaton that its grid was modified from the outside, for instance
+     * by a user
      * drawing cells. Past generations are no longer relevant for cycle detection.
      */
     public void gridEdited() {

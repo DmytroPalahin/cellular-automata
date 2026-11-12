@@ -1,5 +1,10 @@
 package fr.uspn.cellula.cli;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Set;
+
 import fr.uspn.cellula.config.AutomatonDefinition;
 import fr.uspn.cellula.config.DefinitionException;
 import fr.uspn.cellula.config.XmlDefinitionReader;
@@ -7,12 +12,11 @@ import fr.uspn.cellula.grid.Frame;
 import fr.uspn.cellula.render.FrameImages;
 import fr.uspn.cellula.render.Palette;
 import fr.uspn.cellula.ui.text.TextPlayer;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Set;
 
-/** {@code cellula render}: runs an automaton and saves the result as a PNG image. */
+/**
+ * {@code cellula render}: runs an automaton and saves the result as a PNG
+ * image.
+ */
 final class RenderCommand implements Command {
 
     /** Width or height, in pixels, the automatic cell size aims for. */
@@ -53,8 +57,7 @@ final class RenderCommand implements Command {
             throws UsageException, DefinitionException, IOException {
         Arguments parsed = Arguments.parse(
                 arguments, Set.of("--output", "--steps", "--cell-size"), Set.of("--no-grid"));
-        AutomatonDefinition definition =
-                XmlDefinitionReader.read(console.resolve(parsed.single("definition file")));
+        AutomatonDefinition definition = XmlDefinitionReader.read(console.resolve(parsed.single("definition file")));
         Path output = console.resolve(parsed.value("--output")
                 .orElseThrow(() -> new UsageException("option --output is required")));
         int steps = parsed.intValue("--steps", PrintCommand.DEFAULT_STEPS, 0, PrintCommand.MAX_STEPS);

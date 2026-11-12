@@ -6,13 +6,13 @@
   G8* is the 8-neighborhood without the cell itself.
 -->
 <automaton name="Game of Life">
-  <description>Conway's Game of Life (B3/S23) on a random soup where 15% of the cells start alive.</description>
-  <dimension>2</dimension>
-  <size>64, 96</size>
-  <rule>
-    SI(EQ(COMPTER(G0), 1),
-       OU(EQ(COMPTER(G8*), 2), EQ(COMPTER(G8*), 3)),
-       EQ(COMPTER(G8*), 3))
-  </rule>
-  <initial>RANDOM(15)</initial>
+    <description>Conway's Game of Life (B3/S23) on a random soup where 15% of the cells start alive.</description>
+    <dimension>2</dimension>
+    <size>64, 96</size>
+    <rule>
+        SI(EQ(COMPTER(G0), 1),
+        OU(EQ(COMPTER(G8*), 2), EQ(COMPTER(G8*), 3)),
+        EQ(COMPTER(G8*), 3))
+    </rule>
+    <initial>RANDOM(15)</initial>
 </automaton>

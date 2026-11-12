@@ -9,79 +9,79 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" version="1.0">
 
-  <xs:element name="automaton">
-    <xs:complexType>
-      <!-- The children may come in any order; each appears at most once. -->
-      <xs:all>
-        <xs:element name="description" type="xs:string" minOccurs="0"/>
-        <xs:element name="dimension" type="xs:positiveInteger"/>
-        <xs:element name="size" type="nonBlank"/>
-        <xs:element name="boundary" type="boundary" minOccurs="0"/>
-        <xs:element name="slice" type="nonBlank" minOccurs="0"/>
-        <xs:element name="neighborhoods" type="neighborhoods" minOccurs="0"/>
-        <xs:element name="rule" type="nonBlank"/>
-        <xs:element name="initial" type="initial"/>
-        <xs:element name="colors" type="colors" minOccurs="0"/>
-      </xs:all>
-      <xs:attribute name="name" type="nonBlank" use="required"/>
+    <xs:element name="automaton">
+        <xs:complexType>
+            <!-- The children may come in any order; each appears at most once. -->
+            <xs:all>
+                <xs:element name="description" type="xs:string" minOccurs="0" />
+                <xs:element name="dimension" type="xs:positiveInteger" />
+                <xs:element name="size" type="nonBlank" />
+                <xs:element name="boundary" type="boundary" minOccurs="0" />
+                <xs:element name="slice" type="nonBlank" minOccurs="0" />
+                <xs:element name="neighborhoods" type="neighborhoods" minOccurs="0" />
+                <xs:element name="rule" type="nonBlank" />
+                <xs:element name="initial" type="initial" />
+                <xs:element name="colors" type="colors" minOccurs="0" />
+            </xs:all>
+            <xs:attribute name="name" type="nonBlank" use="required" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="nonBlank">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[\s\S]*\S[\s\S]*" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="boundary">
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="fixed" />
+            <xs:enumeration value="periodic" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="neighborhoods">
+        <xs:sequence>
+            <xs:element name="neighborhood" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="nonBlank">
+                            <xs:attribute name="name" use="required">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:token">
+                                        <xs:pattern value="G[0-9]+\*?" />
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:attribute>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
     </xs:complexType>
-  </xs:element>
 
-  <xs:simpleType name="nonBlank">
-    <xs:restriction base="xs:string">
-      <xs:pattern value="[\s\S]*\S[\s\S]*"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="boundary">
-    <xs:restriction base="xs:token">
-      <xs:enumeration value="fixed"/>
-      <xs:enumeration value="periodic"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:complexType name="neighborhoods">
-    <xs:sequence>
-      <xs:element name="neighborhood" maxOccurs="unbounded">
-        <xs:complexType>
-          <xs:simpleContent>
-            <xs:extension base="nonBlank">
-              <xs:attribute name="name" use="required">
-                <xs:simpleType>
-                  <xs:restriction base="xs:token">
-                    <xs:pattern value="G[0-9]+\*?"/>
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:attribute>
+    <xs:complexType name="initial">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="seed" type="xs:long" />
             </xs:extension>
-          </xs:simpleContent>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
+        </xs:simpleContent>
+    </xs:complexType>
 
-  <xs:complexType name="initial">
-    <xs:simpleContent>
-      <xs:extension base="xs:string">
-        <xs:attribute name="seed" type="xs:long"/>
-      </xs:extension>
-    </xs:simpleContent>
-  </xs:complexType>
-
-  <xs:complexType name="colors">
-    <xs:sequence>
-      <xs:element name="state" maxOccurs="unbounded">
-        <xs:complexType>
-          <xs:attribute name="value" type="xs:int" use="required"/>
-          <xs:attribute name="color" use="required">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:pattern value="#[0-9A-Fa-f]{6}"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
+    <xs:complexType name="colors">
+        <xs:sequence>
+            <xs:element name="state" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="value" type="xs:int" use="required" />
+                    <xs:attribute name="color" use="required">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:token">
+                                <xs:pattern value="#[0-9A-Fa-f]{6}" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
 </xs:schema>

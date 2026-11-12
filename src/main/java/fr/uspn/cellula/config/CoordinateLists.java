@@ -1,8 +1,9 @@
 package fr.uspn.cellula.config;
 
-import fr.uspn.cellula.grid.Coordinates;
 import java.util.ArrayList;
 import java.util.List;
+
+import fr.uspn.cellula.grid.Coordinates;
 
 /**
  * Parser for the set-of-tuples notation used by definition files, as in
@@ -14,7 +15,9 @@ import java.util.List;
  * tuple := '(' INT { ',' INT } ')' | INT
  * </pre>
  *
- * <p>The surrounding braces are optional, and so are the parentheses around a one-dimensional
+ * <p>
+ * The surrounding braces are optional, and so are the parentheses around a
+ * one-dimensional
  * coordinate: {@code -2, -1, 1, 2} reads as four positions on a line.
  */
 final class CoordinateLists {

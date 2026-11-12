@@ -1,17 +1,22 @@
 package fr.uspn.cellula.cli;
 
-import fr.uspn.cellula.config.DefinitionException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import fr.uspn.cellula.config.DefinitionException;
+
 /**
- * The command-line interface: finds the sub-command, runs it, and turns failures into messages
+ * The command-line interface: finds the sub-command, runs it, and turns
+ * failures into messages
  * and exit statuses.
  *
- * <p>Exit statuses follow the usual convention: 0 for success, 1 when the command could not do
- * its job (invalid definition, unreadable file), 2 when the command line itself is wrong.
+ * <p>
+ * Exit statuses follow the usual convention: 0 for success, 1 when the command
+ * could not do
+ * its job (invalid definition, unreadable file), 2 when the command line itself
+ * is wrong.
  */
 public final class Cli {
 
@@ -45,7 +50,10 @@ public final class Cli {
         this.console = console;
     }
 
-    /** Returns the version of the application, or {@code "dev"} when not run from a release jar. */
+    /**
+     * Returns the version of the application, or {@code "dev"} when not run from a
+     * release jar.
+     */
     public static String version() {
         String version = Cli.class.getPackage().getImplementationVersion();
         return version != null ? version : "dev";

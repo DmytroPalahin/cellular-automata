@@ -6,15 +6,18 @@ import java.util.List;
 /**
  * Splits the source text of a rule into tokens.
  *
- * <p>The lexical grammar is tiny:
+ * <p>
+ * The lexical grammar is tiny:
  *
  * <pre>
  * NUMBER := '-'? DIGIT+
  * NAME   := LETTER (LETTER | DIGIT | '_')* '*'?
  * </pre>
  *
- * plus parentheses and commas. White space, including line breaks, separates tokens and is
- * otherwise ignored, so long rules can be laid out over several lines. The optional trailing star
+ * plus parentheses and commas. White space, including line breaks, separates
+ * tokens and is
+ * otherwise ignored, so long rules can be laid out over several lines. The
+ * optional trailing star
  * belongs to the name, which is what makes {@code G8*} a single token.
  */
 final class Lexer {
@@ -29,7 +32,8 @@ final class Lexer {
     /**
      * Scans the whole source.
      *
-     * @return the tokens, always terminated by a token of type {@link Token.Type#END}
+     * @return the tokens, always terminated by a token of type
+     *         {@link Token.Type#END}
      * @throws RuleSyntaxException if a character cannot start any token
      */
     List<Token> tokenize() {

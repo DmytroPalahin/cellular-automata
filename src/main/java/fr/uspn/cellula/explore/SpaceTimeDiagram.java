@@ -1,14 +1,18 @@
 package fr.uspn.cellula.explore;
 
-import fr.uspn.cellula.grid.Frame;
 import java.util.Arrays;
 import java.util.zip.Deflater;
 
+import fr.uspn.cellula.grid.Frame;
+
 /**
- * The successive generations of a one-dimensional, two-state automaton, stacked on top of each
- * other, together with the measurements used to tell boring pictures from interesting ones.
+ * The successive generations of a one-dimensional, two-state automaton, stacked
+ * on top of each
+ * other, together with the measurements used to tell boring pictures from
+ * interesting ones.
  *
- * <p>Diagrams are immutable.
+ * <p>
+ * Diagrams are immutable.
  */
 public final class SpaceTimeDiagram {
 
@@ -21,9 +25,9 @@ public final class SpaceTimeDiagram {
     /**
      * Runs a rule from a given first row.
      *
-     * @param rule the rule to apply
+     * @param rule    the rule to apply
      * @param initial the row at generation 0, one 0/1 value per cell
-     * @param steps number of generations to compute after the initial one
+     * @param steps   number of generations to compute after the initial one
      * @return a diagram of {@code steps + 1} rows
      */
     public static SpaceTimeDiagram of(TableRule rule, byte[] initial, int steps) {
@@ -39,17 +43,21 @@ public final class SpaceTimeDiagram {
     }
 
     /**
-     * Runs a rule from a single cell switched on, on a row just wide enough for the pattern never
+     * Runs a rule from a single cell switched on, on a row just wide enough for the
+     * pattern never
      * to reach the edges: {@code 2 * radius * steps + 1} cells.
      *
-     * @param rule the rule to apply
+     * @param rule  the rule to apply
      * @param steps number of generations to compute after the initial one
      */
     public static SpaceTimeDiagram fromSingleCell(TableRule rule, int steps) {
         return of(rule, singleCell(widthFor(rule.radius(), steps)), steps);
     }
 
-    /** Returns the width at which a pattern grown from one cell cannot reach the edges. */
+    /**
+     * Returns the width at which a pattern grown from one cell cannot reach the
+     * edges.
+     */
     public static int widthFor(int radius, int steps) {
         return 2 * radius * steps + 1;
     }
@@ -61,7 +69,9 @@ public final class SpaceTimeDiagram {
         return row;
     }
 
-    /** Returns the number of rows, i.e. of generations including the initial one. */
+    /**
+     * Returns the number of rows, i.e. of generations including the initial one.
+     */
     public int generations() {
         return rows.length;
     }
@@ -88,10 +98,14 @@ public final class SpaceTimeDiagram {
     /**
      * Estimates the box-counting dimension of the set of cells that are on.
      *
-     * <p>The picture is covered with boxes of side {@code s} and the boxes containing at least one
+     * <p>
+     * The picture is covered with boxes of side {@code s} and the boxes containing
+     * at least one
      * live cell are counted: {@code N(s)}. For a fractal, {@code N(s)} grows like
-     * {@code s^-D} as the boxes shrink; {@code D} is estimated as the slope of the least-squares
-     * line through the points {@code (log 1/s, log N(s))} for {@code s = 2, 4, 8, ...}. A line has
+     * {@code s^-D} as the boxes shrink; {@code D} is estimated as the slope of the
+     * least-squares
+     * line through the points {@code (log 1/s, log N(s))} for
+     * {@code s = 2, 4, 8, ...}. A line has
      * dimension 1, a filled area dimension 2, the Sierpiński triangle
      * {@code log 3 / log 2 ≈ 1.585}.
      *
@@ -144,8 +158,11 @@ public final class SpaceTimeDiagram {
     /**
      * Measures how well the picture compresses, as a proxy for its disorder.
      *
-     * <p>The cells are packed eight to a byte and deflated. The result is the ratio of the
-     * compressed size to the packed size: close to 0 for uniform or periodic pictures, small for
+     * <p>
+     * The cells are packed eight to a byte and deflated. The result is the ratio of
+     * the
+     * compressed size to the packed size: close to 0 for uniform or periodic
+     * pictures, small for
      * nested (self-similar) ones, and large for pictures that look random.
      */
     public double compressionRatio() {

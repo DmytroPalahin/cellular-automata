@@ -1,14 +1,18 @@
 package fr.uspn.cellula.cli;
 
+import java.util.List;
+import java.util.Set;
+
 import fr.uspn.cellula.config.AutomatonDefinition;
 import fr.uspn.cellula.config.DefinitionException;
 import fr.uspn.cellula.config.XmlDefinitionReader;
 import fr.uspn.cellula.render.TextRenderer;
 import fr.uspn.cellula.ui.text.TextPlayer;
-import java.util.List;
-import java.util.Set;
 
-/** {@code cellula print}: runs an automaton and draws the result with characters. */
+/**
+ * {@code cellula print}: runs an automaton and draws the result with
+ * characters.
+ */
 final class PrintCommand implements Command {
 
     static final int DEFAULT_STEPS = 32;
@@ -42,8 +46,7 @@ final class PrintCommand implements Command {
     public int run(List<String> arguments, Console console)
             throws UsageException, DefinitionException {
         Arguments parsed = Arguments.parse(arguments, Set.of("--steps"), Set.of("--ascii"));
-        AutomatonDefinition definition =
-                XmlDefinitionReader.read(console.resolve(parsed.single("definition file")));
+        AutomatonDefinition definition = XmlDefinitionReader.read(console.resolve(parsed.single("definition file")));
         int steps = parsed.intValue("--steps", DEFAULT_STEPS, 0, MAX_STEPS);
         TextRenderer renderer = parsed.has("--ascii") ? TextRenderer.ascii() : TextRenderer.unicode();
         TextPlayer.print(definition, steps, renderer, console.out());

@@ -7,25 +7,25 @@ The project has 409 automated tests, written with JUnit and run by a single comm
 \code{./mvnw verify}. They are of four kinds.
 
 \begin{description}[leftmargin=1.2em,style=nextline]
-  \item[Unit tests of the model.] Each class is tested through its public interface: the
-    recursive array in one to six dimensions, the two boundary conditions, the truth table of
-    every operator against its definition in the subject, the size and content of every
-    predefined neighborhood in dimensions one to five.
-  \item[Tests against the subject.] The figures of the subject are used as oracles. The growth
-    automaton must reproduce figure 2 row by row; the Sierpi\'nski rule must match the truth table
-    of figure 4 \emph{and} the arithmetic formula of the subject on every cell of 31 generations;
-    the worked example of section 2.3 must parse to the expected tree. For the Game of Life, the
-    classical patterns are checked: a block is stable, a blinker has period 2, a glider moves by
-    one cell diagonally every four generations.
-  \item[Cross-validation.] Two independent implementations of one-dimensional automata exist: the
-    general engine and the fast simulator of the rule explorer. A test generates random rules,
-    translates them from one representation to the other, and requires both to agree on every
-    cell. A bug in either, or in the translation, would break it.
-  \item[End-to-end tests.] The command-line interface is driven with real arguments in a
-    temporary directory, and its output, exit status and generated files are checked: this
-    exercises the whole chain from an XML file to a PNG image. The Swing windows have their own
-    tests, which build the real windows without showing them and press their buttons; they need
-    a display and are skipped on a build server.
+    \item[Unit tests of the model.] Each class is tested through its public interface: the
+          recursive array in one to six dimensions, the two boundary conditions, the truth table of
+          every operator against its definition in the subject, the size and content of every
+          predefined neighborhood in dimensions one to five.
+    \item[Tests against the subject.] The figures of the subject are used as oracles. The growth
+          automaton must reproduce figure 2 row by row; the Sierpi\'nski rule must match the truth table
+          of figure 4 \emph{and} the arithmetic formula of the subject on every cell of 31 generations;
+          the worked example of section 2.3 must parse to the expected tree. For the Game of Life, the
+          classical patterns are checked: a block is stable, a blinker has period 2, a glider moves by
+          one cell diagonally every four generations.
+    \item[Cross-validation.] Two independent implementations of one-dimensional automata exist: the
+          general engine and the fast simulator of the rule explorer. A test generates random rules,
+          translates them from one representation to the other, and requires both to agree on every
+          cell. A bug in either, or in the translation, would break it.
+    \item[End-to-end tests.] The command-line interface is driven with real arguments in a
+          temporary directory, and its output, exit status and generated files are checked: this
+          exercises the whole chain from an XML file to a PNG image. The Swing windows have their own
+          tests, which build the real windows without showing them and press their buttons; they need
+          a display and are skipped on a build server.
 \end{description}
 
 Invalid inputs receive as much attention as valid ones: 27 kinds of invalid definition files and
@@ -33,42 +33,42 @@ Invalid inputs receive as much attention as valid ones: 27 kinds of invalid defi
 \code{examples} directory is loaded and run by a test, so a broken example cannot be shipped.
 
 \begin{table}[H]
-  \centering\small
-  \begin{tabular}{@{}lrrrrr@{}}
-    \toprule
-    Package & Classes & Lines & Tests & Line coverage & Branch coverage \\
-    \midrule
-    \code{grid} & 16 & 345 & 56 & 97\,\% & 94\,\% \\
-    \code{neighborhood} & 5 & 148 & 63 & 99\,\% & 94\,\% \\
-    \code{rule} (with \code{expression}, \code{parser}) & 28 & 279 & 93 & 100\,\% & 96\,\% \\
-    \code{automaton} & 6 & 59 & 19 & 95\,\% & 95\,\% \\
-    \code{config} & 16 & 358 & 95 & 97\,\% & 91\,\% \\
-    \code{simulation} & 5 & 200 & 18 & 96\,\% & 83\,\% \\
-    \code{render}, \code{ui.text} & 5 & 143 & 9 & 99\,\% & 85\,\% \\
-    \code{explore} & 6 & 262 & 26 & 98\,\% & 92\,\% \\
-    \code{cli} & 11 & 286 & 25 & 94\,\% & 89\,\% \\
-    \midrule
-    All of the above & 98 & 2\,080 & 404 & 97\,\% & 92\,\% \\
-    \code{ui.swing} & 12 & 460 & 5 & \multicolumn{2}{c}{needs a display} \\
-    \bottomrule
-  \end{tabular}
-  \caption{Tests and coverage by package, as measured by JaCoCo in a headless build. Classes
-    include nested classes; lines are executable lines.}
-  \label{tab:coverage}
+    \centering\small
+    \begin{tabular}{@{}lrrrrr@{}}
+        \toprule
+        Package                                             & Classes & Lines  & Tests & Line coverage                       & Branch coverage \\
+        \midrule
+        \code{grid}                                         & 16      & 345    & 56    & 97\,\%                              & 94\,\%          \\
+        \code{neighborhood}                                 & 5       & 148    & 63    & 99\,\%                              & 94\,\%          \\
+        \code{rule} (with \code{expression}, \code{parser}) & 28      & 279    & 93    & 100\,\%                             & 96\,\%          \\
+        \code{automaton}                                    & 6       & 59     & 19    & 95\,\%                              & 95\,\%          \\
+        \code{config}                                       & 16      & 358    & 95    & 97\,\%                              & 91\,\%          \\
+        \code{simulation}                                   & 5       & 200    & 18    & 96\,\%                              & 83\,\%          \\
+        \code{render}, \code{ui.text}                       & 5       & 143    & 9     & 99\,\%                              & 85\,\%          \\
+        \code{explore}                                      & 6       & 262    & 26    & 98\,\%                              & 92\,\%          \\
+        \code{cli}                                          & 11      & 286    & 25    & 94\,\%                              & 89\,\%          \\
+        \midrule
+        All of the above                                    & 98      & 2\,080 & 404   & 97\,\%                              & 92\,\%          \\
+        \code{ui.swing}                                     & 12      & 460    & 5     & \multicolumn{2}{c}{needs a display}                   \\
+        \bottomrule
+    \end{tabular}
+    \caption{Tests and coverage by package, as measured by JaCoCo in a headless build. Classes
+        include nested classes; lines are executable lines.}
+    \label{tab:coverage}
 \end{table}
 
 \subsection{Tooling}
 
 \begin{itemize}
-  \item \textbf{Build.} Maven, through the wrapper, so that the only prerequisite is a JDK. The
-    application itself has no dependency: only the tests need JUnit.
-  \item \textbf{Compiler as reviewer.} The code is compiled with all the lints of \code{javac}
-    enabled and treated as errors: an unchecked conversion or a missing case does not compile.
-  \item \textbf{Continuous integration.} A GitHub Actions workflow builds and tests on Linux,
-    macOS and Windows, with two versions of the JDK, and validates the example files with the
-    packaged application.
-  \item \textbf{Version control.} The history follows the Conventional Commits convention, one
-    commit per coherent step of the work.
+    \item \textbf{Build.} Maven, through the wrapper, so that the only prerequisite is a JDK. The
+          application itself has no dependency: only the tests need JUnit.
+    \item \textbf{Compiler as reviewer.} The code is compiled with all the lints of \code{javac}
+          enabled and treated as errors: an unchecked conversion or a missing case does not compile.
+    \item \textbf{Continuous integration.} A GitHub Actions workflow builds and tests on Linux,
+          macOS and Windows, with two versions of the JDK, and validates the example files with the
+          packaged application.
+    \item \textbf{Version control.} The history follows the Conventional Commits convention, one
+          commit per coherent step of the work.
 \end{itemize}
 
 \subsection{Performance}
@@ -79,21 +79,21 @@ A million-cell Game of Life runs at about 35 generations per second, far beyond 
 needs, which confirms that keeping the recursive array and an interpreted rule was affordable.
 
 \begin{table}[H]
-  \centering\small
-  \begin{tabular}{@{}llrr@{}}
-    \toprule
-    Automaton & Neighborhood & Cells & Time per generation \\
-    \midrule
-    Sierpi\'nski, 1D & G2 & 257 & 0.02 ms \\
-    Game of Life, $64 \times 96$ & G8* & 6\,144 & 0.8 ms \\
-    Game of Life, $512 \times 512$ & G8* & 262\,144 & 7 ms \\
-    Game of Life, $1024 \times 1024$ & G8* & 1\,048\,576 & 29 ms \\
-    Crystal, $65^3$ & G6* & 274\,625 & 8 ms \\
-    Clouds, $40^3$ & G26* & 64\,000 & 13 ms \\
-    Hypercube, $25^4$ & G8* (4D) & 390\,625 & 18 ms \\
-    \bottomrule
-  \end{tabular}
-  \caption{Median time per generation on an Apple M1~Pro (10 cores), OpenJDK 27. Grids below
-    8\,192 cells are computed on a single thread.}
-  \label{tab:performance}
+    \centering\small
+    \begin{tabular}{@{}llrr@{}}
+        \toprule
+        Automaton                        & Neighborhood & Cells       & Time per generation \\
+        \midrule
+        Sierpi\'nski, 1D                 & G2           & 257         & 0.02 ms             \\
+        Game of Life, $64 \times 96$     & G8*          & 6\,144      & 0.8 ms              \\
+        Game of Life, $512 \times 512$   & G8*          & 262\,144    & 7 ms                \\
+        Game of Life, $1024 \times 1024$ & G8*          & 1\,048\,576 & 29 ms               \\
+        Crystal, $65^3$                  & G6*          & 274\,625    & 8 ms                \\
+        Clouds, $40^3$                   & G26*         & 64\,000     & 13 ms               \\
+        Hypercube, $25^4$                & G8* (4D)     & 390\,625    & 18 ms               \\
+        \bottomrule
+    \end{tabular}
+    \caption{Median time per generation on an Apple M1~Pro (10 cores), OpenJDK 27. Grids below
+        8\,192 cells are computed on a single thread.}
+    \label{tab:performance}
 \end{table}

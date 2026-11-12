@@ -1,8 +1,5 @@
 package fr.uspn.cellula.ui.swing;
 
-import fr.uspn.cellula.grid.Frame;
-import fr.uspn.cellula.render.FrameImages;
-import fr.uspn.cellula.render.Palette;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -11,22 +8,33 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
+
+import fr.uspn.cellula.grid.Frame;
+import fr.uspn.cellula.render.FrameImages;
+import fr.uspn.cellula.render.Palette;
 
 /**
  * The component that draws a {@link Frame} as a grid of colored squares.
  *
- * <p>It supports the two displays of the application:
+ * <p>
+ * It supports the two displays of the application:
  *
  * <ul>
- *   <li><em>fitted</em>: the whole frame is scaled to the component and centered (planes);
- *   <li><em>scrolling</em>: the frame is fitted in width and anchored to the top, and when it
- *       grows taller than the component only its latest rows are shown, like a terminal
- *       (space-time diagrams).
+ * <li><em>fitted</em>: the whole frame is scaled to the component and centered
+ * (planes);
+ * <li><em>scrolling</em>: the frame is fitted in width and anchored to the top,
+ * and when it
+ * grows taller than the component only its latest rows are shown, like a
+ * terminal
+ * (space-time diagrams).
  * </ul>
  *
- * <p>The canvas also translates mouse gestures into "the user pointed at this cell" events.
+ * <p>
+ * The canvas also translates mouse gestures into "the user pointed at this
+ * cell" events.
  */
 final class FrameCanvas extends JComponent {
 
@@ -36,10 +44,11 @@ final class FrameCanvas extends JComponent {
         /**
          * Called when the pointer is pressed on, or dragged onto, a cell.
          *
-         * @param row row of the cell in the displayed frame
-         * @param column column of the cell in the displayed frame
-         * @param gestureStart {@code true} for the press that starts a gesture, {@code false}
-         *     for the cells reached while dragging
+         * @param row          row of the cell in the displayed frame
+         * @param column       column of the cell in the displayed frame
+         * @param gestureStart {@code true} for the press that starts a gesture,
+         *                     {@code false}
+         *                     for the cells reached while dragging
          */
         void cellPointed(int row, int column, boolean gestureStart);
     }
@@ -61,8 +70,9 @@ final class FrameCanvas extends JComponent {
     /**
      * Creates an empty canvas.
      *
-     * @param palette the colors of the states
-     * @param scrolling {@code true} for the scrolling display, {@code false} for the fitted one
+     * @param palette   the colors of the states
+     * @param scrolling {@code true} for the scrolling display, {@code false} for
+     *                  the fitted one
      */
     FrameCanvas(Palette palette, boolean scrolling) {
         this.palette = palette;
@@ -81,12 +91,17 @@ final class FrameCanvas extends JComponent {
         repaint();
     }
 
-    /** Returns the frame being displayed, or {@code null} before the first one arrived. */
+    /**
+     * Returns the frame being displayed, or {@code null} before the first one
+     * arrived.
+     */
     Frame frame() {
         return frame;
     }
 
-    /** Returns whether cells are separated by thin lines when they are large enough. */
+    /**
+     * Returns whether cells are separated by thin lines when they are large enough.
+     */
     boolean gridLines() {
         return gridLines;
     }
@@ -103,7 +118,7 @@ final class FrameCanvas extends JComponent {
     /**
      * Returns a sensible initial size for a frame of the given dimensions.
      *
-     * @param rows number of rows the canvas should comfortably show
+     * @param rows    number of rows the canvas should comfortably show
      * @param columns number of columns of the frames
      */
     static Dimension comfortableSize(int rows, int columns) {
@@ -151,7 +166,10 @@ final class FrameCanvas extends JComponent {
         return new Layout(x, y, cellSize, firstRow, shownRows, columns);
     }
 
-    /** Whole pixels per cell whenever a cell is at least one pixel, to keep squares crisp. */
+    /**
+     * Whole pixels per cell whenever a cell is at least one pixel, to keep squares
+     * crisp.
+     */
     private static double snap(double cellSize) {
         return cellSize >= 1 ? Math.floor(cellSize) : cellSize;
     }

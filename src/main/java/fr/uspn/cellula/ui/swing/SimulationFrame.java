@@ -1,15 +1,5 @@
 package fr.uspn.cellula.ui.swing;
 
-import fr.uspn.cellula.config.AutomatonDefinition;
-import fr.uspn.cellula.config.InitialState;
-import fr.uspn.cellula.grid.Cell;
-import fr.uspn.cellula.grid.Frame;
-import fr.uspn.cellula.grid.Shape;
-import fr.uspn.cellula.grid.Slice;
-import fr.uspn.cellula.render.FrameImages;
-import fr.uspn.cellula.render.Palette;
-import fr.uspn.cellula.simulation.Simulation;
-import fr.uspn.cellula.simulation.Snapshot;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -24,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -45,13 +36,29 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import fr.uspn.cellula.config.AutomatonDefinition;
+import fr.uspn.cellula.config.InitialState;
+import fr.uspn.cellula.grid.Cell;
+import fr.uspn.cellula.grid.Frame;
+import fr.uspn.cellula.grid.Shape;
+import fr.uspn.cellula.grid.Slice;
+import fr.uspn.cellula.render.FrameImages;
+import fr.uspn.cellula.render.Palette;
+import fr.uspn.cellula.simulation.Simulation;
+import fr.uspn.cellula.simulation.Snapshot;
+
 /**
  * The window that shows one running automaton.
  *
- * <p>The window is a thin view over a {@link Simulation}. User actions are forwarded to the
- * simulation as commands; the simulation answers by publishing {@link Snapshot}s, which this class
- * moves onto the event dispatch thread before touching any component. When snapshots arrive
- * faster than Swing can paint, intermediate ones are dropped and only the latest is shown.
+ * <p>
+ * The window is a thin view over a {@link Simulation}. User actions are
+ * forwarded to the
+ * simulation as commands; the simulation answers by publishing
+ * {@link Snapshot}s, which this class
+ * moves onto the event dispatch thread before touching any component. When
+ * snapshots arrive
+ * faster than Swing can paint, intermediate ones are dropped and only the
+ * latest is shown.
  */
 public final class SimulationFrame extends JFrame {
 
@@ -195,7 +202,8 @@ public final class SimulationFrame extends JFrame {
     private JComponent statusBar() {
         JPanel bar = new JPanel(new BorderLayout());
         bar.setBorder(BorderFactory.createEmptyBorder(4, 10, 4, 10));
-        // The status takes all the room the summary leaves, so it never needs a new layout pass
+        // The status takes all the room the summary leaves, so it never needs a new
+        // layout pass
         // when its text grows.
         bar.add(statusLabel, BorderLayout.CENTER);
         bar.add(new JLabel(definition.summary()), BorderLayout.EAST);
@@ -233,7 +241,10 @@ public final class SimulationFrame extends JFrame {
     // Simulation -> view
     // ---------------------------------------------------------------------------------------
 
-    /** Called on the simulation thread: hands the snapshot over to the event dispatch thread. */
+    /**
+     * Called on the simulation thread: hands the snapshot over to the event
+     * dispatch thread.
+     */
     private void enqueue(Snapshot snapshot) {
         if (pending.getAndSet(snapshot) == null) {
             SwingUtilities.invokeLater(this::showPending);
@@ -283,8 +294,10 @@ public final class SimulationFrame extends JFrame {
     }
 
     /**
-     * Draws on the grid: a press toggles the pointed cell, and dragging extends the new state to
-     * the cells swept over. On a space-time diagram every row edits the current generation.
+     * Draws on the grid: a press toggles the pointed cell, and dragging extends the
+     * new state to
+     * the cells swept over. On a space-time diagram every row edits the current
+     * generation.
      */
     private void paintCell(int row, int column, boolean gestureStart) {
         Frame frame = canvas.frame();
@@ -316,8 +329,8 @@ public final class SimulationFrame extends JFrame {
         text.append("\nRule\n").append(definition.rule().strip().indent(2));
         if (!definition.neighborhoods().isEmpty()) {
             text.append("\nUser-defined neighborhoods\n");
-            definition.neighborhoods().forEach((name, offsets) ->
-                    text.append("  ").append(name).append(" = ").append(offsets).append('\n'));
+            definition.neighborhoods().forEach(
+                    (name, offsets) -> text.append("  ").append(name).append(" = ").append(offsets).append('\n'));
         }
         text.append("\nInitial state\n  ").append(abbreviate(definition.initialState().describe()));
 

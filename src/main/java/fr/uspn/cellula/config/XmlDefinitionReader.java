@@ -1,9 +1,5 @@
 package fr.uspn.cellula.config;
 
-import fr.uspn.cellula.grid.BoundaryCondition;
-import fr.uspn.cellula.grid.Coordinates;
-import fr.uspn.cellula.grid.Shape;
-import fr.uspn.cellula.grid.Slice;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -13,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalLong;
+
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,6 +20,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -30,25 +28,40 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import fr.uspn.cellula.grid.BoundaryCondition;
+import fr.uspn.cellula.grid.Coordinates;
+import fr.uspn.cellula.grid.Shape;
+import fr.uspn.cellula.grid.Slice;
+
 /**
  * Reads automaton definitions from XML files.
  *
- * <p>Reading happens in three stages, each catching a different class of mistakes:
+ * <p>
+ * Reading happens in three stages, each catching a different class of mistakes:
  *
  * <ol>
- *   <li>the file is parsed and validated against the bundled XML Schema, which rejects files that
- *       are not well-formed or do not have the expected structure;
- *   <li>the textual values (sizes, slice, coordinate lists, ...) are parsed and cross-checked;
- *   <li>the rule is compiled, which proves that it is syntactically correct and only refers to
- *       neighborhoods that exist.
+ * <li>the file is parsed and validated against the bundled XML Schema, which
+ * rejects files that
+ * are not well-formed or do not have the expected structure;
+ * <li>the textual values (sizes, slice, coordinate lists, ...) are parsed and
+ * cross-checked;
+ * <li>the rule is compiled, which proves that it is syntactically correct and
+ * only refers to
+ * neighborhoods that exist.
  * </ol>
  *
- * <p>A file that passes all three is guaranteed to be instantiable by {@link AutomatonFactory}.
- * Whatever goes wrong is reported as a {@link DefinitionException} whose message starts with the
+ * <p>
+ * A file that passes all three is guaranteed to be instantiable by
+ * {@link AutomatonFactory}.
+ * Whatever goes wrong is reported as a {@link DefinitionException} whose
+ * message starts with the
  * name of the file.
  *
- * <p>The parser is configured defensively (no DTD, no external entity, no XInclude), so opening an
- * untrusted file cannot make the application read other files or reach the network.
+ * <p>
+ * The parser is configured defensively (no DTD, no external entity, no
+ * XInclude), so opening an
+ * untrusted file cannot make the application read other files or reach the
+ * network.
  */
 public final class XmlDefinitionReader {
 
@@ -57,14 +70,16 @@ public final class XmlDefinitionReader {
 
     private static final String SCHEMA_RESOURCE = "automaton.xsd";
 
-    private XmlDefinitionReader() {}
+    private XmlDefinitionReader() {
+    }
 
     /**
      * Reads a definition file.
      *
      * @param file path of the XML file
      * @return the validated definition
-     * @throws DefinitionException if the file cannot be read or does not describe a valid automaton
+     * @throws DefinitionException if the file cannot be read or does not describe a
+     *                             valid automaton
      */
     public static AutomatonDefinition read(Path file) throws DefinitionException {
         String source = file.getFileName().toString();
@@ -78,10 +93,11 @@ public final class XmlDefinitionReader {
     /**
      * Reads a definition from a stream.
      *
-     * @param input the XML document
+     * @param input  the XML document
      * @param source name used to refer to the document in error messages
      * @return the validated definition
-     * @throws DefinitionException if the document does not describe a valid automaton
+     * @throws DefinitionException if the document does not describe a valid
+     *                             automaton
      */
     public static AutomatonDefinition read(InputStream input, String source)
             throws DefinitionException {
@@ -96,13 +112,17 @@ public final class XmlDefinitionReader {
     }
 
     /**
-     * Tells, cheaply, whether a file is meant to be an automaton definition, i.e. whether it is an
-     * XML document whose root element is {@code <automaton>}. Other XML files that happen to sit
-     * in the same directory (a Maven {@code pom.xml}, for instance) are thereby ignored.
+     * Tells, cheaply, whether a file is meant to be an automaton definition, i.e.
+     * whether it is an
+     * XML document whose root element is {@code <automaton>}. Other XML files that
+     * happen to sit
+     * in the same directory (a Maven {@code pom.xml}, for instance) are thereby
+     * ignored.
      *
      * @param file the file to probe
-     * @return {@code true} if the file starts like a definition; {@code false} otherwise,
-     *     including when it cannot be read
+     * @return {@code true} if the file starts like a definition; {@code false}
+     *         otherwise,
+     *         including when it cannot be read
      */
     public static boolean looksLikeDefinition(Path file) {
         XMLInputFactory factory = XMLInputFactory.newFactory();
@@ -143,12 +163,18 @@ public final class XmlDefinitionReader {
         }
     }
 
-    /** Strips the "cvc-xxx.n.n: " code that the validator puts in front of its messages. */
+    /**
+     * Strips the "cvc-xxx.n.n: " code that the validator puts in front of its
+     * messages.
+     */
     private static String plain(String message) {
         return message == null ? "invalid XML" : message.replaceFirst("^cvc-[\\w.\\-]+:\\s*", "");
     }
 
-    /** Makes every problem reported by the XML parser fatal, including schema violations. */
+    /**
+     * Makes every problem reported by the XML parser fatal, including schema
+     * violations.
+     */
     private static final class Strict implements ErrorHandler {
         @Override
         public void warning(SAXParseException exception) {
@@ -253,7 +279,9 @@ public final class XmlDefinitionReader {
         }
     }
 
-    /** Reads sizes written as {@code 96, 64}, {@code (96, 64)} or {@code 96 x 64}. */
+    /**
+     * Reads sizes written as {@code 96, 64}, {@code (96, 64)} or {@code 96 x 64}.
+     */
     private static Shape parseShape(String text, int dimension) {
         String body = text.strip();
         if (body.startsWith("(") && body.endsWith(")")) {
@@ -278,7 +306,8 @@ public final class XmlDefinitionReader {
     }
 
     /**
-     * Removes the indentation a multi-line rule owes to its position in the XML file, keeping the
+     * Removes the indentation a multi-line rule owes to its position in the XML
+     * file, keeping the
      * indentation of its lines relative to each other.
      */
     private static String dedent(String text) {

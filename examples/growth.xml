@@ -7,9 +7,10 @@
   A cell switches on as soon as itself or one of its two neighbors is on.
 -->
 <automaton name="Growth">
-  <description>A cell lights up when it or one of its two neighbors is lit: the lit area grows by one cell on each side per generation, then the automaton converges.</description>
-  <dimension>1</dimension>
-  <size>41</size>
-  <rule>SUPEQ(COMPTER(G2), 1)</rule>
-  <initial>(20)</initial>
+    <description>A cell lights up when it or one of its two neighbors is lit: the lit area grows by
+        one cell on each side per generation, then the automaton converges.</description>
+    <dimension>1</dimension>
+    <size>41</size>
+    <rule>SUPEQ(COMPTER(G2), 1)</rule>
+    <initial>(20)</initial>
 </automaton>

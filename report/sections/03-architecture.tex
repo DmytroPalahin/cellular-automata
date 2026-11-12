@@ -7,54 +7,54 @@ Four principles shaped the design. They are stated here because most of the deci
 in the following sections derive from them.
 
 \begin{description}[leftmargin=1.2em,style=nextline]
-  \item[A pure model.] The classes that \emph{are} the automaton (grid, neighborhoods, rules,
-    automaton) know nothing about files, threads or pixels. They form a small library that can be
-    tested in isolation and reused behind any front end.
-  \item[Dependencies point one way.] Packages form layers (\cref{fig:layers}); a package only
-    depends on the layers below it. Swing is confined to a single package: deleting it leaves a
-    working batch application.
-  \item[Immutability by default.] Positions, shapes, neighborhoods, syntax trees, definitions and
-    snapshots are immutable. Mutable state is concentrated in three classes: \code{GridCell},
-    \code{CellularAutomaton} and \code{Simulation}.
-  \item[Errors are for the user.] Whatever comes from outside is validated at the boundary, and a
-    rejected input comes with a message that says what to fix. Inner code then trusts its inputs.
+    \item[A pure model.] The classes that \emph{are} the automaton (grid, neighborhoods, rules,
+          automaton) know nothing about files, threads or pixels. They form a small library that can be
+          tested in isolation and reused behind any front end.
+    \item[Dependencies point one way.] Packages form layers (\cref{fig:layers}); a package only
+          depends on the layers below it. Swing is confined to a single package: deleting it leaves a
+          working batch application.
+    \item[Immutability by default.] Positions, shapes, neighborhoods, syntax trees, definitions and
+          snapshots are immutable. Mutable state is concentrated in three classes: \code{GridCell},
+          \code{CellularAutomaton} and \code{Simulation}.
+    \item[Errors are for the user.] Whatever comes from outside is validated at the boundary, and a
+          rejected input comes with a message that says what to fix. Inner code then trusts its inputs.
 \end{description}
 
 \begin{figure}[H]
-  \centering
-  \begin{tikzpicture}[
-      box/.style={draw=ink!60, fill=classfill, rounded corners=2pt, minimum height=0.85cm, text height=1.6ex, text depth=0.5ex,
-        font=\ttfamily\small, inner xsep=7pt},
-      layer/.style={font=\sffamily\scriptsize\itshape, text=muted, anchor=east},
-      dep/.style={-{Straight Barb[length=3pt]}, draw=muted, line width=0.5pt}]
-    \node[box] (cli) at (2.0, 4.5) {cli};
-    \node[box] (swing) at (5.0, 4.5) {ui.swing};
-    \node[box] (text) at (8.2, 4.5) {ui.text};
-    \node[box] (sim) at (2.6, 3.0) {simulation};
-    \node[box] (render) at (6.0, 3.0) {render};
-    \node[box] (explore) at (9.3, 3.0) {explore};
-    \node[box, minimum width=9.6cm] (config) at (5.6, 1.5) {config};
-    \node[box] (automaton) at (1.6, 0) {automaton};
-    \node[box] (rule) at (4.4, 0) {rule};
-    \node[box] (nb) at (7.4, 0) {neighborhood};
-    \node[box] (grid) at (10.2, 0) {grid};
-    \draw[dep] (automaton) -- (rule);
-    \draw[dep] (rule) -- (nb);
-    \draw[dep] (nb) -- (grid);
-    \node[layer] at (0.2, 4.5) {entry points};
-    \node[layer] at (0.2, 3.0) {services};
-    \node[layer] at (0.2, 1.5) {input files};
-    \node[layer] at (0.2, 0) {model};
-    \begin{scope}[on background layer]
-      \foreach \y in {4.5, 3.0, 1.5, 0}
-        \fill[packfill] (0.35, \y - 0.62) rectangle (11.5, \y + 0.62);
-      \foreach \y in {3.75, 2.25, 0.75}
-        \draw[dep] (5.9, \y + 0.13) -- (5.9, \y - 0.13);
-    \end{scope}
-  \end{tikzpicture}
-  \caption{The packages, in layers. A package depends only on packages of the layers below it
-    and, within the model, on the packages to its right.}
-  \label{fig:layers}
+    \centering
+    \begin{tikzpicture}[
+            box/.style={draw=ink!60, fill=classfill, rounded corners=2pt, minimum height=0.85cm, text height=1.6ex, text depth=0.5ex,
+                    font=\ttfamily\small, inner xsep=7pt},
+            layer/.style={font=\sffamily\scriptsize\itshape, text=muted, anchor=east},
+            dep/.style={-{Straight Barb[length=3pt]}, draw=muted, line width=0.5pt}]
+        \node[box] (cli) at (2.0, 4.5) {cli};
+        \node[box] (swing) at (5.0, 4.5) {ui.swing};
+        \node[box] (text) at (8.2, 4.5) {ui.text};
+        \node[box] (sim) at (2.6, 3.0) {simulation};
+        \node[box] (render) at (6.0, 3.0) {render};
+        \node[box] (explore) at (9.3, 3.0) {explore};
+        \node[box, minimum width=9.6cm] (config) at (5.6, 1.5) {config};
+        \node[box] (automaton) at (1.6, 0) {automaton};
+        \node[box] (rule) at (4.4, 0) {rule};
+        \node[box] (nb) at (7.4, 0) {neighborhood};
+        \node[box] (grid) at (10.2, 0) {grid};
+        \draw[dep] (automaton) -- (rule);
+        \draw[dep] (rule) -- (nb);
+        \draw[dep] (nb) -- (grid);
+        \node[layer] at (0.2, 4.5) {entry points};
+        \node[layer] at (0.2, 3.0) {services};
+        \node[layer] at (0.2, 1.5) {input files};
+        \node[layer] at (0.2, 0) {model};
+        \begin{scope}[on background layer]
+            \foreach \y in {4.5, 3.0, 1.5, 0}
+            \fill[packfill] (0.35, \y - 0.62) rectangle (11.5, \y + 0.62);
+            \foreach \y in {3.75, 2.25, 0.75}
+            \draw[dep] (5.9, \y + 0.13) -- (5.9, \y - 0.13);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{The packages, in layers. A package depends only on packages of the layers below it
+        and, within the model, on the packages to its right.}
+    \label{fig:layers}
 \end{figure}
 
 \subsection{Overview of the classes}
@@ -64,123 +64,123 @@ design and to the relationships between them. Members are omitted here; the diag
 \cref{sec:grid,sec:neighborhoods,sec:rules,sec:simulation} give them package by package.
 
 \begin{figure}[H]
-  \centering
-  \begin{tikzpicture}[scale=0.94]
-    % ---- entry points ---------------------------------------------------------------------
-    \node[simple] (launcher) at (0, 0) {LauncherFrame};
-    \node[simple] (simframe) at (3.6, 0) {SimulationFrame};
-    \node[simple] (cli) at (7.6, 0) {Cli};
-    \node[simple] (explorer) at (11.4, 0) {RuleExplorer};
-    % ---- simulation -----------------------------------------------------------------------
-    \node[simple] (snapshot) at (0, -1.9) {Snapshot};
-    \node[simple] (simulation) at (3.6, -1.9) {Simulation};
-    \node[simpleiface] (projection) at (7.6, -1.9) {\ctitle[interface]{Projection}};
-    \node[simple] (tablerule) at (11.4, -1.9) {TableRule};
-    % ---- config ---------------------------------------------------------------------------
-    \node[simple] (library) at (0, -3.9) {DefinitionLibrary};
-    \node[simple] (reader) at (3.6, -3.9) {XmlDefinitionReader};
-    \node[simple] (definition) at (7.6, -3.9) {AutomatonDefinition};
-    \node[simple] (factory) at (11.4, -3.9) {AutomatonFactory};
-    % ---- automaton ------------------------------------------------------------------------
-    \node[simple] (automaton) at (7.6, -6.0) {CellularAutomaton};
-    \node[simple] (regime) at (11.4, -6.0) {Regime};
-    % ---- rule -----------------------------------------------------------------------------
-    \node[simpleiface] (rule) at (3.0, -6.0) {\ctitle[interface]{Rule}};
-    \node[simple] (exprule) at (3.0, -7.7) {ExpressionRule};
-    \node[simple] (parser) at (-0.2, -7.7) {RuleParser};
-    \node[simpleiface] (expression) at (3.0, -9.4) {\ctitle[interface]{Expression}};
-    \node[simple] (operator) at (0.4, -11.1) {\atitle{Operator}};
-    \node[simple] (count) at (3.6, -11.1) {Count};
-    % ---- neighborhood ---------------------------------------------------------------------
-    \node[simple] (catalog) at (7.3, -7.7) {NeighborhoodCatalog};
-    \node[simpleiface] (neighborhood) at (7.3, -9.4) {\ctitle[interface]{Neighborhood}};
-    \node[simple] (offsets) at (7.3, -11.1) {OffsetNeighborhood};
-    % ---- grid -----------------------------------------------------------------------------
-    \node[simple] (grid) at (11.6, -7.7) {Grid};
-    \node[simple] (array) at (11.6, -9.4) {\atitle{DynamicArrayND<T>}};
-    \node[simpleiface] (cell) at (11.6, -11.1) {\ctitle[interface]{Cell}};
-    \node[simple] (gridcell) at (10.5, -12.6) {GridCell};
-    \node[simple] (voidcell) at (12.8, -12.6) {VoidCell};
+    \centering
+    \begin{tikzpicture}[scale=0.94]
+        % ---- entry points ---------------------------------------------------------------------
+        \node[simple] (launcher) at (0, 0) {LauncherFrame};
+        \node[simple] (simframe) at (3.6, 0) {SimulationFrame};
+        \node[simple] (cli) at (7.6, 0) {Cli};
+        \node[simple] (explorer) at (11.4, 0) {RuleExplorer};
+        % ---- simulation -----------------------------------------------------------------------
+        \node[simple] (snapshot) at (0, -1.9) {Snapshot};
+        \node[simple] (simulation) at (3.6, -1.9) {Simulation};
+        \node[simpleiface] (projection) at (7.6, -1.9) {\ctitle[interface]{Projection}};
+        \node[simple] (tablerule) at (11.4, -1.9) {TableRule};
+        % ---- config ---------------------------------------------------------------------------
+        \node[simple] (library) at (0, -3.9) {DefinitionLibrary};
+        \node[simple] (reader) at (3.6, -3.9) {XmlDefinitionReader};
+        \node[simple] (definition) at (7.6, -3.9) {AutomatonDefinition};
+        \node[simple] (factory) at (11.4, -3.9) {AutomatonFactory};
+        % ---- automaton ------------------------------------------------------------------------
+        \node[simple] (automaton) at (7.6, -6.0) {CellularAutomaton};
+        \node[simple] (regime) at (11.4, -6.0) {Regime};
+        % ---- rule -----------------------------------------------------------------------------
+        \node[simpleiface] (rule) at (3.0, -6.0) {\ctitle[interface]{Rule}};
+        \node[simple] (exprule) at (3.0, -7.7) {ExpressionRule};
+        \node[simple] (parser) at (-0.2, -7.7) {RuleParser};
+        \node[simpleiface] (expression) at (3.0, -9.4) {\ctitle[interface]{Expression}};
+        \node[simple] (operator) at (0.4, -11.1) {\atitle{Operator}};
+        \node[simple] (count) at (3.6, -11.1) {Count};
+        % ---- neighborhood ---------------------------------------------------------------------
+        \node[simple] (catalog) at (7.3, -7.7) {NeighborhoodCatalog};
+        \node[simpleiface] (neighborhood) at (7.3, -9.4) {\ctitle[interface]{Neighborhood}};
+        \node[simple] (offsets) at (7.3, -11.1) {OffsetNeighborhood};
+        % ---- grid -----------------------------------------------------------------------------
+        \node[simple] (grid) at (11.6, -7.7) {Grid};
+        \node[simple] (array) at (11.6, -9.4) {\atitle{DynamicArrayND<T>}};
+        \node[simpleiface] (cell) at (11.6, -11.1) {\ctitle[interface]{Cell}};
+        \node[simple] (gridcell) at (10.5, -12.6) {GridCell};
+        \node[simple] (voidcell) at (12.8, -12.6) {VoidCell};
 
-    % ---- relationships --------------------------------------------------------------------
-    \draw[uses] (launcher.west) -- ++(-0.45, 0) |- (library.west);
-    \draw[uses] (launcher) -- node[elabel] {opens} (simframe);
-    \draw[association] (simframe) -- (simulation);
-    \draw[uses] (simulation) -- node[elabel] {publishes} (snapshot);
-    \draw[association] (simulation) -- (projection);
-    \draw[uses] (cli) -- (projection);
-    \draw[uses] (cli) -- (explorer);
-    \draw[association] (explorer) -- (tablerule);
-    \draw[uses] (tablerule) -- node[elabel, pos=0.45] {exports} (definition.north east);
-    \draw[uses] (library) -- (reader);
-    \draw[uses] (reader) -- node[elabel] {creates} (definition);
-    \draw[uses] (factory) -- node[elabel] {reads} (definition);
-    \draw[uses] (factory) -- node[elabel, pos=0.4] {creates} (automaton.north east);
-    \draw[composition] (simulation) -- (automaton.north west);
-    \draw[composition] (automaton) -- (rule);
-    \draw[composition] (automaton) -- (grid.north west);
-    \draw[association] (automaton) -- (regime);
-    \draw[implements] (exprule) -- (rule);
-    \draw[composition] (exprule) -- (expression);
-    \draw[uses] (parser) -- node[elabel, pos=0.55] {creates} (expression.north west);
-    \draw[implements] (operator) -- (expression);
-    \draw[implements] (count) -- (expression);
-    \draw[composition] (operator.west) -- ++(-0.5, 0) |- node[elabel, pos=0.25] {operands} (expression.west);
-    \draw[association] (count) -- (neighborhood.south west);
-    \draw[aggregation] (catalog) -- (neighborhood);
-    \draw[implements] (offsets) -- (neighborhood);
-    \draw[uses] (neighborhood) -- node[elabel, pos=0.4] {yields} (cell.north west);
-    \draw[composition] (grid) -- (array);
-    \draw[composition] (array.south west) -- node[elabel, pos=0.45] {stores} (gridcell.north);
-    \draw[implements] (gridcell) -- (cell);
-    \draw[implements] (voidcell) -- (cell);
+        % ---- relationships --------------------------------------------------------------------
+        \draw[uses] (launcher.west) -- ++(-0.45, 0) |- (library.west);
+        \draw[uses] (launcher) -- node[elabel] {opens} (simframe);
+        \draw[association] (simframe) -- (simulation);
+        \draw[uses] (simulation) -- node[elabel] {publishes} (snapshot);
+        \draw[association] (simulation) -- (projection);
+        \draw[uses] (cli) -- (projection);
+        \draw[uses] (cli) -- (explorer);
+        \draw[association] (explorer) -- (tablerule);
+        \draw[uses] (tablerule) -- node[elabel, pos=0.45] {exports} (definition.north east);
+        \draw[uses] (library) -- (reader);
+        \draw[uses] (reader) -- node[elabel] {creates} (definition);
+        \draw[uses] (factory) -- node[elabel] {reads} (definition);
+        \draw[uses] (factory) -- node[elabel, pos=0.4] {creates} (automaton.north east);
+        \draw[composition] (simulation) -- (automaton.north west);
+        \draw[composition] (automaton) -- (rule);
+        \draw[composition] (automaton) -- (grid.north west);
+        \draw[association] (automaton) -- (regime);
+        \draw[implements] (exprule) -- (rule);
+        \draw[composition] (exprule) -- (expression);
+        \draw[uses] (parser) -- node[elabel, pos=0.55] {creates} (expression.north west);
+        \draw[implements] (operator) -- (expression);
+        \draw[implements] (count) -- (expression);
+        \draw[composition] (operator.west) -- ++(-0.5, 0) |- node[elabel, pos=0.25] {operands} (expression.west);
+        \draw[association] (count) -- (neighborhood.south west);
+        \draw[aggregation] (catalog) -- (neighborhood);
+        \draw[implements] (offsets) -- (neighborhood);
+        \draw[uses] (neighborhood) -- node[elabel, pos=0.4] {yields} (cell.north west);
+        \draw[composition] (grid) -- (array);
+        \draw[composition] (array.south west) -- node[elabel, pos=0.45] {stores} (gridcell.north);
+        \draw[implements] (gridcell) -- (cell);
+        \draw[implements] (voidcell) -- (cell);
 
-    % ---- packages -------------------------------------------------------------------------
-    \begin{scope}[on background layer]
-      \node[package, fit=(launcher)(simframe)] (p-ui) {};
-      \node[package, fit=(cli)] (p-cli) {};
-      \node[package, fit=(explorer)(tablerule)] (p-explore) {};
-      \node[package, fit=(snapshot)(simulation)(projection)] (p-sim) {};
-      \node[package, fit=(library)(reader)(definition)(factory)] (p-config) {};
-      \node[package, fit=(automaton)(regime)] (p-automaton) {};
-      \node[package, fit=(rule)(parser)(operator)(count)(expression)] (p-rule) {};
-      \node[package, fit=(catalog)(neighborhood)(offsets)] (p-nb) {};
-      \node[package, fit=(grid)(array)(cell)(gridcell)(voidcell)] (p-grid) {};
-    \end{scope}
-    \node[packagelabel, anchor=south west] at (p-ui.north west) {ui.swing};
-    \node[packagelabel, anchor=south west] at (p-cli.north west) {cli};
-    \node[packagelabel, anchor=south east] at (p-explore.north east) {explore};
-    \node[packagelabel, anchor=south west] at (p-sim.north west) {simulation};
-    \node[packagelabel, anchor=south west] at (p-config.north west) {config};
-    \node[packagelabel, anchor=south east] at (p-automaton.north east) {automaton};
-    \node[packagelabel, anchor=north west] at (p-rule.south west) {rule};
-    \node[packagelabel, anchor=north west] at (p-nb.south west) {neighborhood};
-    \node[packagelabel, anchor=north west] at (p-grid.south west) {grid};
-  \end{tikzpicture}
-  \caption{Class diagram of the project (main classes only).
-    \legendarrow{extends}~inheritance,
-    \legendarrow{implements}~realization,
-    \legendarrow{composition}~composition,
-    \legendarrow{aggregation}~aggregation,
-    \legendarrow{association}~association,
-    \legendarrow{uses}~dependency.}
-  \label{fig:overview}
+        % ---- packages -------------------------------------------------------------------------
+        \begin{scope}[on background layer]
+            \node[package, fit=(launcher)(simframe)] (p-ui) {};
+            \node[package, fit=(cli)] (p-cli) {};
+            \node[package, fit=(explorer)(tablerule)] (p-explore) {};
+            \node[package, fit=(snapshot)(simulation)(projection)] (p-sim) {};
+            \node[package, fit=(library)(reader)(definition)(factory)] (p-config) {};
+            \node[package, fit=(automaton)(regime)] (p-automaton) {};
+            \node[package, fit=(rule)(parser)(operator)(count)(expression)] (p-rule) {};
+            \node[package, fit=(catalog)(neighborhood)(offsets)] (p-nb) {};
+            \node[package, fit=(grid)(array)(cell)(gridcell)(voidcell)] (p-grid) {};
+        \end{scope}
+        \node[packagelabel, anchor=south west] at (p-ui.north west) {ui.swing};
+        \node[packagelabel, anchor=south west] at (p-cli.north west) {cli};
+        \node[packagelabel, anchor=south east] at (p-explore.north east) {explore};
+        \node[packagelabel, anchor=south west] at (p-sim.north west) {simulation};
+        \node[packagelabel, anchor=south west] at (p-config.north west) {config};
+        \node[packagelabel, anchor=south east] at (p-automaton.north east) {automaton};
+        \node[packagelabel, anchor=north west] at (p-rule.south west) {rule};
+        \node[packagelabel, anchor=north west] at (p-nb.south west) {neighborhood};
+        \node[packagelabel, anchor=north west] at (p-grid.south west) {grid};
+    \end{tikzpicture}
+    \caption{Class diagram of the project (main classes only).
+        \legendarrow{extends}~inheritance,
+        \legendarrow{implements}~realization,
+        \legendarrow{composition}~composition,
+        \legendarrow{aggregation}~aggregation,
+        \legendarrow{association}~association,
+        \legendarrow{uses}~dependency.}
+    \label{fig:overview}
 \end{figure}
 
 Reading the diagram from the bottom:
 
 \begin{itemize}
-  \item a \code{Grid} stores its cells in a \code{DynamicArrayND}; a \code{Neighborhood} yields
-    \code{Cell}s, which are either real \code{GridCell}s or the \code{VoidCell} standing for
-    everything outside the grid;
-  \item a rule is a tree of \code{Expression}s whose \code{Count} leaves walk neighborhoods; the
-    engine only sees it through the one-method interface \code{Rule};
-  \item a \code{CellularAutomaton} is composed of a grid and a rule, and reports its
-    \code{Regime} (evolving, converged, cycling);
-  \item an \code{AutomatonDefinition} is the content of an input file as immutable data; the
-    \code{AutomatonFactory} turns it into a live automaton;
-  \item a \code{Simulation} runs an automaton on its own thread and publishes \code{Snapshot}s
-    to the window.
+    \item a \code{Grid} stores its cells in a \code{DynamicArrayND}; a \code{Neighborhood} yields
+          \code{Cell}s, which are either real \code{GridCell}s or the \code{VoidCell} standing for
+          everything outside the grid;
+    \item a rule is a tree of \code{Expression}s whose \code{Count} leaves walk neighborhoods; the
+          engine only sees it through the one-method interface \code{Rule};
+    \item a \code{CellularAutomaton} is composed of a grid and a rule, and reports its
+          \code{Regime} (evolving, converged, cycling);
+    \item an \code{AutomatonDefinition} is the content of an input file as immutable data; the
+          \code{AutomatonFactory} turns it into a live automaton;
+    \item a \code{Simulation} runs an automaton on its own thread and publishes \code{Snapshot}s
+          to the window.
 \end{itemize}
 
 \subsection{Design patterns}
@@ -189,27 +189,27 @@ The course presents design patterns as a vocabulary for recurring solutions; \cr
 lists those that the project uses, each for a reason given in the corresponding section.
 
 \begin{table}[H]
-  \centering\small
-  \begin{tabularx}{\textwidth}{@{}l l L@{}}
-    \toprule
-    Pattern & Where & Purpose \\
-    \midrule
-    Composite & \code{DynamicArrayND}; \code{Expression} & Recursive structures handled
-      uniformly \\
-    Interpreter & \code{Expression.evaluate} & The syntax tree of a rule evaluates itself \\
-    Template method & \code{UnaryOperator}, \code{BinaryOperator} & Operand evaluation written
-      once \\
-    Iterator & \code{Neighborhood.around} & A neighborhood \emph{is} a traversal \\
-    Strategy & \code{BoundaryCondition}, \code{Projection}, \code{Rule} & Interchangeable
-      behaviors \\
-    Null object, Singleton & \code{VoidCell} & No bounds checks in rules \\
-    Factory & \code{AutomatonFactory}, \code{Neighborhoods}, \code{OperatorCatalog} &
-      Construction separated from use \\
-    Builder & \code{AutomatonDefinition.Builder} & Readable construction of a nine-field record \\
-    Observer & \code{SimulationListener} & The view follows the model without coupling \\
-    Command & \code{cli.Command}; \code{Simulation} & Uniform dispatch; serialized execution \\
-    \bottomrule
-  \end{tabularx}
-  \caption{Design patterns used in the project.}
-  \label{tab:patterns}
+    \centering\small
+    \begin{tabularx}{\textwidth}{@{}l l L@{}}
+        \toprule
+        Pattern                & Where                                                                 & Purpose                                      \\
+        \midrule
+        Composite              & \code{DynamicArrayND}; \code{Expression}                              & Recursive structures handled
+        uniformly                                                                                                                                     \\
+        Interpreter            & \code{Expression.evaluate}                                            & The syntax tree of a rule evaluates itself   \\
+        Template method        & \code{UnaryOperator}, \code{BinaryOperator}                           & Operand evaluation written
+        once                                                                                                                                          \\
+        Iterator               & \code{Neighborhood.around}                                            & A neighborhood \emph{is} a traversal         \\
+        Strategy               & \code{BoundaryCondition}, \code{Projection}, \code{Rule}              & Interchangeable
+        behaviors                                                                                                                                     \\
+        Null object, Singleton & \code{VoidCell}                                                       & No bounds checks in rules                    \\
+        Factory                & \code{AutomatonFactory}, \code{Neighborhoods}, \code{OperatorCatalog} &
+        Construction separated from use                                                                                                               \\
+        Builder                & \code{AutomatonDefinition.Builder}                                    & Readable construction of a nine-field record \\
+        Observer               & \code{SimulationListener}                                             & The view follows the model without coupling  \\
+        Command                & \code{cli.Command}; \code{Simulation}                                 & Uniform dispatch; serialized execution       \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Design patterns used in the project.}
+    \label{tab:patterns}
 \end{table}

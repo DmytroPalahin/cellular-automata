@@ -1,8 +1,5 @@
 package fr.uspn.cellula.ui.swing;
 
-import fr.uspn.cellula.config.AutomatonDefinition;
-import fr.uspn.cellula.config.DefinitionLibrary;
-import fr.uspn.cellula.config.DefinitionLibrary.Entry;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -15,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -33,11 +31,18 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
+import fr.uspn.cellula.config.AutomatonDefinition;
+import fr.uspn.cellula.config.DefinitionLibrary;
+import fr.uspn.cellula.config.DefinitionLibrary.Entry;
+
 /**
- * The start-up menu: lists the automaton definition files of a directory and launches the
+ * The start-up menu: lists the automaton definition files of a directory and
+ * launches the
  * simulation of the one the user picks.
  *
- * <p>Invalid files are listed too, with the reason why they were rejected, so that a typo in a
+ * <p>
+ * Invalid files are listed too, with the reason why they were rejected, so that
+ * a typo in a
  * definition is discovered here rather than by the absence of the file.
  */
 public final class LauncherFrame extends JFrame {
@@ -216,8 +221,8 @@ public final class LauncherFrame extends JFrame {
         text.append("\nRule\n").append(definition.rule().strip().indent(2));
         if (!definition.neighborhoods().isEmpty()) {
             text.append("\nUser-defined neighborhoods\n");
-            definition.neighborhoods().forEach((name, offsets) ->
-                    text.append("  ").append(name).append(" = ").append(offsets).append('\n'));
+            definition.neighborhoods().forEach(
+                    (name, offsets) -> text.append("  ").append(name).append(" = ").append(offsets).append('\n'));
         }
         String initial = definition.initialState().describe();
         text.append("\nInitial state\n  ")

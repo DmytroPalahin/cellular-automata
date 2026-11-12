@@ -1,10 +1,14 @@
 package fr.uspn.cellula.cli;
 
-import fr.uspn.cellula.config.DefinitionException;
 import java.io.IOException;
 import java.util.List;
 
-/** One sub-command of the command-line interface, such as {@code render} or {@code explore}. */
+import fr.uspn.cellula.config.DefinitionException;
+
+/**
+ * One sub-command of the command-line interface, such as {@code render} or
+ * {@code explore}.
+ */
 interface Command {
 
     /** Returns the word that selects this command. */
@@ -20,11 +24,11 @@ interface Command {
      * Runs the command.
      *
      * @param arguments the words following the command name
-     * @param console where to read from and print to
+     * @param console   where to read from and print to
      * @return the process exit status: 0 for success
-     * @throws UsageException if the arguments are wrong
+     * @throws UsageException      if the arguments are wrong
      * @throws DefinitionException if a definition file is invalid
-     * @throws IOException if a file cannot be read or written
+     * @throws IOException         if a file cannot be read or written
      */
     int run(List<String> arguments, Console console)
             throws UsageException, DefinitionException, IOException;

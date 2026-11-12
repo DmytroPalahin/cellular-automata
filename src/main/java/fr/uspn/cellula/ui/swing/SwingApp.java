@@ -1,28 +1,36 @@
 package fr.uspn.cellula.ui.swing;
 
-import fr.uspn.cellula.config.AutomatonDefinition;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
+
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import fr.uspn.cellula.config.AutomatonDefinition;
+
 /**
  * Entry points of the graphical user interface.
  *
- * <p>These methods may be called from any thread: they take care of creating the windows on the
+ * <p>
+ * These methods may be called from any thread: they take care of creating the
+ * windows on the
  * event dispatch thread.
  */
 public final class SwingApp {
 
     private static boolean prepared;
 
-    private SwingApp() {}
+    private SwingApp() {
+    }
 
-    /** Tells whether windows can be opened, i.e. whether the JVM has access to a display. */
+    /**
+     * Tells whether windows can be opened, i.e. whether the JVM has access to a
+     * display.
+     */
     public static boolean isAvailable() {
         return !GraphicsEnvironment.isHeadless();
     }
@@ -41,8 +49,9 @@ public final class SwingApp {
      * Opens the window of one automaton.
      *
      * @param definition the automaton to show
-     * @return a future completed once the window has been closed; it fails if the window could
-     *     not be created
+     * @return a future completed once the window has been closed; it fails if the
+     *         window could
+     *         not be created
      */
     public static CompletableFuture<Void> showSimulation(AutomatonDefinition definition) {
         prepare();

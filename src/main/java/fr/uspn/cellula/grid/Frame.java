@@ -5,14 +5,18 @@ import java.util.Objects;
 /**
  * An immutable two-dimensional picture of cell states, ready to be displayed.
  *
- * <p>A frame is what crosses the boundary between the simulation and whatever shows it: a plane
- * cut through a grid ({@link Slice#extract}), or the successive generations of a one-dimensional
+ * <p>
+ * A frame is what crosses the boundary between the simulation and whatever
+ * shows it: a plane
+ * cut through a grid ({@link Slice#extract}), or the successive generations of
+ * a one-dimensional
  * automaton stacked on top of each other.
  *
- * @param rows number of rows
+ * @param rows    number of rows
  * @param columns number of columns
- * @param states the states in row-major order; the array is owned by the frame and must not be
- *     modified after construction
+ * @param states  the states in row-major order; the array is owned by the frame
+ *                and must not be
+ *                modified after construction
  */
 public record Frame(int rows, int columns, int[] states) {
 

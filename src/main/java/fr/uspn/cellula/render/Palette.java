@@ -6,23 +6,27 @@ import java.util.Map;
 /**
  * Maps cell states to display colors.
  *
- * <p>The default palette follows the figures of the subject: white for a cell that is off, blue
- * for a cell that is on. Further states get distinct colors, so multi-state automata are legible
+ * <p>
+ * The default palette follows the figures of the subject: white for a cell that
+ * is off, blue
+ * for a cell that is on. Further states get distinct colors, so multi-state
+ * automata are legible
  * without any configuration, and a definition file may override any of them.
  *
- * <p>Palettes are immutable.
+ * <p>
+ * Palettes are immutable.
  */
 public final class Palette {
 
     private static final int[] DEFAULTS = {
-        0xFFFFFF, // 0: off
-        0x1D4ED8, // 1: on
-        0xF59E0B,
-        0x10B981,
-        0xEF4444,
-        0x8B5CF6,
-        0x06B6D4,
-        0xEC4899,
+            0xFFFFFF, // 0: off
+            0x1D4ED8, // 1: on
+            0xF59E0B,
+            0x10B981,
+            0xEF4444,
+            0x8B5CF6,
+            0x06B6D4,
+            0xEC4899,
     };
 
     private static final Palette STANDARD = new Palette(Map.of());
@@ -60,7 +64,8 @@ public final class Palette {
         if (state >= 0 && state < DEFAULTS.length) {
             return DEFAULTS[state];
         }
-        // Unplanned states: spread hues with the golden ratio so neighbors in value differ in color.
+        // Unplanned states: spread hues with the golden ratio so neighbors in value
+        // differ in color.
         float hue = (float) ((state * 0.6180339887498949) % 1.0);
         return Color.HSBtoRGB(hue < 0 ? hue + 1 : hue, 0.65f, 0.85f) & 0xFFFFFF;
     }

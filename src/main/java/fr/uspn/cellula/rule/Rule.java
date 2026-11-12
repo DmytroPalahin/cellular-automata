@@ -6,12 +6,18 @@ import fr.uspn.cellula.grid.GridCell;
 /**
  * The local transition function of a cellular automaton.
  *
- * <p>A rule decides the next state of one cell from what it can observe around that cell in the
- * current generation. It must not modify the grid: the automaton applies it to every cell
+ * <p>
+ * A rule decides the next state of one cell from what it can observe around
+ * that cell in the
+ * current generation. It must not modify the grid: the automaton applies it to
+ * every cell
  * "simultaneously", possibly from several threads at once.
  *
- * <p>The engine depends only on this interface. Rules written in the rule language are provided
- * by {@link ExpressionRule}; any other implementation, such as a lambda in a test, works too.
+ * <p>
+ * The engine depends only on this interface. Rules written in the rule language
+ * are provided
+ * by {@link ExpressionRule}; any other implementation, such as a lambda in a
+ * test, works too.
  */
 @FunctionalInterface
 public interface Rule {

@@ -1,9 +1,5 @@
 package fr.uspn.cellula.config;
 
-import fr.uspn.cellula.grid.Cell;
-import fr.uspn.cellula.grid.Coordinates;
-import fr.uspn.cellula.grid.Grid;
-import fr.uspn.cellula.grid.Shape;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -13,11 +9,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import fr.uspn.cellula.grid.Cell;
+import fr.uspn.cellula.grid.Coordinates;
+import fr.uspn.cellula.grid.Grid;
+import fr.uspn.cellula.grid.Shape;
+
 /**
  * How the grid of an automaton is filled at generation 0.
  *
- * <p>The subject allows two forms: the list of the cells that start in state 1, or the keyword
- * {@code RANDOM(k)} which switches each cell on with probability {@code k}%. The two forms are
+ * <p>
+ * The subject allows two forms: the list of the cells that start in state 1, or
+ * the keyword
+ * {@code RANDOM(k)} which switches each cell on with probability {@code k}%.
+ * The two forms are
  * the two implementations of this sealed interface.
  */
 public sealed interface InitialState {
@@ -70,12 +74,13 @@ public sealed interface InitialState {
      * Every cell is independently switched on with a given probability.
      *
      * @param percentage probability, in percent, that a cell starts in state 1
-     * @param seed seed of the random generator; when absent, each application draws a new state
+     * @param seed       seed of the random generator; when absent, each application
+     *                   draws a new state
      */
     record RandomFill(int percentage, OptionalLong seed) implements InitialState {
 
-        private static final Pattern SYNTAX =
-                Pattern.compile("RANDOM\\s*\\(\\s*(\\d+)\\s*\\)", Pattern.CASE_INSENSITIVE);
+        private static final Pattern SYNTAX = Pattern.compile("RANDOM\\s*\\(\\s*(\\d+)\\s*\\)",
+                Pattern.CASE_INSENSITIVE);
 
         /** Validates the percentage. */
         public RandomFill {

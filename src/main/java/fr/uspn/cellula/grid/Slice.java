@@ -8,15 +8,23 @@ import java.util.StringJoiner;
 /**
  * The part of a grid that is shown on screen.
  *
- * <p>A screen is flat, a grid may not be. A slice selects a plane by pinning every axis but two,
- * using the Matlab-like notation of the subject: {@code (37, :, :)} is the plane {@code x = 37} of
- * a three-dimensional grid, where {@code :} marks a <em>free</em> axis. The first free axis maps to
+ * <p>
+ * A screen is flat, a grid may not be. A slice selects a plane by pinning every
+ * axis but two,
+ * using the Matlab-like notation of the subject: {@code (37, :, :)} is the
+ * plane {@code x = 37} of
+ * a three-dimensional grid, where {@code :} marks a <em>free</em> axis. The
+ * first free axis maps to
  * the rows of the picture and the second to its columns.
  *
- * <p>The notion degrades gracefully in low dimension: a two-dimensional grid has the single slice
- * {@code (:, :)}, and a one-dimensional grid the single slice {@code (:)}, a lone row.
+ * <p>
+ * The notion degrades gracefully in low dimension: a two-dimensional grid has
+ * the single slice
+ * {@code (:, :)}, and a one-dimensional grid the single slice {@code (:)}, a
+ * lone row.
  *
- * <p>Slices are immutable.
+ * <p>
+ * Slices are immutable.
  */
 public final class Slice {
 
@@ -58,8 +66,9 @@ public final class Slice {
      *
      * @param text for example {@code "(37, :, :)"}; the parentheses are optional
      * @return the slice
-     * @throws IllegalArgumentException if the text is malformed or does not leave the right number
-     *     of free axes
+     * @throws IllegalArgumentException if the text is malformed or does not leave
+     *                                  the right number
+     *                                  of free axes
      */
     public static Slice parse(String text) {
         String body = text.strip();
@@ -87,7 +96,8 @@ public final class Slice {
     }
 
     /**
-     * Returns the default slice of a grid: the first two axes are free and every other axis is
+     * Returns the default slice of a grid: the first two axes are free and every
+     * other axis is
      * pinned at its middle.
      */
     public static Slice centered(Shape shape) {
@@ -109,7 +119,9 @@ public final class Slice {
         return free.length;
     }
 
-    /** Tells whether the given axis is free (spans the picture) rather than pinned. */
+    /**
+     * Tells whether the given axis is free (spans the picture) rather than pinned.
+     */
     public boolean isFree(int axis) {
         return free[axis];
     }
@@ -138,9 +150,11 @@ public final class Slice {
     }
 
     /**
-     * Returns a slice parallel to this one, with one pinned axis moved to another coordinate.
+     * Returns a slice parallel to this one, with one pinned axis moved to another
+     * coordinate.
      *
-     * @throws IllegalArgumentException if the axis is free or the coordinate negative
+     * @throws IllegalArgumentException if the axis is free or the coordinate
+     *                                  negative
      */
     public Slice moved(int axis, int coordinate) {
         if (free[axis]) {
@@ -154,8 +168,9 @@ public final class Slice {
     /**
      * Checks that this slice designates a plane of a grid of the given shape.
      *
-     * @throws IllegalArgumentException if the dimensions differ or a pinned coordinate is out of
-     *     range
+     * @throws IllegalArgumentException if the dimensions differ or a pinned
+     *                                  coordinate is out of
+     *                                  range
      */
     public void requireWithin(Shape shape) {
         if (shape.dimension() != dimension()) {
@@ -185,7 +200,7 @@ public final class Slice {
     /**
      * Returns the grid position shown at a given row and column of the picture.
      *
-     * @param row row in the picture (ignored for one-dimensional grids)
+     * @param row    row in the picture (ignored for one-dimensional grids)
      * @param column column in the picture
      */
     public Coordinates locate(int row, int column) {

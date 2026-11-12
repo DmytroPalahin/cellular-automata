@@ -1,12 +1,16 @@
 package fr.uspn.cellula.cli;
 
-import fr.uspn.cellula.config.AutomatonDefinition;
-import fr.uspn.cellula.config.DefinitionException;
-import fr.uspn.cellula.config.XmlDefinitionReader;
 import java.util.List;
 import java.util.Set;
 
-/** {@code cellula validate}: checks definition files and explains what is wrong with them. */
+import fr.uspn.cellula.config.AutomatonDefinition;
+import fr.uspn.cellula.config.DefinitionException;
+import fr.uspn.cellula.config.XmlDefinitionReader;
+
+/**
+ * {@code cellula validate}: checks definition files and explains what is wrong
+ * with them.
+ */
 final class ValidateCommand implements Command {
 
     @Override

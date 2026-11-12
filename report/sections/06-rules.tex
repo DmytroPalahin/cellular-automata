@@ -18,35 +18,35 @@ Such a formula is a tree: operators are inner nodes, numbers and counts are leav
 evaluates the tree for every cell at every step.
 
 \begin{figure}[H]
-  \centering
-  \begin{tikzpicture}[
-      level distance=1.05cm, sibling distance=1.9cm,
-      every node/.style={font=\ttfamily\footnotesize, draw=ink!60, fill=classfill,
-        rounded corners=2pt, inner sep=3pt},
-      leaf/.style={fill=ifacefill},
-      edge from parent/.style={draw=ink!60, line width=0.5pt},
-      level 1/.style={sibling distance=4.9cm},
-      level 2/.style={sibling distance=1.75cm},
-      level 3/.style={sibling distance=1.4cm}]
-    \node {SI}
-      child {node {EQ}
-        child {node[leaf] {COMPTER(G0)}}
-        child {node[leaf] {1}}}
-      child {node {SI}
-        child {node {SUPEQ}
-          child {node[leaf] {COMPTER(G8)}}
-          child {node[leaf] {4}}}
-        child {node[leaf] {0}}
-        child {node[leaf] {1}}}
-      child {node {SI}
+    \centering
+    \begin{tikzpicture}[
+            level distance=1.05cm, sibling distance=1.9cm,
+            every node/.style={font=\ttfamily\footnotesize, draw=ink!60, fill=classfill,
+                    rounded corners=2pt, inner sep=3pt},
+            leaf/.style={fill=ifacefill},
+            edge from parent/.style={draw=ink!60, line width=0.5pt},
+            level 1/.style={sibling distance=4.9cm},
+            level 2/.style={sibling distance=1.75cm},
+            level 3/.style={sibling distance=1.4cm}]
+        \node {SI}
         child {node {EQ}
-          child {node[leaf] {COMPTER(G8)}}
-          child {node[leaf] {2}}}
-        child {node[leaf] {1}}
-        child {node[leaf] {0}}};
-  \end{tikzpicture}
-  \caption{The syntax tree of the example of the subject.}
-  \label{fig:tree}
+                child {node[leaf] {COMPTER(G0)}}
+                child {node[leaf] {1}}}
+        child {node {SI}
+                child {node {SUPEQ}
+                        child {node[leaf] {COMPTER(G8)}}
+                        child {node[leaf] {4}}}
+                child {node[leaf] {0}}
+                child {node[leaf] {1}}}
+        child {node {SI}
+                child {node {EQ}
+                        child {node[leaf] {COMPTER(G8)}}
+                        child {node[leaf] {2}}}
+                child {node[leaf] {1}}
+                child {node[leaf] {0}}};
+    \end{tikzpicture}
+    \caption{The syntax tree of the example of the subject.}
+    \label{fig:tree}
 \end{figure}
 
 \subsection{The hierarchy of operators}
@@ -55,55 +55,55 @@ The subject advises to ``think carefully about the class hierarchy used to repre
 operators''. \Cref{fig:rule} shows the one that was chosen.
 
 \begin{figure}[tbp]
-  \centering
-  \begin{tikzpicture}[kw/.style={font=\ttfamily\tiny, text=muted, inner sep=2pt}]
-    \node[iface] (expr) at (0, 0) {\ctitle[interface]{Expression}
-      \nodepart{second}+ evaluate(context): int\\+ operands(): List<Expression>\\
-        + walk(visitor)};
-    \node[class, label={[kw]below:42}] (const) at (-6.0, -2.7)
-      {\ctitle{Constant}\nodepart{second}- value: int};
-    \node[class, label={[kw]below:COMPTER(G)}] (count) at (-3.3, -2.7)
-      {\ctitle{Count}\nodepart{second}- neighborhood};
-    \node[simple, label={[kw]below:ETAT()}] (state) at (-0.6, -2.55) {\textbf{CurrentState}};
-    \node[class=3] (op) at (4.2, -3.0) {\atitle{Operator}
-      \nodepart{second}- symbol: String\\- operands: List<Expression>
-      \nodepart{third}+ symbol(): String\\+ toString(): String};
-    \node[class] (unary) at (-3.4, -6.4) {\atitle{UnaryOperator}
-      \nodepart{second}+ evaluate(context): int\\\# \textit{apply(value): int}};
-    \node[class] (binary) at (2.0, -6.4) {\atitle{BinaryOperator}
-      \nodepart{second}+ evaluate(context): int\\\# \textit{apply(left, right): int}};
-    \node[class, label={[kw]below:SI}] (cond) at (7.0, -6.4) {\ctitle{Conditional}
-      \nodepart{second}+ evaluate(context): int};
-    \node[simple, label={[kw]below:NON}] (not) at (-3.4, -8.6) {\textbf{Not}};
-    \node[simple] (binaries) at (2.0, -8.9) {%
-      \begin{tabular}{@{}l@{\ }l@{\qquad}l@{\ }l@{\qquad}l@{\ }l@{\qquad}l@{\ }l@{}}
-        \textbf{And} & {\tiny\color{muted}ET} & \textbf{Or} & {\tiny\color{muted}OU} &
-        \textbf{GreaterThan} & {\tiny\color{muted}SUP} &
-        \textbf{GreaterOrEqual} & {\tiny\color{muted}SUPEQ} \\
-        \textbf{Equal} & {\tiny\color{muted}EQ} & \textbf{Add} & {\tiny\color{muted}ADD} &
-        \textbf{Subtract} & {\tiny\color{muted}SUB} &
-        \textbf{Multiply} & {\tiny\color{muted}MUL}
-      \end{tabular}};
-    \node[kw, anchor=north] at (binaries.south) {\normalfont\sffamily eight final classes};
+    \centering
+    \begin{tikzpicture}[kw/.style={font=\ttfamily\tiny, text=muted, inner sep=2pt}]
+        \node[iface] (expr) at (0, 0) {\ctitle[interface]{Expression}
+            \nodepart{second}+ evaluate(context): int\\+ operands(): List<Expression>\\
+            + walk(visitor)};
+        \node[class, label={[kw]below:42}] (const) at (-6.0, -2.7)
+        {\ctitle{Constant}\nodepart{second}- value: int};
+        \node[class, label={[kw]below:COMPTER(G)}] (count) at (-3.3, -2.7)
+        {\ctitle{Count}\nodepart{second}- neighborhood};
+        \node[simple, label={[kw]below:ETAT()}] (state) at (-0.6, -2.55) {\textbf{CurrentState}};
+        \node[class=3] (op) at (4.2, -3.0) {\atitle{Operator}
+            \nodepart{second}- symbol: String\\- operands: List<Expression>
+            \nodepart{third}+ symbol(): String\\+ toString(): String};
+        \node[class] (unary) at (-3.4, -6.4) {\atitle{UnaryOperator}
+            \nodepart{second}+ evaluate(context): int\\\# \textit{apply(value): int}};
+        \node[class] (binary) at (2.0, -6.4) {\atitle{BinaryOperator}
+            \nodepart{second}+ evaluate(context): int\\\# \textit{apply(left, right): int}};
+        \node[class, label={[kw]below:SI}] (cond) at (7.0, -6.4) {\ctitle{Conditional}
+            \nodepart{second}+ evaluate(context): int};
+        \node[simple, label={[kw]below:NON}] (not) at (-3.4, -8.6) {\textbf{Not}};
+        \node[simple] (binaries) at (2.0, -8.9) {%
+            \begin{tabular}{@{}l@{\ }l@{\qquad}l@{\ }l@{\qquad}l@{\ }l@{\qquad}l@{\ }l@{}}
+                \textbf{And}            & {\tiny\color{muted}ET}    & \textbf{Or}  & {\tiny\color{muted}OU}  &
+                \textbf{GreaterThan}    & {\tiny\color{muted}SUP}   &
+                \textbf{GreaterOrEqual} & {\tiny\color{muted}SUPEQ}                                            \\
+                \textbf{Equal}          & {\tiny\color{muted}EQ}    & \textbf{Add} & {\tiny\color{muted}ADD} &
+                \textbf{Subtract}       & {\tiny\color{muted}SUB}   &
+                \textbf{Multiply}       & {\tiny\color{muted}MUL}
+            \end{tabular}};
+        \node[kw, anchor=north] at (binaries.south) {\normalfont\sffamily eight final classes};
 
-    \coordinate (bus) at (0, -1.4);
-    \draw[implements] (const.north) |- (bus) -- (expr.south);
-    \draw[ink!80, dashed, line width=0.5pt] (count.north) |- (bus);
-    \draw[ink!80, dashed, line width=0.5pt] (state.north) |- (bus);
-    \draw[ink!80, dashed, line width=0.5pt] (op.north) |- (bus);
-    \draw[composition] (op.east) -- ++(0.5, 0) |- node[elabel, pos=0.75, above] {operands}
-      (expr.east);
+        \coordinate (bus) at (0, -1.4);
+        \draw[implements] (const.north) |- (bus) -- (expr.south);
+        \draw[ink!80, dashed, line width=0.5pt] (count.north) |- (bus);
+        \draw[ink!80, dashed, line width=0.5pt] (state.north) |- (bus);
+        \draw[ink!80, dashed, line width=0.5pt] (op.north) |- (bus);
+        \draw[composition] (op.east) -- ++(0.5, 0) |- node[elabel, pos=0.75, above] {operands}
+        (expr.east);
 
-    \coordinate (bus2) at (4.2, -5.1);
-    \draw[extends] (binary.north) |- (bus2) -- (op.south);
-    \draw[ink!80, line width=0.5pt] (unary.north) |- (bus2);
-    \draw[ink!80, line width=0.5pt] (cond.north) |- (bus2);
-    \draw[extends] (not) -- (unary);
-    \draw[extends] (binaries) -- (binary);
-  \end{tikzpicture}
-  \caption{The \code{rule.expression} package: the class hierarchy of the operators, with the
-    keyword of each in gray.}
-  \label{fig:rule}
+        \coordinate (bus2) at (4.2, -5.1);
+        \draw[extends] (binary.north) |- (bus2) -- (op.south);
+        \draw[ink!80, line width=0.5pt] (unary.north) |- (bus2);
+        \draw[ink!80, line width=0.5pt] (cond.north) |- (bus2);
+        \draw[extends] (not) -- (unary);
+        \draw[extends] (binaries) -- (binary);
+    \end{tikzpicture}
+    \caption{The \code{rule.expression} package: the class hierarchy of the operators, with the
+        keyword of each in gray.}
+    \label{fig:rule}
 \end{figure}
 
 \paragraph{One interface.} Every node, leaf or operator, is an \code{Expression} and can

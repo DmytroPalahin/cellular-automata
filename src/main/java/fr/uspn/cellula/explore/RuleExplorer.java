@@ -9,17 +9,26 @@ import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 /**
- * Searches the one-dimensional rules of radius 2 for those that draw a fractal or chaotic picture
+ * Searches the one-dimensional rules of radius 2 for those that draw a fractal
+ * or chaotic picture
  * (bonus question of the subject).
  *
- * <p>There are 2<sup>32</sup> such rules, too many to look at, so the explorer works on families:
- * the 64 totalistic rules exhaustively, and random samples of the left-right symmetric rules or of
- * all rules. Each rule is run from a single cell with the fast {@link TableRule} simulator and its
- * picture is classified from two measurements, the box-counting dimension and the compression
+ * <p>
+ * There are 2<sup>32</sup> such rules, too many to look at, so the explorer
+ * works on families:
+ * the 64 totalistic rules exhaustively, and random samples of the left-right
+ * symmetric rules or of
+ * all rules. Each rule is run from a single cell with the fast
+ * {@link TableRule} simulator and its
+ * picture is classified from two measurements, the box-counting dimension and
+ * the compression
  * ratio (see {@link SpaceTimeDiagram}).
  *
- * <p>A candidate is only reported if it is <em>genuinely</em> of radius 2, as the question
- * demands: its truth table depends on the outer cells, and its picture differs from the picture
+ * <p>
+ * A candidate is only reported if it is <em>genuinely</em> of radius 2, as the
+ * question
+ * demands: its truth table depends on the outer cells, and its picture differs
+ * from the picture
  * of each of the 256 rules of radius 1 started from the same row.
  */
 public final class RuleExplorer {
@@ -28,7 +37,9 @@ public final class RuleExplorer {
     public enum Family {
         /** The 64 rules whose result only depends on the number of live cells. */
         TOTALISTIC,
-        /** Rules unchanged by mirroring left and right; sampled among 2<sup>20</sup>. */
+        /**
+         * Rules unchanged by mirroring left and right; sampled among 2<sup>20</sup>.
+         */
         SYMMETRIC,
         /** All rules; sampled among 2<sup>32</sup>. */
         GENERAL
@@ -49,13 +60,14 @@ public final class RuleExplorer {
     /**
      * A rule together with the measurements of its picture.
      *
-     * @param rule the rule
-     * @param verdict the kind of picture it draws
-     * @param boxDimension estimated box-counting dimension of the picture
+     * @param rule             the rule
+     * @param verdict          the kind of picture it draws
+     * @param boxDimension     estimated box-counting dimension of the picture
      * @param compressionRatio compressed size over raw size of the picture
      */
     public record Candidate(
-            TableRule rule, Verdict verdict, double boxDimension, double compressionRatio) {}
+            TableRule rule, Verdict verdict, double boxDimension, double compressionRatio) {
+    }
 
     /** Pictures compressing below this ratio are too orderly to be interesting. */
     static final double REGULAR_COMPRESSION = 0.015;
@@ -78,8 +90,9 @@ public final class RuleExplorer {
     /**
      * Creates an explorer.
      *
-     * @param steps number of generations each rule is run for; 255 gives pictures of 256 rows,
-     *     a power of two that suits box counting
+     * @param steps number of generations each rule is run for; 255 gives pictures
+     *              of 256 rows,
+     *              a power of two that suits box counting
      */
     public RuleExplorer(int steps) {
         if (steps < 32) {
@@ -121,12 +134,15 @@ public final class RuleExplorer {
     /**
      * Explores a family and returns its fractal and chaotic members.
      *
-     * @param family the family to explore
-     * @param samples number of rules to draw; ignored for {@link Family#TOTALISTIC}, which is
-     *     explored exhaustively
-     * @param seed seed of the random generator, for reproducible searches
-     * @return the interesting rules, genuinely of radius 2; fractal ones first, ordered by
-     *     increasing dimension, then chaotic ones, ordered by decreasing compression ratio
+     * @param family  the family to explore
+     * @param samples number of rules to draw; ignored for
+     *                {@link Family#TOTALISTIC}, which is
+     *                explored exhaustively
+     * @param seed    seed of the random generator, for reproducible searches
+     * @return the interesting rules, genuinely of radius 2; fractal ones first,
+     *         ordered by
+     *         increasing dimension, then chaotic ones, ordered by decreasing
+     *         compression ratio
      */
     public List<Candidate> search(Family family, int samples, long seed) {
         List<TableRule> rules = switch (family) {
@@ -153,13 +169,15 @@ public final class RuleExplorer {
     }
 
     /**
-     * Tells whether one of the 256 rules of radius 1 draws exactly the same picture as the given
+     * Tells whether one of the 256 rules of radius 1 draws exactly the same picture
+     * as the given
      * rule, from the same single cell on the same row.
      */
     public boolean reproducibleWithRadiusOne(TableRule rule) {
         SpaceTimeDiagram picture = SpaceTimeDiagram.fromSingleCell(rule, steps);
         byte[] start = SpaceTimeDiagram.singleCell(picture.width());
-        // Equal pictures have equal hash codes: only the few rules sharing the hash are re-run.
+        // Equal pictures have equal hash codes: only the few rules sharing the hash are
+        // re-run.
         for (long code : radiusOneCodesByHash(picture.width()).getOrDefault(picture.hashCode(), List.of())) {
             if (SpaceTimeDiagram.of(TableRule.of(1, code), start, steps).equals(picture)) {
                 return true;
@@ -169,7 +187,8 @@ public final class RuleExplorer {
     }
 
     /**
-     * Indexes the pictures of the 256 radius-1 rules by hash code. Keeping the pictures themselves
+     * Indexes the pictures of the 256 radius-1 rules by hash code. Keeping the
+     * pictures themselves
      * would take tens of megabytes; their hash codes take a few kilobytes.
      */
     private synchronized Map<Integer, List<Long>> radiusOneCodesByHash(int width) {
@@ -200,16 +219,19 @@ public final class RuleExplorer {
         }
         SplittableRandom random = new SplittableRandom(seed);
         return LongStream.generate(() -> {
-                    long code = random.nextLong() & 0xFFFF_FFFEL;
-                    return symmetric ? symmetrize(code) : code;
-                })
+            long code = random.nextLong() & 0xFFFF_FFFEL;
+            return symmetric ? symmetrize(code) : code;
+        })
                 .distinct()
                 .limit(samples)
                 .mapToObj(code -> TableRule.of(RADIUS, code))
                 .toList();
     }
 
-    /** Makes a radius-2 truth table mirror-symmetric by copying each entry onto its mirror. */
+    /**
+     * Makes a radius-2 truth table mirror-symmetric by copying each entry onto its
+     * mirror.
+     */
     private static long symmetrize(long code) {
         long symmetric = 0;
         for (int neighborhood = 0; neighborhood < 32; neighborhood++) {

@@ -3,10 +3,15 @@ package fr.uspn.cellula.grid;
 /**
  * A cell stored in a {@link Grid}.
  *
- * <p>Besides its current state, a cell buffers the state it will take at the next time step. This
- * is what lets a whole grid evolve <em>simultaneously</em>: every cell first computes its next
- * state from the untouched current generation ({@link #stage}), then all cells switch at once
- * ({@link #commit}). Both operations are reserved to {@link Grid}, which owns the protocol.
+ * <p>
+ * Besides its current state, a cell buffers the state it will take at the next
+ * time step. This
+ * is what lets a whole grid evolve <em>simultaneously</em>: every cell first
+ * computes its next
+ * state from the untouched current generation ({@link #stage}), then all cells
+ * switch at once
+ * ({@link #commit}). Both operations are reserved to {@link Grid}, which owns
+ * the protocol.
  */
 public final class GridCell implements Cell {
 

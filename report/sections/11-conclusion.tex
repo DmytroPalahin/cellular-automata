@@ -12,33 +12,33 @@ bonus question obtained with the program itself.
 Three design decisions proved the most valuable.
 
 \begin{itemize}
-  \item \emph{Letting the grid answer for every position.} Because \code{Grid.cellAt} always
-    returns a cell, neither the neighborhoods nor the operators contain a single bounds check,
-    and a second boundary condition was added by writing one method.
-  \item \emph{Generating the neighborhoods instead of listing them.} Two formulas replace six
-    special cases and make the program work in four dimensions without a line of
-    dimension-specific code.
-  \item \emph{Separating the definition from the automaton, and the automaton from its display.}
-    The same classes serve the window, the terminal, the batch commands and the tests; this is
-    what made it possible to test nearly everything automatically and to produce the figures of
-    this report with the program.
+    \item \emph{Letting the grid answer for every position.} Because \code{Grid.cellAt} always
+          returns a cell, neither the neighborhoods nor the operators contain a single bounds check,
+          and a second boundary condition was added by writing one method.
+    \item \emph{Generating the neighborhoods instead of listing them.} Two formulas replace six
+          special cases and make the program work in four dimensions without a line of
+          dimension-specific code.
+    \item \emph{Separating the definition from the automaton, and the automaton from its display.}
+          The same classes serve the window, the terminal, the batch commands and the tests; this is
+          what made it possible to test nearly everything automatically and to produce the figures of
+          this report with the program.
 \end{itemize}
 
 \subsection{Limits}
 
 \begin{itemize}
-  \item \textbf{Repeated work in rules.} A rule such as the Game of Life mentions
-    \code{COMPTER(G8*)} three times, and each occurrence walks the neighborhood again. Sharing
-    identical sub-expressions when the tree is built would roughly halve the cost of such rules.
-  \item \textbf{Memory.} Every cell is an object holding its coordinates. This is what the
-    recursive, object-oriented design of the subject leads to, and it limits practical grids to
-    a few million cells; a flat array of integers would use ten times less memory.
-  \item \textbf{Display of higher dimensions.} A grid of three dimensions or more is only seen
-    one plane at a time. A true 3D view would be a natural addition.
-  \item \textbf{Cycle detection} is bounded to periods of at most 1\,024 generations, and relies
-    on 64-bit fingerprints: a collision is extremely unlikely but not impossible.
-  \item \textbf{The classification of pictures} in the rule explorer is a heuristic. It
-    shortlists candidates well, but a human still chooses among them.
+    \item \textbf{Repeated work in rules.} A rule such as the Game of Life mentions
+          \code{COMPTER(G8*)} three times, and each occurrence walks the neighborhood again. Sharing
+          identical sub-expressions when the tree is built would roughly halve the cost of such rules.
+    \item \textbf{Memory.} Every cell is an object holding its coordinates. This is what the
+          recursive, object-oriented design of the subject leads to, and it limits practical grids to
+          a few million cells; a flat array of integers would use ten times less memory.
+    \item \textbf{Display of higher dimensions.} A grid of three dimensions or more is only seen
+          one plane at a time. A true 3D view would be a natural addition.
+    \item \textbf{Cycle detection} is bounded to periods of at most 1\,024 generations, and relies
+          on 64-bit fingerprints: a collision is extremely unlikely but not impossible.
+    \item \textbf{The classification of pictures} in the rule explorer is a heuristic. It
+          shortlists candidates well, but a human still chooses among them.
 \end{itemize}
 
 \subsection{Possible extensions}

@@ -3,7 +3,9 @@ package fr.uspn.cellula.rule.expression;
 /**
  * An operator with one operand.
  *
- * <p>Evaluation is a template method: this class evaluates the operand, the subclass only says how
+ * <p>
+ * Evaluation is a template method: this class evaluates the operand, the
+ * subclass only says how
  * to transform the resulting value.
  */
 public abstract class UnaryOperator extends Operator {
@@ -13,7 +15,7 @@ public abstract class UnaryOperator extends Operator {
     /**
      * Initializes the operator.
      *
-     * @param symbol keyword of the operator in the rule language
+     * @param symbol  keyword of the operator in the rule language
      * @param operand the sub-expression
      */
     protected UnaryOperator(String symbol, Expression operand) {

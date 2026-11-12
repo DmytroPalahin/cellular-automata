@@ -1,16 +1,20 @@
 package fr.uspn.cellula.simulation;
 
+import java.util.Objects;
+
 import fr.uspn.cellula.grid.Coordinates;
 import fr.uspn.cellula.grid.Frame;
 import fr.uspn.cellula.grid.Grid;
 import fr.uspn.cellula.grid.Slice;
-import java.util.Objects;
 
 /**
  * Shows the current generation of a grid through a plane.
  *
- * <p>For a two-dimensional grid the plane is the grid itself. For three dimensions and more it is
- * the cut selected by a {@link Slice}, which can be moved while the simulation runs.
+ * <p>
+ * For a two-dimensional grid the plane is the grid itself. For three dimensions
+ * and more it is
+ * the cut selected by a {@link Slice}, which can be moved while the simulation
+ * runs.
  */
 public final class PlaneProjection implements Projection {
 

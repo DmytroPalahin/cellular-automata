@@ -5,12 +5,15 @@ import java.util.Locale;
 /**
  * What a rule sees when it looks beyond the edge of the grid.
  *
- * <p>Each constant is a strategy that resolves out-of-range coordinates to a {@link Cell}.
+ * <p>
+ * Each constant is a strategy that resolves out-of-range coordinates to a
+ * {@link Cell}.
  */
 public enum BoundaryCondition {
 
     /**
-     * Positions outside the grid hold a cell that is permanently off. This is the behavior
+     * Positions outside the grid hold a cell that is permanently off. This is the
+     * behavior
      * mandated by the subject and the default.
      */
     FIXED {
@@ -21,7 +24,8 @@ public enum BoundaryCondition {
     },
 
     /**
-     * Opposite edges are glued together, turning the grid into a torus. Useful to let gliders
+     * Opposite edges are glued together, turning the grid into a torus. Useful to
+     * let gliders
      * travel forever on a small grid.
      */
     PERIODIC {
@@ -34,7 +38,7 @@ public enum BoundaryCondition {
     /**
      * Resolves coordinates that lie outside {@code grid}.
      *
-     * @param grid the grid being read
+     * @param grid        the grid being read
      * @param coordinates out-of-range coordinates; must not be modified
      * @return the cell to use in place of the missing one
      */

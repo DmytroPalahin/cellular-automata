@@ -1,7 +1,5 @@
 package fr.uspn.cellula.cli;
 
-import fr.uspn.cellula.config.DefinitionLibrary;
-import fr.uspn.cellula.config.DefinitionLibrary.Entry;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,7 +7,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-/** {@code cellula list}: prints the definition files of a directory, without interaction. */
+import fr.uspn.cellula.config.DefinitionLibrary;
+import fr.uspn.cellula.config.DefinitionLibrary.Entry;
+
+/**
+ * {@code cellula list}: prints the definition files of a directory, without
+ * interaction.
+ */
 final class ListCommand implements Command {
 
     @Override

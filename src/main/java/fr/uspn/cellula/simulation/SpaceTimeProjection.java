@@ -1,16 +1,21 @@
 package fr.uspn.cellula.simulation;
 
-import fr.uspn.cellula.grid.Coordinates;
-import fr.uspn.cellula.grid.Frame;
-import fr.uspn.cellula.grid.Grid;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import fr.uspn.cellula.grid.Coordinates;
+import fr.uspn.cellula.grid.Frame;
+import fr.uspn.cellula.grid.Grid;
+
 /**
- * Shows the history of a one-dimensional grid: one row per generation, the oldest on top.
+ * Shows the history of a one-dimensional grid: one row per generation, the
+ * oldest on top.
  *
- * <p>This is the "juxtaposition of successive states" of the subject, the display in which rule
- * 18 draws the Sierpiński triangle. The history is bounded: once it is full, the oldest generation
+ * <p>
+ * This is the "juxtaposition of successive states" of the subject, the display
+ * in which rule
+ * 18 draws the Sierpiński triangle. The history is bounded: once it is full,
+ * the oldest generation
  * is dropped for each new one, so the picture scrolls.
  */
 public final class SpaceTimeProjection implements Projection {
@@ -73,7 +78,10 @@ public final class SpaceTimeProjection implements Projection {
         return new Frame(rows.size(), columns, states);
     }
 
-    /** Whatever the row, a column of the picture stands for the cell of the current generation. */
+    /**
+     * Whatever the row, a column of the picture stands for the cell of the current
+     * generation.
+     */
     @Override
     public Coordinates locate(int row, int column) {
         return Coordinates.of(column);

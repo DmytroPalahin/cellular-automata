@@ -1,6 +1,8 @@
 package fr.uspn.cellula.rule.expression;
 
-/** {@code OU(a, b)}: yields 0 if both operands are equal to 0, and 1 otherwise. */
+/**
+ * {@code OU(a, b)}: yields 0 if both operands are equal to 0, and 1 otherwise.
+ */
 public final class Or extends BinaryOperator {
 
     /** The keyword of this operator in the rule language. */
@@ -9,7 +11,7 @@ public final class Or extends BinaryOperator {
     /**
      * Creates the operator.
      *
-     * @param left first operand
+     * @param left  first operand
      * @param right second operand
      */
     public Or(Expression left, Expression right) {

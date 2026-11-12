@@ -1,6 +1,5 @@
 package fr.uspn.cellula.render;
 
-import fr.uspn.cellula.grid.Frame;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -8,13 +7,19 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
 import javax.imageio.ImageIO;
+
+import fr.uspn.cellula.grid.Frame;
 
 /**
  * Turns frames into raster images.
  *
- * <p>The same code paints the simulation window and produces exported PNG files, so what is saved
- * is what was on screen. It only relies on the part of AWT that works without a display.
+ * <p>
+ * The same code paints the simulation window and produces exported PNG files,
+ * so what is saved
+ * is what was on screen. It only relies on the part of AWT that works without a
+ * display.
  */
 public final class FrameImages {
 
@@ -24,12 +29,13 @@ public final class FrameImages {
     /** Cells smaller than this many pixels are drawn without separating lines. */
     private static final int MIN_CELL_SIZE_FOR_GRID = 4;
 
-    private FrameImages() {}
+    private FrameImages() {
+    }
 
     /**
      * Renders a frame with one pixel per cell.
      *
-     * @param frame the states to draw
+     * @param frame   the states to draw
      * @param palette the colors of the states
      * @return an image of {@code frame.columns()} by {@code frame.rows()} pixels
      */
@@ -56,11 +62,13 @@ public final class FrameImages {
     /**
      * Renders a frame with square cells of a given size.
      *
-     * @param frame the states to draw
-     * @param palette the colors of the states
-     * @param cellSize side of a cell, in pixels; at least one
-     * @param gridLines whether to separate cells with thin lines (ignored for very small cells)
-     * @return an image of {@code columns * cellSize} by {@code rows * cellSize} pixels
+     * @param frame     the states to draw
+     * @param palette   the colors of the states
+     * @param cellSize  side of a cell, in pixels; at least one
+     * @param gridLines whether to separate cells with thin lines (ignored for very
+     *                  small cells)
+     * @return an image of {@code columns * cellSize} by {@code rows * cellSize}
+     *         pixels
      */
     public static BufferedImage render(Frame frame, Palette palette, int cellSize, boolean gridLines) {
         if (cellSize < 1) {
@@ -82,12 +90,13 @@ public final class FrameImages {
     /**
      * Paints a one-pixel-per-cell image, magnified, onto a graphics context.
      *
-     * @param graphics where to paint
-     * @param cells an image produced by {@link #render(Frame, Palette)}
-     * @param x left edge of the painted area
-     * @param y top edge of the painted area
-     * @param cellSize side of a cell, in pixels
-     * @param gridLines whether to separate cells with thin lines (ignored for very small cells)
+     * @param graphics  where to paint
+     * @param cells     an image produced by {@link #render(Frame, Palette)}
+     * @param x         left edge of the painted area
+     * @param y         top edge of the painted area
+     * @param cellSize  side of a cell, in pixels
+     * @param gridLines whether to separate cells with thin lines (ignored for very
+     *                  small cells)
      */
     public static void paint(
             Graphics2D graphics, BufferedImage cells, int x, int y, int cellSize, boolean gridLines) {
@@ -113,7 +122,7 @@ public final class FrameImages {
      * Saves an image as a PNG file, creating the parent directories if needed.
      *
      * @param image the image to save
-     * @param file the destination
+     * @param file  the destination
      * @throws IOException if the file cannot be written
      */
     public static void writePng(BufferedImage image, Path file) throws IOException {

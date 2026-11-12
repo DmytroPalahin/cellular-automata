@@ -7,27 +7,27 @@
 requirement is met; the last column of the table doubles as a map of the source code.
 
 \begin{table}[H]
-  \centering\small
-  \begin{tabularx}{\textwidth}{@{}l L l@{}}
-    \toprule
-    \S & Requirement & Realized by \\
-    \midrule
-    2.1 & Recursive array whose dimension is chosen at run time & \code{DynamicArrayND} \\
-    2.1 & A class for cells; cells outside the grid are always off & \code{Cell}, \code{VoidCell} \\
-    2.2 & Predefined neighborhoods G0, G2, G4, G8, G6, G26 and G$k$* & \code{Neighborhoods} \\
-    2.2 & A neighborhood is a rule for traversing cells (\code{Iterable}) & \code{Neighborhood} \\
-    2.2 & User-defined neighborhoods given as offsets & \code{NeighborhoodCatalog} \\
-    2.3 & The eleven operators, freely nested; a class hierarchy & \code{rule.expression} \\
-    2.4 & Display of 1D and 2D automata; 2D slice of 3D+ automata & \code{ui.swing}, \code{Slice} \\
-    2.5 & Input file: dimension, size, slice, neighborhoods, rule, initial cells or
-          \code{RANDOM(k)} & \code{config} \\
-    2.6 & Menu of the input files of the current directory & \code{LauncherFrame} \\
-    2.6 & Files for the Game of Life and the Sierpi\'nski triangle & \code{examples/} \\
-    2.6.1 & Bonus: a fractal or chaotic rule of radius 2 & \code{explore} \\
-    \bottomrule
-  \end{tabularx}
-  \caption{Requirements of the subject and the code that realizes them.}
-  \label{tab:requirements}
+    \centering\small
+    \begin{tabularx}{\textwidth}{@{}l L l@{}}
+        \toprule
+        \S               & Requirement                                                               & Realized by                   \\
+        \midrule
+        2.1              & Recursive array whose dimension is chosen at run time                     & \code{DynamicArrayND}         \\
+        2.1              & A class for cells; cells outside the grid are always off                  & \code{Cell}, \code{VoidCell}  \\
+        2.2              & Predefined neighborhoods G0, G2, G4, G8, G6, G26 and G$k$*                & \code{Neighborhoods}          \\
+        2.2              & A neighborhood is a rule for traversing cells (\code{Iterable})           & \code{Neighborhood}           \\
+        2.2              & User-defined neighborhoods given as offsets                               & \code{NeighborhoodCatalog}    \\
+        2.3              & The eleven operators, freely nested; a class hierarchy                    & \code{rule.expression}        \\
+        2.4              & Display of 1D and 2D automata; 2D slice of 3D+ automata                   & \code{ui.swing}, \code{Slice} \\
+        2.5              & Input file: dimension, size, slice, neighborhoods, rule, initial cells or
+        \code{RANDOM(k)} & \code{config}                                                                                             \\
+        2.6              & Menu of the input files of the current directory                          & \code{LauncherFrame}          \\
+        2.6              & Files for the Game of Life and the Sierpi\'nski triangle                  & \code{examples/}              \\
+        2.6.1            & Bonus: a fractal or chaotic rule of radius 2                              & \code{explore}                \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Requirements of the subject and the code that realizes them.}
+    \label{tab:requirements}
 \end{table}
 
 \subsection{Decisions on points left open}

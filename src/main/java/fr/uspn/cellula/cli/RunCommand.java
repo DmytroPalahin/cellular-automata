@@ -1,11 +1,12 @@
 package fr.uspn.cellula.cli;
 
+import java.util.List;
+import java.util.Set;
+
 import fr.uspn.cellula.config.AutomatonDefinition;
 import fr.uspn.cellula.config.DefinitionException;
 import fr.uspn.cellula.config.XmlDefinitionReader;
 import fr.uspn.cellula.ui.swing.SwingApp;
-import java.util.List;
-import java.util.Set;
 
 /** {@code cellula run}: opens the simulation window of one definition file. */
 final class RunCommand implements Command {
@@ -35,8 +36,7 @@ final class RunCommand implements Command {
     public int run(List<String> arguments, Console console)
             throws UsageException, DefinitionException {
         Arguments parsed = Arguments.parse(arguments, Set.of(), Set.of());
-        AutomatonDefinition definition =
-                XmlDefinitionReader.read(console.resolve(parsed.single("definition file")));
+        AutomatonDefinition definition = XmlDefinitionReader.read(console.resolve(parsed.single("definition file")));
         if (!SwingApp.isAvailable()) {
             console.err().println(
                     "cellula: no display available; use 'cellula print' or 'cellula render' instead");

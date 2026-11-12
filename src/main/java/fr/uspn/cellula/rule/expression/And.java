@@ -1,6 +1,9 @@
 package fr.uspn.cellula.rule.expression;
 
-/** {@code ET(a, b)}: yields 1 if both operands are different from 0, and 0 otherwise. */
+/**
+ * {@code ET(a, b)}: yields 1 if both operands are different from 0, and 0
+ * otherwise.
+ */
 public final class And extends BinaryOperator {
 
     /** The keyword of this operator in the rule language. */
@@ -9,7 +12,7 @@ public final class And extends BinaryOperator {
     /**
      * Creates the operator.
      *
-     * @param left first operand
+     * @param left  first operand
      * @param right second operand
      */
     public And(Expression left, Expression right) {

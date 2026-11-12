@@ -28,14 +28,14 @@ on a row wide enough for the pattern never to reach the edges. The resulting pic
 in two ways.
 
 \begin{itemize}
-  \item The \emph{box-counting dimension}. Cover the picture with boxes of side $s$ and count
-    those containing a live cell, $N(s)$. For a fractal, $N(s) \propto s^{-D}$; $D$ is estimated
-    as the slope of the least-squares line through the points $(\log 1/s, \log N(s))$ for
-    $s = 2, 4, \dots, 32$. A line has dimension 1, a filled area 2, and the Sierpi\'nski triangle
-    $\log 3 / \log 2 \approx 1.585$.
-  \item The \emph{compression ratio}. The cells are packed eight to a byte and deflated; the
-    ratio of the compressed size to the packed size is close to 0 for uniform or periodic
-    pictures, small for nested ones, and large for disordered ones.
+    \item The \emph{box-counting dimension}. Cover the picture with boxes of side $s$ and count
+          those containing a live cell, $N(s)$. For a fractal, $N(s) \propto s^{-D}$; $D$ is estimated
+          as the slope of the least-squares line through the points $(\log 1/s, \log N(s))$ for
+          $s = 2, 4, \dots, 32$. A line has dimension 1, a filled area 2, and the Sierpi\'nski triangle
+          $\log 3 / \log 2 \approx 1.585$.
+    \item The \emph{compression ratio}. The cells are packed eight to a byte and deflated; the
+          ratio of the compressed size to the packed size is close to 0 for uniform or periodic
+          pictures, small for nested ones, and large for disordered ones.
 \end{itemize}
 
 The two numbers place a picture in one of four classes: \emph{extinct} (the last row is empty),
@@ -45,21 +45,21 @@ whose behavior is well known (\cref{tab:calibration}). The program measures $D =
 18, the theoretical value to three decimals, which validates the estimator.
 
 \begin{table}[H]
-  \centering\small
-  \begin{tabular}{@{}lccl@{}}
-    \toprule
-    Radius-1 rule & Dimension & Compression & Verdict \\
-    \midrule
-    4 (a lone cell persists) & 1.000 & 0.005 & regular \\
-    254 (filled triangle) & 1.962 & 0.057 & regular \\
-    18 and 90 (Sierpi\'nski) & 1.585 & 0.061 & fractal \\
-    150 & 1.695 & 0.081 & fractal \\
-    30 & 1.944 & 0.386 & chaotic \\
-    45 & 1.988 & 0.587 & chaotic \\
-    \bottomrule
-  \end{tabular}
-  \caption{Calibration of the classifier on elementary rules.}
-  \label{tab:calibration}
+    \centering\small
+    \begin{tabular}{@{}lccl@{}}
+        \toprule
+        Radius-1 rule            & Dimension & Compression & Verdict \\
+        \midrule
+        4 (a lone cell persists) & 1.000     & 0.005       & regular \\
+        254 (filled triangle)    & 1.962     & 0.057       & regular \\
+        18 and 90 (Sierpi\'nski) & 1.585     & 0.061       & fractal \\
+        150                      & 1.695     & 0.081       & fractal \\
+        30                       & 1.944     & 0.386       & chaotic \\
+        45                       & 1.988     & 0.587       & chaotic \\
+        \bottomrule
+    \end{tabular}
+    \caption{Calibration of the classifier on elementary rules.}
+    \label{tab:calibration}
 \end{table}
 
 This classification is a filter, not a proof: it shortlists candidates, and the final choice is
@@ -85,40 +85,40 @@ kind (\cref{tab:bonus}, \cref{fig:bonus}) ships with the project as
 \code{examples/radius2-fractal.xml} and \code{examples/radius2-chaotic.xml}.
 
 \begin{table}[H]
-  \centering\small
-  \begin{tabularx}{\textwidth}{@{}l L L@{}}
-    \toprule
-    & Fractal & Chaotic \\
-    \midrule
-    Rule, in words & on when \emph{exactly one} of the five cells is on &
-      on when \emph{one, two or four} of the five cells are on \\
-    Rule language & \code{EQ(COMPTER(G4), 1)} &
-      \code{OU(EQ(COMPTER(G4), 1), OU(EQ(COMPTER(G4), 2), EQ(COMPTER(G4), 4)))} \\
-    Wolfram code & 65\,814 & 1\,771\,542\,398 \\
-    Box-counting dimension & 1.50 & 1.95 \\
-    Compression ratio & 0.03 & 0.43 \\
-    \bottomrule
-  \end{tabularx}
-  \caption{The two rules retained, with
-    $G4 = \{(-2), (-1), (0), (1), (2)\}$ declared in the files.}
-  \label{tab:bonus}
+    \centering\small
+    \begin{tabularx}{\textwidth}{@{}l L L@{}}
+        \toprule
+                               & Fractal                                            & Chaotic          \\
+        \midrule
+        Rule, in words         & on when \emph{exactly one} of the five cells is on &
+        on when \emph{one, two or four} of the five cells are on                                       \\
+        Rule language          & \code{EQ(COMPTER(G4), 1)}                          &
+        \code{OU(EQ(COMPTER(G4), 1), OU(EQ(COMPTER(G4), 2), EQ(COMPTER(G4), 4)))}                      \\
+        Wolfram code           & 65\,814                                            & 1\,771\,542\,398 \\
+        Box-counting dimension & 1.50                                               & 1.95             \\
+        Compression ratio      & 0.03                                               & 0.43             \\
+        \bottomrule
+    \end{tabularx}
+    \caption{The two rules retained, with
+        $G4 = \{(-2), (-1), (0), (1), (2)\}$ declared in the files.}
+    \label{tab:bonus}
 \end{table}
 
 \begin{figure}[H]
-  \centering
-  \begin{subfigure}[b]{\textwidth}
     \centering
-    \includegraphics[width=0.92\textwidth]{radius2-fractal}
-    \caption{Fractal: \code{EQ(COMPTER(G4), 1)}}
-  \end{subfigure}\\[0.8em]
-  \begin{subfigure}[b]{\textwidth}
-    \centering
-    \includegraphics[width=0.92\textwidth]{radius2-chaotic}
-    \caption{Chaotic: one, two or four live cells among the five}
-  \end{subfigure}
-  \caption{Generations 0 to 255 of the two radius-2 rules, from a single live cell, rendered by
-    \code{cellula render}.}
-  \label{fig:bonus}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=0.92\textwidth]{radius2-fractal}
+        \caption{Fractal: \code{EQ(COMPTER(G4), 1)}}
+    \end{subfigure}\\[0.8em]
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=0.92\textwidth]{radius2-chaotic}
+        \caption{Chaotic: one, two or four live cells among the five}
+    \end{subfigure}
+    \caption{Generations 0 to 255 of the two radius-2 rules, from a single live cell, rendered by
+        \code{cellula render}.}
+    \label{fig:bonus}
 \end{figure}
 
 For these two rules there is also a one-line argument that no rule of radius 1 can draw the same

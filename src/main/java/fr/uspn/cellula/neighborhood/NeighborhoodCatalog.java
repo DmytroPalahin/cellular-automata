@@ -1,6 +1,5 @@
 package fr.uspn.cellula.neighborhood;
 
-import fr.uspn.cellula.grid.Coordinates;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,20 +10,34 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import fr.uspn.cellula.grid.Coordinates;
+
 /**
- * The neighborhoods a rule may refer to by name, for grids of one given dimension.
+ * The neighborhoods a rule may refer to by name, for grids of one given
+ * dimension.
  *
- * <p>A catalog knows the predefined neighborhoods of its dimension and the ones declared by the
- * user. Names always follow the convention of the subject: a capital {@code G}, a number, and an
+ * <p>
+ * A catalog knows the predefined neighborhoods of its dimension and the ones
+ * declared by the
+ * user. Names always follow the convention of the subject: a capital {@code G},
+ * a number, and an
  * optional star.
  *
- * <p>Predefined names are resolved against the dimension of the catalog. {@code G0} exists
- * everywhere; {@code G<2d>} is the von Neumann neighborhood and {@code G<3^d - 1>} the Moore
- * neighborhood, each with a starred variant that leaves out the central cell. Hence {@code G4}
- * and {@code G8} exist only in 2D, {@code G6} and {@code G26} only in 3D, exactly as specified,
- * and a four-dimensional grid gets {@code G8} (von Neumann) and {@code G80} (Moore) for free.
+ * <p>
+ * Predefined names are resolved against the dimension of the catalog.
+ * {@code G0} exists
+ * everywhere; {@code G<2d>} is the von Neumann neighborhood and
+ * {@code G<3^d - 1>} the Moore
+ * neighborhood, each with a starred variant that leaves out the central cell.
+ * Hence {@code G4}
+ * and {@code G8} exist only in 2D, {@code G6} and {@code G26} only in 3D,
+ * exactly as specified,
+ * and a four-dimensional grid gets {@code G8} (von Neumann) and {@code G80}
+ * (Moore) for free.
  *
- * <p>A user-defined neighborhood takes precedence over a predefined one with the same name.
+ * <p>
+ * A user-defined neighborhood takes precedence over a predefined one with the
+ * same name.
  */
 public final class NeighborhoodCatalog {
 
@@ -59,11 +72,14 @@ public final class NeighborhoodCatalog {
     /**
      * Declares a user-defined neighborhood.
      *
-     * @param name a name following the {@code G<number>[*]} convention
-     * @param offsets the coordinates of the neighbors of a cell located at the origin
+     * @param name    a name following the {@code G<number>[*]} convention
+     * @param offsets the coordinates of the neighbors of a cell located at the
+     *                origin
      * @return the new neighborhood
-     * @throws IllegalArgumentException if the name is malformed or already declared, if there is
-     *     no offset, or if an offset does not have the dimension of the catalog
+     * @throws IllegalArgumentException if the name is malformed or already
+     *                                  declared, if there is
+     *                                  no offset, or if an offset does not have the
+     *                                  dimension of the catalog
      */
     public Neighborhood define(String name, Collection<Coordinates> offsets) {
         if (!isValidName(name)) {
@@ -99,13 +115,17 @@ public final class NeighborhoodCatalog {
     /**
      * Returns the neighborhood with the given name.
      *
-     * @throws UnknownNeighborhoodException if no such neighborhood exists in this dimension
+     * @throws UnknownNeighborhoodException if no such neighborhood exists in this
+     *                                      dimension
      */
     public Neighborhood resolve(String name) {
         return find(name).orElseThrow(() -> new UnknownNeighborhoodException(name, this));
     }
 
-    /** Returns every usable name: the predefined ones first, then the user-defined ones. */
+    /**
+     * Returns every usable name: the predefined ones first, then the user-defined
+     * ones.
+     */
     public List<String> names() {
         List<String> names = new ArrayList<>();
         names.add("G0");
@@ -125,7 +145,10 @@ public final class NeighborhoodCatalog {
         return names;
     }
 
-    /** Builds the predefined neighborhood with the given name, or returns {@code null}. */
+    /**
+     * Builds the predefined neighborhood with the given name, or returns
+     * {@code null}.
+     */
     private Neighborhood generate(String name) {
         Matcher matcher = NAME.matcher(name);
         if (!matcher.matches()) {

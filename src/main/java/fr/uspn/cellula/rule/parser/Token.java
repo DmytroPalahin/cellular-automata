@@ -3,8 +3,8 @@ package fr.uspn.cellula.rule.parser;
 /**
  * A lexical unit of the rule language.
  *
- * @param type the kind of token
- * @param text the characters of the token, as written in the source
+ * @param type     the kind of token
+ * @param text     the characters of the token, as written in the source
  * @param position offset of the first character of the token in the source
  */
 record Token(Type type, String text, int position) {
@@ -13,7 +13,9 @@ record Token(Type type, String text, int position) {
     enum Type {
         /** An integer literal, possibly negative. */
         NUMBER("a number"),
-        /** An operator keyword or a neighborhood name, e.g. {@code SI} or {@code G8*}. */
+        /**
+         * An operator keyword or a neighborhood name, e.g. {@code SI} or {@code G8*}.
+         */
         NAME("a name"),
         /** An opening parenthesis. */
         LEFT_PAREN("'('"),

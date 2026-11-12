@@ -6,14 +6,15 @@
   Rule: a cell freezes when exactly one of its six neighbors is frozen, and stays frozen.
 -->
 <automaton name="Snowflake">
-  <description>Crystal growth on a hexagonal lattice, obtained with a user-defined six-cell neighborhood. The square grid shears the hexagons, hence the slanted snowflake.</description>
-  <dimension>2</dimension>
-  <size>97, 97</size>
-  <neighborhoods>
-    <neighborhood name="G6*">{(-1, 0), (1, 0), (0, -1), (0, 1), (-1, 1), (1, -1)}</neighborhood>
-  </neighborhoods>
-  <rule>
-    OU(COMPTER(G0), EQ(COMPTER(G6*), 1))
-  </rule>
-  <initial>(48, 48)</initial>
+    <description>Crystal growth on a hexagonal lattice, obtained with a user-defined six-cell
+        neighborhood. The square grid shears the hexagons, hence the slanted snowflake.</description>
+    <dimension>2</dimension>
+    <size>97, 97</size>
+    <neighborhoods>
+        <neighborhood name="G6*">{(-1, 0), (1, 0), (0, -1), (0, 1), (-1, 1), (1, -1)}</neighborhood>
+    </neighborhoods>
+    <rule>
+        OU(COMPTER(G0), EQ(COMPTER(G6*), 1))
+    </rule>
+    <initial>(48, 48)</initial>
 </automaton>

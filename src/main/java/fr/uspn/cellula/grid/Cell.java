@@ -3,8 +3,11 @@ package fr.uspn.cellula.grid;
 /**
  * A cell as seen by an evolution rule: something that has a state.
  *
- * <p>Rules only ever read cells. The two implementations are {@link GridCell}, a real cell stored
- * in a {@link Grid}, and {@link VoidCell}, which stands for every position lying outside the grid.
+ * <p>
+ * Rules only ever read cells. The two implementations are {@link GridCell}, a
+ * real cell stored
+ * in a {@link Grid}, and {@link VoidCell}, which stands for every position
+ * lying outside the grid.
  */
 public interface Cell {
 

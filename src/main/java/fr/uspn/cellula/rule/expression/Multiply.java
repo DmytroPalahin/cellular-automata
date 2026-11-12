@@ -9,7 +9,7 @@ public final class Multiply extends BinaryOperator {
     /**
      * Creates the operator.
      *
-     * @param left first operand
+     * @param left  first operand
      * @param right second operand
      */
     public Multiply(Expression left, Expression right) {

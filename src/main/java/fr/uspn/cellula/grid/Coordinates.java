@@ -7,12 +7,18 @@ import java.util.StringJoiner;
 /**
  * An immutable integer vector of arbitrary dimension.
  *
- * <p>The same value type is used for two closely related notions: the <em>position</em> of a cell
- * in a grid, and the <em>offset</em> of a neighbor relative to the cell under examination (the
- * subject expresses neighborhoods as "the coordinates of the neighbors of a cell located at the
+ * <p>
+ * The same value type is used for two closely related notions: the
+ * <em>position</em> of a cell
+ * in a grid, and the <em>offset</em> of a neighbor relative to the cell under
+ * examination (the
+ * subject expresses neighborhoods as "the coordinates of the neighbors of a
+ * cell located at the
  * origin").
  *
- * <p>Instances are compared component-wise and ordered lexicographically, which makes them usable
+ * <p>
+ * Instances are compared component-wise and ordered lexicographically, which
+ * makes them usable
  * as map keys and gives collections of offsets a deterministic order.
  */
 public final class Coordinates implements Comparable<Coordinates> {
@@ -95,7 +101,9 @@ public final class Coordinates implements Comparable<Coordinates> {
     /**
      * Returns the Chebyshev norm, i.e. the largest absolute component.
      *
-     * <p>For an offset this is the number of "rings" separating the neighbor from the center.
+     * <p>
+     * For an offset this is the number of "rings" separating the neighbor from the
+     * center.
      */
     public int chebyshevNorm() {
         int norm = 0;
@@ -125,7 +133,10 @@ public final class Coordinates implements Comparable<Coordinates> {
         return Arrays.hashCode(components);
     }
 
-    /** Returns the tuple notation used in definition files, for example {@code (1, -2, 0)}. */
+    /**
+     * Returns the tuple notation used in definition files, for example
+     * {@code (1, -2, 0)}.
+     */
     @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(", ", "(", ")");

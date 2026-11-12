@@ -1,9 +1,5 @@
 package fr.uspn.cellula.neighborhood;
 
-import fr.uspn.cellula.grid.Cell;
-import fr.uspn.cellula.grid.Coordinates;
-import fr.uspn.cellula.grid.Grid;
-import fr.uspn.cellula.grid.GridCell;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -13,31 +9,46 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import fr.uspn.cellula.grid.Cell;
+import fr.uspn.cellula.grid.Coordinates;
+import fr.uspn.cellula.grid.Grid;
+import fr.uspn.cellula.grid.GridCell;
+
 /**
- * A neighborhood described by a fixed set of offsets relative to the cell under examination.
+ * A neighborhood described by a fixed set of offsets relative to the cell under
+ * examination.
  *
- * <p>This is the form used by the subject: {@code G4* = {(-1, 0), (1, 0), (0, -1), (0, 1)}} lists
- * the coordinates of the neighbors of a cell sitting at the origin. Every predefined neighborhood
- * and every neighborhood declared in a definition file is an instance of this class.
+ * <p>
+ * This is the form used by the subject:
+ * {@code G4* = {(-1, 0), (1, 0), (0, -1), (0, 1)}} lists
+ * the coordinates of the neighbors of a cell sitting at the origin. Every
+ * predefined neighborhood
+ * and every neighborhood declared in a definition file is an instance of this
+ * class.
  *
- * <p>Instances are immutable and can be shared freely between threads.
+ * <p>
+ * Instances are immutable and can be shared freely between threads.
  */
 public final class OffsetNeighborhood implements Neighborhood {
 
     private final String name;
     private final int dimension;
     private final List<Coordinates> offsets;
-    /** The offsets again, unboxed, for the benefit of the traversal's inner loop. */
+    /**
+     * The offsets again, unboxed, for the benefit of the traversal's inner loop.
+     */
     private final int[][] deltas;
 
     /**
      * Creates a neighborhood.
      *
-     * @param name the name used to refer to the neighborhood in rules
-     * @param offsets the relative positions of the visited cells; duplicates are ignored, as the
-     *     definition is a set
-     * @throws IllegalArgumentException if no offset is given or if the offsets do not all have the
-     *     same dimension
+     * @param name    the name used to refer to the neighborhood in rules
+     * @param offsets the relative positions of the visited cells; duplicates are
+     *                ignored, as the
+     *                definition is a set
+     * @throws IllegalArgumentException if no offset is given or if the offsets do
+     *                                  not all have the
+     *                                  same dimension
      */
     public OffsetNeighborhood(String name, Collection<Coordinates> offsets) {
         this.name = Objects.requireNonNull(name, "name");
@@ -84,7 +95,10 @@ public final class OffsetNeighborhood implements Neighborhood {
         return offsets.stream().anyMatch(Coordinates::isOrigin);
     }
 
-    /** Returns how far the neighborhood reaches, as the largest Chebyshev norm of its offsets. */
+    /**
+     * Returns how far the neighborhood reaches, as the largest Chebyshev norm of
+     * its offsets.
+     */
     public int radius() {
         return offsets.stream().mapToInt(Coordinates::chebyshevNorm).max().orElse(0);
     }
@@ -93,7 +107,8 @@ public final class OffsetNeighborhood implements Neighborhood {
      * Returns the same neighborhood deprived of the cell under examination.
      *
      * @param newName name of the resulting neighborhood
-     * @throws IllegalArgumentException if nothing is left once the center is removed
+     * @throws IllegalArgumentException if nothing is left once the center is
+     *                                  removed
      */
     public OffsetNeighborhood withoutCenter(String newName) {
         List<Coordinates> others = new ArrayList<>(offsets);
@@ -116,7 +131,9 @@ public final class OffsetNeighborhood implements Neighborhood {
 
         private final Grid grid;
         private final Coordinates center;
-        /** Reused for every neighbor: {@link Grid#cellAt} does not retain its argument. */
+        /**
+         * Reused for every neighbor: {@link Grid#cellAt} does not retain its argument.
+         */
         private final int[] cursor = new int[dimension];
         private int next;
 
@@ -155,7 +172,10 @@ public final class OffsetNeighborhood implements Neighborhood {
         return Objects.hash(name, offsets);
     }
 
-    /** Returns the definition in the notation of the subject, e.g. {@code G2* = {(-1), (1)}}. */
+    /**
+     * Returns the definition in the notation of the subject, e.g.
+     * {@code G2* = {(-1), (1)}}.
+     */
     @Override
     public String toString() {
         return name + " = "

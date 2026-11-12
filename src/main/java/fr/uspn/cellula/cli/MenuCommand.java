@@ -1,10 +1,5 @@
 package fr.uspn.cellula.cli;
 
-import fr.uspn.cellula.config.AutomatonDefinition;
-import fr.uspn.cellula.render.TextRenderer;
-import fr.uspn.cellula.ui.swing.SwingApp;
-import fr.uspn.cellula.ui.text.ConsoleMenu;
-import fr.uspn.cellula.ui.text.TextPlayer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,7 +7,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletionException;
 
-/** {@code cellula menu}: the start-up menu of the definition files of a directory. */
+import fr.uspn.cellula.config.AutomatonDefinition;
+import fr.uspn.cellula.render.TextRenderer;
+import fr.uspn.cellula.ui.swing.SwingApp;
+import fr.uspn.cellula.ui.text.ConsoleMenu;
+import fr.uspn.cellula.ui.text.TextPlayer;
+
+/**
+ * {@code cellula menu}: the start-up menu of the definition files of a
+ * directory.
+ */
 final class MenuCommand implements Command {
 
     /** Number of generations shown when a simulation has to be played as text. */
@@ -59,7 +63,10 @@ final class MenuCommand implements Command {
         return Cli.SUCCESS;
     }
 
-    /** Opens a window and waits for it to be closed, or falls back to text without a display. */
+    /**
+     * Opens a window and waits for it to be closed, or falls back to text without a
+     * display.
+     */
     private static void launch(AutomatonDefinition definition, Console console) {
         if (SwingApp.isAvailable()) {
             console.out().println("Simulating " + definition.name() + " - close its window to come back here.");

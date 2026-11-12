@@ -1,33 +1,40 @@
 package fr.uspn.cellula.config;
 
-import fr.uspn.cellula.grid.BoundaryCondition;
-import fr.uspn.cellula.grid.Coordinates;
-import fr.uspn.cellula.grid.Shape;
-import fr.uspn.cellula.grid.Slice;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import fr.uspn.cellula.grid.BoundaryCondition;
+import fr.uspn.cellula.grid.Coordinates;
+import fr.uspn.cellula.grid.Shape;
+import fr.uspn.cellula.grid.Slice;
+
 /**
- * The complete, validated description of an automaton, as read from a definition file.
+ * The complete, validated description of an automaton, as read from a
+ * definition file.
  *
- * <p>A definition is plain immutable data. It deliberately holds the rule as text and the
+ * <p>
+ * A definition is plain immutable data. It deliberately holds the rule as text
+ * and the
  * neighborhoods as offset lists: turning them into live objects is the job of
- * {@link AutomatonFactory}, so the same definition can be instantiated several times, displayed
+ * {@link AutomatonFactory}, so the same definition can be instantiated several
+ * times, displayed
  * in a menu, or written back to a file.
  *
- * @param name short display name
- * @param description free-form text shown next to the name; may be empty
- * @param shape extent of the grid
- * @param boundary what lies beyond the edges of the grid
- * @param slice the plane of the grid shown on screen
- * @param neighborhoods user-defined neighborhoods: offsets by name, in declaration order
- * @param rule the evolution rule, in the rule language
- * @param initialState how the grid is filled at generation 0
- * @param colors display colors as {@code 0xRRGGBB} values, by state; states without an entry get
- *     a default color
+ * @param name          short display name
+ * @param description   free-form text shown next to the name; may be empty
+ * @param shape         extent of the grid
+ * @param boundary      what lies beyond the edges of the grid
+ * @param slice         the plane of the grid shown on screen
+ * @param neighborhoods user-defined neighborhoods: offsets by name, in
+ *                      declaration order
+ * @param rule          the evolution rule, in the rule language
+ * @param initialState  how the grid is filled at generation 0
+ * @param colors        display colors as {@code 0xRRGGBB} values, by state;
+ *                      states without an entry get
+ *                      a default color
  */
 public record AutomatonDefinition(
         String name,
@@ -69,7 +76,9 @@ public record AutomatonDefinition(
         return shape.dimension();
     }
 
-    /** Returns a one-line summary such as {@code "2D · 96 × 64 · fixed boundary"}. */
+    /**
+     * Returns a one-line summary such as {@code "2D · 96 × 64 · fixed boundary"}.
+     */
     public String summary() {
         return dimension() + "D · " + shape + " · " + boundary.label() + " boundary";
     }
@@ -82,7 +91,9 @@ public record AutomatonDefinition(
     /**
      * Step-by-step construction of a definition.
      *
-     * <p>Only the name, the shape and the rule are mandatory. By default the boundary is fixed,
+     * <p>
+     * Only the name, the shape and the rule are mandatory. By default the boundary
+     * is fixed,
      * the slice is {@linkplain Slice#centered centered}, and the grid starts empty.
      */
     public static final class Builder {
@@ -97,7 +108,8 @@ public record AutomatonDefinition(
         private InitialState initialState = new InitialState.ExplicitCells(List.of());
         private final Map<Integer, Integer> colors = new LinkedHashMap<>();
 
-        private Builder() {}
+        private Builder() {
+        }
 
         /** Sets the display name. */
         public Builder name(String name) {
@@ -162,7 +174,7 @@ public record AutomatonDefinition(
          * Sets the display color of a state.
          *
          * @param state the state
-         * @param rgb the color as {@code 0xRRGGBB}
+         * @param rgb   the color as {@code 0xRRGGBB}
          */
         public Builder color(int state, int rgb) {
             colors.put(state, rgb & 0xFFFFFF);
@@ -172,8 +184,9 @@ public record AutomatonDefinition(
         /**
          * Builds the definition.
          *
-         * @throws IllegalArgumentException if a mandatory part is missing or the parts are
-         *     inconsistent with each other
+         * @throws IllegalArgumentException if a mandatory part is missing or the parts
+         *                                  are
+         *                                  inconsistent with each other
          */
         public AutomatonDefinition build() {
             if (name == null) {
