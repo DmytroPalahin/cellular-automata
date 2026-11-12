@@ -10,12 +10,12 @@ LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error -output-directory
 
 all: report.pdf
 
-report.pdf: main.tex $(wildcard sections/*.tex) $(wildcard ../docs/images/*.png)
-	$(LATEXMK) main.tex
-	cp build/main.pdf report.pdf
+report.pdf: report.tex $(wildcard sections/*.tex) $(wildcard ../docs/images/*.png)
+	$(LATEXMK) report.tex
+	cp build/report.pdf report.pdf
 
 watch:
-	$(LATEXMK) -pvc main.tex
+	$(LATEXMK) -pvc report.tex
 
 clean:
 	rm -rf build
