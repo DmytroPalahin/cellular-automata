@@ -1,0 +1,189 @@
+\section{The grid}
+\label{sec:grid}
+
+\subsection{A recursive array of any dimension}
+
+In Java the dimension of an array is part of its type: \code{int[][]} has two dimensions and
+always will. The subject therefore asks for a data structure whose dimension $d$ is an input of
+the program, defined recursively: an array of size $k_1 \times k_2 \times \dots \times k_n$
+allocates $k_1$ arrays of size $k_2 \times \dots \times k_n$.
+
+\code{DynamicArrayND<T>} is that structure. The definition has two cases, a recursive one and a
+base one, and the class models them with two private subclasses instead of a flag and a pair of
+half-used fields:
+
+\begin{itemize}
+  \item a \code{Branch} holds a list of arrays that have one dimension less;
+  \item a \code{Leaf} is a one-dimensional array and holds the elements.
+\end{itemize}
+
+This is the Composite pattern. Client code only sees the abstract type and obtains an instance
+from a static factory method, whose signature uses a variable number of arguments, as the subject
+suggests:
+
+\begin{lstlisting}
+DynamicArrayND<GridCell> cells = DynamicArrayND.create(GridCell::new, 65, 65, 65);
+GridCell center = cells.get(32, 32, 32);
+\end{lstlisting}
+
+The first argument computes the element stored at given coordinates; it is called once per
+element, so an array is never observed half-filled. The construction follows the recursive
+definition literally:
+
+\begin{lstlisting}
+private static <T> DynamicArrayND<T> allocate(
+        Shape shape, int depth, int[] prefix,
+        Function<? super Coordinates, ? extends T> initializer) {
+    int length = shape.size(depth);
+    if (depth == shape.dimension() - 1) {                      // base case: a row of elements
+        Object[] elements = new Object[length];
+        for (int index = 0; index < length; index++) {
+            prefix[depth] = index;
+            elements[index] = initializer.apply(Coordinates.of(prefix));
+        }
+        return new Leaf<>(elements);
+    }
+    List<DynamicArrayND<T>> children = new ArrayList<>(length);  // recursive case
+    for (int index = 0; index < length; index++) {
+        prefix[depth] = index;
+        children.add(allocate(shape, depth + 1, prefix, initializer));
+    }
+    return new Branch<>(children);
+}
+\end{lstlisting}
+
+Access is recursive in the same way. The public method \code{get(int... indices)} checks that
+there is one index per dimension, then calls \code{get(indices, 0)}; a \code{Branch} picks the
+child designated by \code{indices[depth]} and delegates to it with \code{depth + 1}; a
+\code{Leaf} returns the element. An access costs $d$ steps and allocates nothing. The class is
+generic and implements \code{Iterable<T>}, visiting elements in row-major order.
+
+\begin{figure}[tbp]
+  \centering
+  \begin{tikzpicture}
+    \node[class] (array) at (0, 0) {\atitle{DynamicArrayND<T>}
+      \nodepart{second}+ \static{create}(initializer, sizes...)\\
+        + get(indices...): T\\+ set(value, indices...)\\+ dimension(): int\\+ shape(): Shape\\
+        + iterator(): Iterator<T>\\\# \textit{get(indices, depth): T}};
+    \node[class] (leaf) at (-2.2, -3.5) {\ctitle{Leaf<T>}\nodepart{second}- elements: Object[]};
+    \node[class] (branch) at (1.75, -3.5) {\ctitle{Branch<T>}
+      \nodepart{second}- children: List<DynamicArrayND<T>>};
+
+    \node[class=3] (grid) at (6.8, 0.25) {\ctitle{Grid}
+      \nodepart{second}- shape: Shape\\- boundary: BoundaryCondition\\- cells: List<GridCell>
+      \nodepart{third}+ cellAt(coordinates...): Cell\\+ cell(coordinates...): GridCell\\
+        + setState(position, state)\\+ evolve(transition): int\\+ population(): int\\
+        + snapshot(): int[]\\+ fingerprint(): long};
+    \node[enum=3] (boundary) at (10.9, 0.95) {\ctitle[enumeration]{BoundaryCondition}
+      \nodepart{second}FIXED\\PERIODIC
+      \nodepart{third}\textasciitilde{} \textit{outside(...): Cell}};
+
+    \node[iface] (cell) at (10.9, -2.5) {\ctitle[interface]{Cell}
+      \nodepart{second}+ state(): int\\+ isOn(): boolean};
+    \node[class=3] (gridcell) at (6.8, -4.6) {\ctitle{GridCell}
+      \nodepart{second}- position: Coordinates\\- state: int\\- staged: int
+      \nodepart{third}+ position(): Coordinates\\\textasciitilde{} stage(nextState)\\
+        \textasciitilde{} commit(): boolean};
+    \node[enum] (void) at (10.9, -5.0) {\ctitle[enumeration]{VoidCell}\nodepart{second}INSTANCE};
+
+    \node[class] (slice) at (-1.2, -6.4) {\ctitle{Slice}
+      \nodepart{second}+ \static{parse}(text): Slice\\+ extract(grid): Frame\\
+        + locate(row, column): Coordinates\\+ moved(axis, coordinate): Slice};
+    \node[class] (frame) at (3.6, -6.9) {\ctitle{Frame}
+      \nodepart{second}+ rows, columns: int\\+ stateAt(row, column): int};
+
+    \draw[extends] (leaf.north) -- ++(0, 0.45) -| ($(array.south)+(-0.4,0)$);
+    \draw[extends] (branch.north) -- ++(0, 0.45) -| ($(array.south)+(0.4,0)$);
+    \draw[composition] (branch.east) -- ++(0.3, 0) |- node[elabel, pos=0.25] {$k_1$ children}
+      ($(array.east)+(0,-0.9)$);
+    \draw[composition] ($(grid.west)+(0,0.4)$) -- node[elabel] {stores cells in}
+      ($(array.east)+(0,0.65)$);
+    \draw[association] ($(grid.east)+(0,0.7)$) -- (boundary.west);
+    \draw[composition] (grid.south) -- node[elabel] {$k_1 \cdots k_d$} (gridcell.north);
+    \draw[implements] (gridcell.east) -- ++(0.9, 0) |- (cell.west);
+    \draw[implements] (void) -- (cell);
+    \draw[uses] (boundary.south) -- node[elabel] {resolves to} (cell.north);
+    \draw[uses] (slice.east |- frame.west) -- node[elabel, above] {produces} (frame.west);
+  \end{tikzpicture}
+  \caption{The \code{grid} package. \code{Shape} and \code{Coordinates}, two small immutable value
+    types used throughout, are not drawn.}
+  \label{fig:grid}
+\end{figure}
+
+\paragraph{Why not a flat array?} A single \code{int[]} indexed by
+$i_1 k_2 \cdots k_d + \dots + i_d$ would be more compact and faster. The recursive structure was
+kept because the subject asks for it, and it was isolated behind a class of its own: nothing else
+in the program knows how cells are stored, so the representation could be swapped without
+touching the rest. The measurements of \cref{sec:quality} show that it is fast enough.
+
+\subsection{Cells, and what lies beyond the edge}
+
+A \code{Grid} owns a \code{DynamicArrayND<GridCell>}. Each \code{GridCell} knows its position and
+its state (an \code{int}, so that automata are not limited to two states).
+
+Automata are defined on an infinite grid; the subject settles the finite case by stating that any
+cell outside the grid is permanently off. Sprinkling bounds checks over every operator would have
+been error-prone. Instead, the question ``which cell is at these coordinates?'' always has an
+answer:
+
+\begin{lstlisting}
+public Cell cellAt(int... coordinates) {
+    if (shape.contains(coordinates)) {
+        return storage.get(coordinates);
+    }
+    return boundary.outside(this, coordinates);
+}
+\end{lstlisting}
+
+Rules see cells through the two-method interface \code{Cell}. Outside the grid, the
+\code{FIXED} boundary answers with \code{VoidCell.INSTANCE}, a cell whose state is 0 forever: a
+Null Object, implemented as a single-element enumeration, which is the idiomatic Java singleton.
+The boundary condition itself is a Strategy written as an enumeration with one method body per
+constant; the second constant, \code{PERIODIC}, wraps coordinates around and turns the grid into
+a torus. No rule, operator or neighborhood contains a bounds check.
+
+\subsection{Simultaneous evolution}
+
+``All the cells of a cellular automaton evolve simultaneously.'' Updating cells in place, one
+after the other, would let a cell read the \emph{new} state of a neighbor updated before it and
+silently compute a different automaton. The grid owns the protocol that prevents this:
+
+\begin{lstlisting}
+public int evolve(ToIntFunction<? super GridCell> transition) {
+    if (cells.size() >= PARALLEL_THRESHOLD) {
+        cells.parallelStream().forEach(cell -> cell.stage(transition.applyAsInt(cell)));
+    } else {
+        for (GridCell cell : cells) {
+            cell.stage(transition.applyAsInt(cell));
+        }
+    }
+    int changed = 0;
+    for (GridCell cell : cells) {
+        if (cell.commit()) {
+            changed++;
+        }
+    }
+    return changed;
+}
+\end{lstlisting}
+
+In the first phase every cell computes its next state from the untouched current generation and
+\emph{stages} it in a private field; in the second, all cells \emph{commit}. \code{stage} and
+\code{commit} are package-private: only the grid can call them, so the invariant cannot be broken
+from outside.
+
+The first phase only reads shared state and writes one private field per cell. It is therefore
+safe to run on several threads, which the grid does for 8\,192 cells or more, using a parallel
+stream over the flat list of cells built once at construction. The number of changed cells,
+returned for free by the second phase, is what detects convergence.
+
+A unit test pins the property down: with the transition ``copy your left neighbor'', a row
+\code{1 0 0 0 0} must become \code{0 1 0 0 0}, not \code{1 1 1 1 1}.
+
+\subsection{Slices}
+
+A grid of three dimensions or more is displayed through a plane. \code{Slice} parses the
+Matlab-like notation of the subject, \code{(37, :, :)}, where a colon marks a displayed axis, and
+\code{extract(grid)} returns the selected plane as a \code{Frame}, an immutable two-dimensional
+picture of states. The same class handles the degenerate cases, \code{(:, :)} for a 2D grid and
+\code{(:)} for a 1D one, so the display code is identical in every dimension.

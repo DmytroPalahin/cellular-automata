@@ -1,0 +1,227 @@
+\section{Rules}
+\label{sec:rules}
+
+\subsection{From a formula to a tree}
+
+The subject defines rules as compositions of eleven operators, where an argument is either a
+number or the result of another operator, and one operator, \code{COMPTER}, takes a neighborhood.
+The worked example of the subject is
+
+\begin{lstlisting}[style=rule]
+SI(EQ(COMPTER(G0), 1),
+   SI(SUPEQ(COMPTER(G8), 4), 0, 1),
+   SI(EQ(COMPTER(G8), 2), 1, 0))
+\end{lstlisting}
+
+Such a formula is a tree: operators are inner nodes, numbers and counts are leaves
+(\cref{fig:tree}). The program parses the text of a rule \emph{once} into that tree, then
+evaluates the tree for every cell at every step.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+      level distance=1.05cm, sibling distance=1.9cm,
+      every node/.style={font=\ttfamily\footnotesize, draw=ink!60, fill=classfill,
+        rounded corners=2pt, inner sep=3pt},
+      leaf/.style={fill=ifacefill},
+      edge from parent/.style={draw=ink!60, line width=0.5pt},
+      level 1/.style={sibling distance=4.9cm},
+      level 2/.style={sibling distance=1.75cm},
+      level 3/.style={sibling distance=1.4cm}]
+    \node {SI}
+      child {node {EQ}
+        child {node[leaf] {COMPTER(G0)}}
+        child {node[leaf] {1}}}
+      child {node {SI}
+        child {node {SUPEQ}
+          child {node[leaf] {COMPTER(G8)}}
+          child {node[leaf] {4}}}
+        child {node[leaf] {0}}
+        child {node[leaf] {1}}}
+      child {node {SI}
+        child {node {EQ}
+          child {node[leaf] {COMPTER(G8)}}
+          child {node[leaf] {2}}}
+        child {node[leaf] {1}}
+        child {node[leaf] {0}}};
+  \end{tikzpicture}
+  \caption{The syntax tree of the example of the subject.}
+  \label{fig:tree}
+\end{figure}
+
+\subsection{The hierarchy of operators}
+
+The subject advises to ``think carefully about the class hierarchy used to represent the
+operators''. \Cref{fig:rule} shows the one that was chosen.
+
+\begin{figure}[tbp]
+  \centering
+  \begin{tikzpicture}[kw/.style={font=\ttfamily\tiny, text=muted, inner sep=2pt}]
+    \node[iface] (expr) at (0, 0) {\ctitle[interface]{Expression}
+      \nodepart{second}+ evaluate(context): int\\+ operands(): List<Expression>\\
+        + walk(visitor)};
+    \node[class, label={[kw]below:42}] (const) at (-6.0, -2.7)
+      {\ctitle{Constant}\nodepart{second}- value: int};
+    \node[class, label={[kw]below:COMPTER(G)}] (count) at (-3.3, -2.7)
+      {\ctitle{Count}\nodepart{second}- neighborhood};
+    \node[simple, label={[kw]below:ETAT()}] (state) at (-0.6, -2.55) {\textbf{CurrentState}};
+    \node[class=3] (op) at (4.2, -3.0) {\atitle{Operator}
+      \nodepart{second}- symbol: String\\- operands: List<Expression>
+      \nodepart{third}+ symbol(): String\\+ toString(): String};
+    \node[class] (unary) at (-3.4, -6.4) {\atitle{UnaryOperator}
+      \nodepart{second}+ evaluate(context): int\\\# \textit{apply(value): int}};
+    \node[class] (binary) at (2.0, -6.4) {\atitle{BinaryOperator}
+      \nodepart{second}+ evaluate(context): int\\\# \textit{apply(left, right): int}};
+    \node[class, label={[kw]below:SI}] (cond) at (7.0, -6.4) {\ctitle{Conditional}
+      \nodepart{second}+ evaluate(context): int};
+    \node[simple, label={[kw]below:NON}] (not) at (-3.4, -8.6) {\textbf{Not}};
+    \node[simple] (binaries) at (2.0, -8.9) {%
+      \begin{tabular}{@{}l@{\ }l@{\qquad}l@{\ }l@{\qquad}l@{\ }l@{\qquad}l@{\ }l@{}}
+        \textbf{And} & {\tiny\color{muted}ET} & \textbf{Or} & {\tiny\color{muted}OU} &
+        \textbf{GreaterThan} & {\tiny\color{muted}SUP} &
+        \textbf{GreaterOrEqual} & {\tiny\color{muted}SUPEQ} \\
+        \textbf{Equal} & {\tiny\color{muted}EQ} & \textbf{Add} & {\tiny\color{muted}ADD} &
+        \textbf{Subtract} & {\tiny\color{muted}SUB} &
+        \textbf{Multiply} & {\tiny\color{muted}MUL}
+      \end{tabular}};
+    \node[kw, anchor=north] at (binaries.south) {\normalfont\sffamily eight final classes};
+
+    \coordinate (bus) at (0, -1.4);
+    \draw[implements] (const.north) |- (bus) -- (expr.south);
+    \draw[ink!80, dashed, line width=0.5pt] (count.north) |- (bus);
+    \draw[ink!80, dashed, line width=0.5pt] (state.north) |- (bus);
+    \draw[ink!80, dashed, line width=0.5pt] (op.north) |- (bus);
+    \draw[composition] (op.east) -- ++(0.5, 0) |- node[elabel, pos=0.75, above] {operands}
+      (expr.east);
+
+    \coordinate (bus2) at (4.2, -5.1);
+    \draw[extends] (binary.north) |- (bus2) -- (op.south);
+    \draw[ink!80, line width=0.5pt] (unary.north) |- (bus2);
+    \draw[ink!80, line width=0.5pt] (cond.north) |- (bus2);
+    \draw[extends] (not) -- (unary);
+    \draw[extends] (binaries) -- (binary);
+  \end{tikzpicture}
+  \caption{The \code{rule.expression} package: the class hierarchy of the operators, with the
+    keyword of each in gray.}
+  \label{fig:rule}
+\end{figure}
+
+\paragraph{One interface.} Every node, leaf or operator, is an \code{Expression} and can
+evaluate itself for a cell: this is the Composite pattern used as an Interpreter. The engine
+never asks a node what kind it is.
+
+\paragraph{Grouping by arity.} Operators differ in what they compute, not in how they obtain
+their arguments. The abstract classes \code{UnaryOperator} and \code{BinaryOperator} evaluate the
+operands and delegate the computation to an abstract method, which is the Template Method
+pattern:
+
+\begin{lstlisting}
+public abstract class BinaryOperator extends Operator {
+    @Override
+    public final int evaluate(EvaluationContext context) {
+        return apply(left.evaluate(context), right.evaluate(context));
+    }
+
+    protected abstract int apply(int left, int right);
+}
+\end{lstlisting}
+
+A concrete operator is then reduced to its definition in the subject. Here is \code{ET},
+complete:
+
+\begin{lstlisting}
+/** ET(a, b): yields 1 if both operands are different from 0, and 0 otherwise. */
+public final class And extends BinaryOperator {
+    public static final String SYMBOL = "ET";
+
+    public And(Expression left, Expression right) {
+        super(SYMBOL, left, right);
+    }
+
+    @Override
+    protected int apply(int left, int right) {
+        return left != 0 && right != 0 ? 1 : 0;
+    }
+}
+\end{lstlisting}
+
+\paragraph{What the common superclass buys.} \code{Operator} stores the keyword and the operands
+and implements, once, everything that depends on structure alone: printing in canonical form,
+equality, and traversal. Printing then parsing a tree gives an equal tree, a property the tests
+check.
+
+\paragraph{The exceptions.} \code{Conditional} (\code{SI}) does not fit the template on purpose:
+it evaluates only the branch it selects, which spares whole sub-trees. \code{Count} is not an
+\code{Operator} at all, since its argument is a neighborhood and not a value; the type system
+thereby rules out nonsense such as \code{ADD(G8, 1)}.
+
+\paragraph{Purity.} Expressions are immutable and evaluation has no side effect. Evaluation
+order is therefore unobservable, a single tree can be evaluated for many cells at the same time
+by several threads (\cref{sec:grid}), and the laziness of \code{SI} cannot change a result.
+
+\subsection{The parser}
+
+Rules are parsed by a hand-written lexer and recursive-descent parser; the language is small
+enough that a parser generator would have been a dependency for no benefit. The grammar is:
+
+\begin{lstlisting}[style=text]
+rule         := expression END
+expression   := NUMBER | NAME '(' arguments ')'
+arguments    := neighborhood                        -- for COMPTER
+              | [ expression { ',' expression } ]   -- for every other operator
+neighborhood := NAME                                -- G0, G8*, ...
+\end{lstlisting}
+
+The \code{Lexer} turns the text into tokens that remember their position. A name may end with a
+star, which is what makes \code{G8*} a single token. The \code{RuleParser} has one method per
+production.
+
+The parser knows no operator. When it meets a name, it asks an \code{OperatorCatalog} for the
+\emph{signature} of that keyword, which says how to read the arguments and how to build the
+node. Signatures form a sealed interface with two implementations, so the compiler checks that
+the parser handles both:
+
+\begin{lstlisting}
+Expression node = switch (signature) {
+    case NeighborhoodOperator operator -> operator.factory().apply(neighborhood(operator));
+    case ValueOperator operator -> {
+        List<Expression> arguments = arguments();
+        if (arguments.size() != operator.arity()) {
+            throw error(name, operator.symbol() + " expects " + operator.arity()
+                    + " argument(s) but got " + arguments.size());
+        }
+        yield operator.factory().apply(arguments);
+    }
+};
+\end{lstlisting}
+
+The catalog is the single place where a keyword is bound to a class:
+
+\begin{lstlisting}
+catalog.register(binary(And.SYMBOL, And::new), "AND");
+catalog.register(new NeighborhoodOperator(Count.SYMBOL, Count::new), "COUNT");
+\end{lstlisting}
+
+Adding an operator to the language thus takes one class of about ten lines and one line of
+registration; arity checking, error messages and printing follow. Keywords are case-insensitive
+and each has an English alias.
+
+Neighborhood names are resolved \emph{during} parsing, against the catalog of the grid's
+dimension (\cref{sec:neighborhoods}). A tree that parses is therefore guaranteed to be
+evaluable: no error can occur later, in the middle of a simulation.
+
+\subsection{Error messages}
+
+A rule is text typed by a person, and mistakes are the normal case. Every syntax error carries
+the position of the faulty token (class \code{RuleSyntaxException}), and its message quotes the
+line and points at the culprit:
+
+\begin{lstlisting}[style=text]
+unknown neighborhood 'G9' for a 2-dimensional grid (available: G0, G4, G4*, G8, G8*) (line 2, column 12)
+       COMPTER(G9),
+               ^
+\end{lstlisting}
+
+Eighteen distinct mistakes (missing parenthesis, wrong number of arguments, unknown operator, a
+neighborhood used as a value, \ldots) are covered by a parameterized test that checks both the
+message and the reported position.

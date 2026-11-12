@@ -1,0 +1,173 @@
+% Cellula -- project report.
+% Build with `make` (latexmk + pdflatex); the result is report.pdf.
+\documentclass[11pt,a4paper]{article}
+
+% --- Metadata: change these four lines to re-brand the report ------------------------------
+\newcommand{\reporttitle}{Cellula}
+\newcommand{\reportsubtitle}{A cellular automaton engine for grids of any dimension}
+\newcommand{\reportauthor}{Dmytro Palahin}
+\newcommand{\reportdate}{November 2026}
+
+% --- Encoding, fonts, language --------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{libertine}
+\usepackage[libertine]{newtxmath}
+\usepackage[scaled=0.86,varqu]{zi4}
+\usepackage{microtype}
+
+% --- Layout ---------------------------------------------------------------------------------
+\usepackage[a4paper,margin=2.5cm,headheight=14pt]{geometry}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink,capitalise]{cleveref}
+
+\graphicspath{{../docs/images/}}
+
+% --- Colors ---------------------------------------------------------------------------------
+\definecolor{accent}{HTML}{1D4ED8}
+\definecolor{ink}{HTML}{0F172A}
+\definecolor{muted}{HTML}{64748B}
+\definecolor{rule}{HTML}{CBD5E1}
+\definecolor{codebg}{HTML}{F8FAFC}
+\definecolor{keyword}{HTML}{7C3AED}
+\definecolor{string}{HTML}{15803D}
+\definecolor{comment}{HTML}{64748B}
+\definecolor{classfill}{HTML}{EFF6FF}
+\definecolor{ifacefill}{HTML}{FEF9C3}
+\definecolor{enumfill}{HTML}{F0FDF4}
+\definecolor{packfill}{HTML}{F8FAFC}
+
+\color{ink}
+\hypersetup{colorlinks=true,linkcolor=accent,urlcolor=accent,citecolor=accent,
+  pdftitle={\reporttitle: \reportsubtitle},pdfauthor={\reportauthor}}
+
+% --- Headings, headers, lists, captions -----------------------------------------------------
+\titleformat{\section}{\Large\bfseries\sffamily\color{ink}}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\large\bfseries\sffamily\color{ink}}{\thesubsection}{0.8em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\sffamily\color{ink}}{\thesubsubsection}{0.8em}{}
+\titlespacing*{\section}{0pt}{1.6\baselineskip}{0.6\baselineskip}
+\titlespacing*{\subsection}{0pt}{1.1\baselineskip}{0.4\baselineskip}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\sffamily\color{muted}\reporttitle{} --- project report}
+\fancyhead[R]{\small\sffamily\color{muted}\nouppercase{\leftmark}}
+\fancyfoot[C]{\small\sffamily\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{rule}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+
+\setlist{itemsep=0.2em,topsep=0.3em}
+\captionsetup{font=small,labelfont={bf,sf},textfont={it},margin=1cm}
+\renewcommand{\arraystretch}{1.2}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+% --- Code -----------------------------------------------------------------------------------
+\lstdefinestyle{base}{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codebg},
+  frame=single, rulecolor=\color{rule}, framesep=6pt,
+  xleftmargin=8pt, xrightmargin=8pt,
+  aboveskip=0.9em, belowskip=0.6em,
+  columns=fullflexible, keepspaces=true,
+  showstringspaces=false, breaklines=true, tabsize=4,
+  commentstyle=\color{comment}\itshape,
+  stringstyle=\color{string},
+  keywordstyle=\color{keyword}\bfseries,
+}
+\lstdefinestyle{java}{style=base, language=Java,
+  morekeywords={record,sealed,permits,var,yield}}
+% A deliberately small XML highlighter: listings' own XML mode chokes on some of our content.
+\lstdefinelanguage{definition}{
+  sensitive=true,
+  morestring=[b]",
+  morecomment=[s]{<!--}{-->},
+  morekeywords={automaton,description,dimension,size,boundary,slice,neighborhoods,neighborhood,
+    rule,initial,colors,state},
+}
+\lstdefinestyle{xml}{style=base, language=definition}
+\lstdefinestyle{rule}{style=base, language={},
+  morekeywords={SI,ET,OU,NON,SUP,SUPEQ,EQ,COMPTER,ADD,SUB,MUL,ETAT}}
+\lstdefinestyle{text}{style=base, language={}}
+\lstset{style=java}
+\newcommand{\code}[1]{\texttt{#1}}
+
+% --- UML diagrams ---------------------------------------------------------------------------
+\usetikzlibrary{shapes.multipart,positioning,arrows.meta,calc,fit,backgrounds}
+\tikzset{
+  uml/.style={draw=ink!70, line width=0.5pt, rectangle split, rectangle split parts=#1,
+    rectangle split part align={center,left,left}, align=left, font=\ttfamily\scriptsize,
+    inner xsep=5pt, inner ysep=3.5pt, fill=classfill},
+  uml/.default=2,
+  class/.style={uml=#1}, class/.default=2,
+  iface/.style={uml=#1, fill=ifacefill}, iface/.default=2,
+  enum/.style={uml=#1, fill=enumfill}, enum/.default=2,
+  simple/.style={draw=ink!70, line width=0.5pt, fill=classfill, font=\ttfamily\scriptsize,
+    inner xsep=5pt, inner ysep=4pt, align=center},
+  simpleiface/.style={simple, fill=ifacefill},
+  simpleenum/.style={simple, fill=enumfill},
+  package/.style={draw=muted, line width=0.5pt, fill=packfill, rounded corners=2pt,
+    inner sep=8pt},
+  packagelabel/.style={font=\sffamily\scriptsize\bfseries, text=muted},
+  extends/.style={-{Triangle[open,length=6pt,width=6pt]}, line width=0.5pt, draw=ink!80},
+  implements/.style={extends, dashed},
+  composition/.style={{Diamond[length=8pt,width=5pt]}-{Straight Barb[length=3pt]}, line width=0.5pt,
+    draw=ink!80},
+  aggregation/.style={{Diamond[open,length=8pt,width=5pt]}-{Straight Barb[length=3pt]},
+    line width=0.5pt, draw=ink!80},
+  association/.style={-{Straight Barb[length=3pt]}, line width=0.5pt, draw=ink!80},
+  uses/.style={association, dashed},
+  elabel/.style={font=\sffamily\tiny, text=muted, inner sep=1.5pt, fill=white, fill opacity=0.85,
+    text opacity=1},
+}
+% Title cell of a class box: optional stereotype, then the name.
+\newcommand{\ctitle}[2][]{%
+  \begin{tabular}{@{}c@{}}%
+    \if\relax\detokenize{#1}\relax\else{\normalfont\rmfamily\itshape\tiny\guillemotleft #1\guillemotright}\\[-1pt]\fi
+    \textbf{#2}%
+  \end{tabular}}
+\newcommand{\atitle}[2][abstract]{\ctitle[#1]{\textit{#2}}}
+% Marks a static member: only its name is underlined, which stays legible at this size.
+\newcommand{\static}[1]{\underline{\smash{#1}}}
+% A small sample of an arrow style, safe to use in captions.
+\DeclareRobustCommand{\legendarrow}[1]{\tikz[baseline=-0.6ex]{\draw[#1] (0,0) -- (0.8,0);}}
+
+\begin{document}
+
+\input{sections/00-title}
+
+\tableofcontents
+\clearpage
+
+\input{sections/01-introduction}
+\input{sections/02-analysis}
+\input{sections/03-architecture}
+\input{sections/04-grid}
+\input{sections/05-neighborhoods}
+\input{sections/06-rules}
+\input{sections/07-definitions}
+\input{sections/08-simulation}
+\input{sections/09-bonus}
+\input{sections/10-quality}
+\input{sections/11-conclusion}
+
+\appendix
+\input{sections/A-appendix}
+
+\end{document}

@@ -1,0 +1,110 @@
+\section{Definition files}
+\label{sec:definitions}
+
+\subsection{The format}
+
+The subject leaves the format open and suggests XML. XML was adopted: the JDK ships a parser and
+a schema validator, so the choice costs no dependency and brings structural validation for free.
+\Cref{lst:definition} is a complete definition; it carries the six pieces of information required
+by section 2.5 of the subject, in the notations the subject itself uses.
+
+\begin{lstlisting}[style=xml, caption={A definition file using every feature of the format.},
+  label={lst:definition}, captionpos=b]
+<automaton name="Everything at once">
+  <description>A 3D automaton that uses every feature of the format.</description>
+  <dimension>3</dimension>                        <!-- dimensionality of the grid -->
+  <size>40, 40, 40</size>                         <!-- one extent per dimension -->
+  <boundary>periodic</boundary>                   <!-- extension; default: fixed -->
+  <slice>(20, :, :)</slice>                       <!-- displayed plane, for 3D and more -->
+  <neighborhoods>                                 <!-- additional neighborhoods -->
+    <neighborhood name="G3">{(0, 0, 0), (1, 1, 0), (-1, 0, 0)}</neighborhood>
+  </neighborhoods>
+  <rule>                                          <!-- the evolution rule -->
+    SI(EQ(COMPTER(G0), 1),
+       SUPEQ(COMPTER(G26*), 13),
+       EQ(COMPTER(G3), 2))
+  </rule>
+  <initial seed="42">RANDOM(50)</initial>         <!-- or a list of coordinates -->
+  <colors>                                        <!-- extension -->
+    <state value="0" color="#0F172A"/>
+    <state value="1" color="#38BDF8"/>
+  </colors>
+</automaton>
+\end{lstlisting}
+
+The elements may come in any order. \code{boundary}, \code{slice}, \code{neighborhoods},
+\code{colors} and \code{description} are optional. Coordinates and sets of coordinates are
+written as in the subject; on a one-dimensional grid the parentheses may be dropped, so the
+initial state of the Sierpi\'nski file is simply \code{(128)}.
+
+\subsection{Three stages of validation}
+
+A file written by hand will contain mistakes, and the worst way to learn about them is an
+exception in the middle of a simulation. \code{XmlDefinitionReader} therefore accepts a file only
+after three successive checks, each catching a different class of errors.
+
+\begin{enumerate}
+  \item \textbf{Structure.} The document is validated against an XML Schema bundled with the
+    application (\code{automaton.xsd}): unknown or duplicated elements, missing mandatory ones,
+    malformed colors or neighborhood names. These errors come with a line number.
+  \item \textbf{Consistency.} The values are parsed and cross-checked: as many sizes as
+    dimensions, a slice that fits the grid and leaves exactly two free axes, offsets and initial
+    cells that have the right number of coordinates and lie inside the grid.
+  \item \textbf{The rule.} The rule is compiled against the neighborhoods of the file. This proves
+    that it is syntactically correct and only refers to neighborhoods that exist in the grid's
+    dimension.
+\end{enumerate}
+
+A file that passes is guaranteed to be instantiable. A file that fails yields a
+\code{DefinitionException}, a checked exception because every caller has to do something about
+it, whose message starts with the name of the file. Twenty-seven kinds of invalid files are
+exercised by a parameterized test.
+
+\paragraph{Security.} A definition file may come from someone else. The XML parser is configured
+to refuse document type declarations and external entities, which closes the classic XML external
+entity attack; a test feeds it such a document. The size of a grid and the nesting depth of a
+rule are bounded, so a hostile file cannot exhaust the memory or the stack.
+
+\subsection{A definition is data}
+
+The reader does not build an automaton. It builds an \code{AutomatonDefinition}, an immutable
+record holding the sizes, the offsets of the neighborhoods, the rule \emph{as text} and the
+initial state. Turning it into live objects is the separate job of \code{AutomatonFactory}:
+
+\begin{lstlisting}
+public static CellularAutomaton create(AutomatonDefinition definition) {
+    ExpressionRule rule = compileRule(definition);
+    Grid grid = new Grid(definition.shape(), definition.boundary());
+    definition.initialState().applyTo(grid);
+    return new CellularAutomaton(grid, rule);
+}
+\end{lstlisting}
+
+This intermediate form is what the rest of the application manipulates. The menu displays
+definitions without allocating any grid; a simulation instantiates one; the tests and the rule
+explorer build definitions in code with a Builder, since the record has nine components:
+
+\begin{lstlisting}
+AutomatonDefinition glider = AutomatonDefinition.builder()
+        .name("Glider")
+        .size(20, 20)
+        .boundary(BoundaryCondition.PERIODIC)
+        .rule("SI(COMPTER(G0), OU(EQ(COMPTER(G8*), 2), EQ(COMPTER(G8*), 3)), EQ(COMPTER(G8*), 3))")
+        .initialState(new InitialState.ExplicitCells(cells))
+        .build();
+\end{lstlisting}
+
+The two forms of initial state allowed by the subject are the two implementations of a sealed
+interface, \code{InitialState}: \code{ExplicitCells} and \code{RandomFill}. A sealed interface
+states in the code that there are exactly two cases and lets the compiler verify that both are
+handled. An \code{XmlDefinitionWriter} does the inverse of the reader, and a test checks that
+writing then reading a definition gives back an equal definition.
+
+\subsection{The files of a directory}
+
+The menu required by the subject lists ``all the input files of the current directory''.
+\code{DefinitionLibrary} scans a directory for XML files whose root element is
+\code{<automaton>}, which keeps unrelated XML files (the \code{pom.xml} of the project, for one)
+out of the menu. Each file becomes an \code{Entry}, another sealed interface: \code{Loaded} with
+its definition, or \code{Broken} with the reason of the rejection. Invalid files are thus listed
+with an explanation instead of silently disappearing.

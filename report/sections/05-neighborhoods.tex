@@ -1,0 +1,140 @@
+\section{Neighborhoods}
+\label{sec:neighborhoods}
+
+\subsection{A neighborhood is a traversal}
+
+The subject is explicit: ``a neighborhood is nothing but a rule for traversing the cells
+neighboring a given cell'', and it points to \code{Iterator} and \code{Iterable}. The interface
+says exactly that:
+
+\begin{lstlisting}
+public interface Neighborhood {
+    String name();
+    int dimension();
+    int size();
+    Iterable<Cell> around(Grid grid, GridCell center);
+}
+\end{lstlisting}
+
+An operator consumes a neighborhood with a \code{for} loop and never manipulates a coordinate.
+This is the whole implementation of \code{COMPTER}:
+
+\begin{lstlisting}
+public int evaluate(EvaluationContext context) {
+    int count = 0;
+    for (Cell neighbor : neighborhood.around(context.grid(), context.cell())) {
+        if (neighbor.isOn()) {
+            count++;
+        }
+    }
+    return count;
+}
+\end{lstlisting}
+
+\code{OffsetNeighborhood} is the one implementation the project needs. It holds the list of the
+coordinates of the neighbors of a cell located at the origin, which is precisely how the subject
+writes neighborhoods: $G4^* = \{(-1, 0), (1, 0), (0, -1), (0, 1)\}$. Its iterator adds each
+offset to the position of the center and asks the grid for the cell there:
+
+\begin{lstlisting}
+public Cell next() {
+    if (!hasNext()) {
+        throw new NoSuchElementException();
+    }
+    int[] delta = deltas[next++];
+    for (int axis = 0; axis < dimension; axis++) {
+        cursor[axis] = center.get(axis) + delta[axis];
+    }
+    return grid.cellAt(cursor);     // the grid resolves positions beyond its edges
+}
+\end{lstlisting}
+
+The iterator reuses one buffer for all the neighbors, so walking a neighborhood allocates two
+small objects however many cells it visits. Because \code{Grid.cellAt} always returns a cell
+(\cref{sec:grid}), a walk yields exactly \code{size()} cells even in a corner of the grid.
+
+\begin{figure}[tbp]
+  \centering
+  \begin{tikzpicture}
+    \node[iface] (nb) at (0, 0) {\ctitle[interface]{Neighborhood}
+      \nodepart{second}+ name(): String\\+ dimension(): int\\+ size(): int\\
+        + around(grid, center): Iterable<Cell>};
+    \node[class=3] (off) at (0, -3.6) {\ctitle{OffsetNeighborhood}
+      \nodepart{second}- name: String\\- offsets: List<Coordinates>
+      \nodepart{third}+ offsets(): List<Coordinates>\\+ includesCenter(): boolean\\
+        + radius(): int\\+ withoutCenter(name): OffsetNeighborhood};
+    \node[class] (walk) at (5.3, -3.9) {\ctitle{Walk}
+      \nodepart{second}- cursor: int[]\\+ hasNext(): boolean\\+ next(): Cell};
+    \node[iface] (iter) at (5.3, -1.6) {\ctitle[interface]{Iterator<Cell>}};
+    \node[class] (factory) at (5.6, 0.8) {\ctitle{Neighborhoods}
+      \nodepart{second}+ \static{self}(d): OffsetNeighborhood\\
+        + \static{vonNeumann}(d): OffsetNeighborhood\\
+        + \static{moore}(d): OffsetNeighborhood\\
+        + \static{punctured}(n): OffsetNeighborhood};
+    \node[class=3] (catalog) at (10.9, -2.4) {\ctitle{NeighborhoodCatalog}
+      \nodepart{second}- dimension: int\\- defined: Map<String, Neighborhood>
+      \nodepart{third}+ define(name, offsets): Neighborhood\\+ find(name): Optional<...>\\
+        + resolve(name): Neighborhood\\+ names(): List<String>};
+
+    \draw[implements] (off) -- (nb);
+    \draw[implements] (walk) -- (iter);
+    \draw[uses] (off.east |- walk.west) -- node[elabel, above] {creates} (walk.west);
+    \draw[uses] (catalog.north) |- node[elabel, pos=0.75, above] {generates the predefined ones}
+      (factory.east);
+    \draw[uses] (factory.west) -- ++(-0.6, 0) |- node[elabel, pos=0.2] {creates}
+      ($(off.east)+(0,0.9)$);
+    \draw[aggregation] (catalog.south) |- ++(-2, -2.3) -| node[elabel, pos=0.2, above] {by name}
+      ($(off.south)+(1.0,0)$);
+  \end{tikzpicture}
+  \caption{The \code{neighborhood} package. \code{Walk} is the private iterator of
+    \code{OffsetNeighborhood}.}
+  \label{fig:neighborhood}
+\end{figure}
+
+\subsection{Six names, two formulas}
+
+The subject lists six predefined neighborhoods. Writing six classes, or six hard-coded lists of
+offsets, would duplicate what is really two definitions that make sense in every dimension $d$:
+
+\begin{center}\small
+  \begin{tabular}{@{}llccccc@{}}
+    \toprule
+    Family & Neighbors of a cell & Count & $d = 1$ & $d = 2$ & $d = 3$ & $d = 4$ \\
+    \midrule
+    von Neumann & those sharing a face & $2d$ & G2 & G4 & G6 & G8 \\
+    Moore & those sharing a face, an edge or a corner & $3^d - 1$ & G2 & G8 & G26 & G80 \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+The names of the subject turn out to be the number of neighbors. \code{Neighborhoods} generates
+both families for any $d$: the von Neumann offsets are the $2d$ unit vectors, and the Moore
+offsets are enumerated by an odometer over $\{-1, 0, 1\}^d$. \code{G0} is the cell alone, and
+the starred variant of a neighborhood is obtained by removing the origin from its offsets.
+
+\subsection{Resolving names}
+
+A rule refers to neighborhoods by name. \code{NeighborhoodCatalog}, created for the dimension of
+the grid, resolves those names:
+
+\begin{itemize}
+  \item a name declared in the input file designates the user's neighborhood;
+  \item otherwise \code{G0} is the cell alone, \code{G}$\langle 2d \rangle$ the von Neumann
+    neighborhood and \code{G}$\langle 3^d - 1 \rangle$ the Moore neighborhood, each with a
+    starred variant;
+  \item any other name is an error.
+\end{itemize}
+
+This reproduces the validity rules of the subject (G4 and G8 only in 2D, G6 and G26 only in 3D)
+without a table of special cases, and it extends them: on a four-dimensional grid, \code{G8}
+designates the eight face neighbors and \code{G80} the full neighborhood. The same name may thus
+mean different things in different dimensions, which is why a catalog is bound to one dimension.
+
+User-defined neighborhoods are checked when they are declared: the name must follow the
+convention of the subject (a capital G, a number, an optional star), and every offset must have
+as many coordinates as the grid has dimensions. An unknown name is reported with the names that
+do exist:
+
+\begin{lstlisting}[style=text]
+unknown neighborhood 'G26' for a 2-dimensional grid (available: G0, G4, G4*, G8, G8*)
+\end{lstlisting}

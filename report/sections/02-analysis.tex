@@ -1,0 +1,75 @@
+\section{Analysis of the subject}
+\label{sec:analysis}
+
+\subsection{Requirements}
+
+\Cref{tab:requirements} lists what the subject asks for and where each item is realized. Every
+requirement is met; the last column of the table doubles as a map of the source code.
+
+\begin{table}[H]
+  \centering\small
+  \begin{tabularx}{\textwidth}{@{}l L l@{}}
+    \toprule
+    \S & Requirement & Realized by \\
+    \midrule
+    2.1 & Recursive array whose dimension is chosen at run time & \code{DynamicArrayND} \\
+    2.1 & A class for cells; cells outside the grid are always off & \code{Cell}, \code{VoidCell} \\
+    2.2 & Predefined neighborhoods G0, G2, G4, G8, G6, G26 and G$k$* & \code{Neighborhoods} \\
+    2.2 & A neighborhood is a rule for traversing cells (\code{Iterable}) & \code{Neighborhood} \\
+    2.2 & User-defined neighborhoods given as offsets & \code{NeighborhoodCatalog} \\
+    2.3 & The eleven operators, freely nested; a class hierarchy & \code{rule.expression} \\
+    2.4 & Display of 1D and 2D automata; 2D slice of 3D+ automata & \code{ui.swing}, \code{Slice} \\
+    2.5 & Input file: dimension, size, slice, neighborhoods, rule, initial cells or
+          \code{RANDOM(k)} & \code{config} \\
+    2.6 & Menu of the input files of the current directory & \code{LauncherFrame} \\
+    2.6 & Files for the Game of Life and the Sierpi\'nski triangle & \code{examples/} \\
+    2.6.1 & Bonus: a fractal or chaotic rule of radius 2 & \code{explore} \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Requirements of the subject and the code that realizes them.}
+  \label{tab:requirements}
+\end{table}
+
+\subsection{Decisions on points left open}
+
+The subject leaves several questions open. Each was settled explicitly, and the answer is
+documented where the user will look for it.
+
+\paragraph{What does \code{COMPTER} count?} The subject says ``the number of cells in state 1''.
+The rule language, however, can produce any integer (through \code{ADD}, for instance), so a
+grid may hold other states. \code{COMPTER} was implemented to the letter: it counts cells whose
+state is exactly 1. This makes automata with more than two states possible, such as Brian's
+Brain where state 1 means ``firing''. Since a cell in state 2 is then invisible to
+\code{COMPTER(G0)}, one operator was added, \code{ETAT()}, which returns the state of the cell
+itself. It is the only extension to the language and it is redundant for two-state automata.
+
+\paragraph{In which dimension is a predefined neighborhood valid?} The subject states that G2
+is ``valid in 1D'', G4 and G8 ``in 2D'', G6 and G26 ``in 3D''. Using G8 on a 3D grid is therefore
+an error, reported to the user with the list of valid names. The definition was generalized
+rather than restricted (\cref{sec:neighborhoods}): for any dimension $d$, G$2d$ and G$(3^d-1)$
+exist, which gives the six names of the subject for $d \le 3$ and sensible ones beyond.
+
+\paragraph{Which display for one dimension?} A one-dimensional grid is a single row of pixels.
+The figures of the subject juxtapose the successive states, and this is the display adopted:
+time runs down the window.
+
+\paragraph{What if the slice is missing?} The subject requires a file to be \emph{able} to give
+the displayed plane of a grid of three dimensions or more. When a file does not, the first two
+axes are displayed and the others are pinned at their middle; the plane can then be moved from
+the window.
+
+\paragraph{The orientation of coordinates.} Coordinates are array indices from 0. In a picture
+the first free axis runs down (rows) and the second to the right (columns), the usual convention
+for matrices and the one of Matlab, which the subject refers to for slices.
+
+\paragraph{The example of section 2.3.} The worked example uses G8, which includes the cell
+itself, although its text speaks of neighbors. The formula is reproduced verbatim in
+\code{examples/subject-example.xml}, and the Game of Life uses G8* as its definition demands.
+
+\subsection{Beyond the subject}
+
+A few features were added because the architecture made them nearly free, and because they make
+the program pleasant to use and to verify: a periodic boundary condition, the detection of
+convergence and of cycles (both phenomena are described in section 1.2 of the subject), drawing
+cells with the mouse, per-state colors, and a command-line interface that runs and pictures
+automata without a display. The figures of this report were produced by that interface.
