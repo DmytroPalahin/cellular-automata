@@ -7,6 +7,23 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-13
+
+Maintenance release. The application behaves exactly as in 1.0.0.
+
+### Changed
+
+- The Java sources, the example definitions and the sources of the report were reformatted with
+  the IDE formatter.
+- The LaTeX source of the report is now `report/report.tex` (it was `report/main.tex`).
+- `.gitignore` was replaced by a more complete template.
+
+### Fixed
+
+- `make -C report` failed after the source of the report was renamed.
+- The archive built by `scripts/package-submission.sh` includes the LaTeX sources of the report
+  again, and a missing file now stops the script instead of being skipped silently.
+
 ## [1.0.0] - 2026-11-12
 
 First release. It covers every requirement of the subject, the bonus question, and a few
@@ -53,5 +70,6 @@ extensions.
 - Two rules found this way ship as `examples/radius2-fractal.xml` and
   `examples/radius2-chaotic.xml`.
 
-[Unreleased]: ../../compare/v1.0.0...HEAD
+[Unreleased]: ../../compare/v1.0.1...HEAD
+[1.0.1]: ../../compare/v1.0.0...v1.0.1
 [1.0.0]: ../../releases/tag/v1.0.0
